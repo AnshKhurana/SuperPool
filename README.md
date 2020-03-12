@@ -1,14 +1,14 @@
-#SuperPool#
+# SuperPool #
 
-##Team Members:##
+## Team Members: ##
 
 Aman Kansal (170050027)
 Ansh Khurana (170050035)
 Arnab Jana (170100082)
 Pranay Reddy Samala (170070022)
 
-##Category: Web App##
-###Overview###
+## Category: Web App ##
+### Overview ###
 Modern technology has transformed the marketplace worldwide. Apps and websites like Uber, Zomato, Amazon and Flipkart have redefined the relationship between consumers and producers. With just the tap of a button, customers can bring day to day services to their doorstep, giving an all new meaning to consumerism.
 However, in this dynamic marketplace, there are no apps/websites which offer consumer-consumer interaction. What if you want to order food with friends? How do you find like-minded friends to go with for a movie? 
 Technology at hand ignores the social aspect of the marketplace. We seek to address this void by creating “Supershare”, a user-driven platform that brings consumers together. Now no more time wasted searching for the “10th” member to avail your group discount!
@@ -22,7 +22,7 @@ Coupons and offers matching - Many times, coupons and offers released by various
 E-commerce: Many e-commerce sellers apply minimum order limits. This limits many buyers who are looking for small items quickly. We plan to merge such small orders across different people to fulfil the required limits without any hassles.
 
 
-###Features###
+### Features ###
 We currently are considering implementing the following features -
 For each ‘service’ that app can be used for, the user would be able to have a group of ‘friends’ with whom he’d be able to pool that particular service. 
 A user can also create ‘links’ such that all people who get that link would be able to share the service with each other. This is similar to the creation of groups in WhatsApp.
@@ -36,14 +36,14 @@ While we would try to implement all the features mentioned above, the final set 
 
 
 
-###Details of schema, views and interfaces###
+### Details of schema, views and interfaces ###
 
-####Relational Schema:-####
+#### Relational Schema:- ####
 
 
 			Sketch plan for SuperShare_Relations_Schema
 
-####Terminology:- ####
+#### Terminology:- ####
 Service_type - Broad categories of services (like food, shopping, travel etc).
 Service - Particular service under any of the Service_type (like ‘Pizza from ABC on date XYZ’ under ‘food’).
 Message - Message associated with chat in a particular service for its members.
@@ -51,7 +51,7 @@ Group - Group of users (potentially related, like WhatsApp group for HostelX, no
 Current_service - All services with start-time<=current-time<=start-time+slackness
 Past_service - All services with current-time>start-time+slackness
 
-####Materialized Views required:-####
+#### Materialized Views required:- ####
 User_profile - Personal details
 List of groups - Display all groups, which a user is a member of, and a public group for all app users.
 Group - Displays all the members in that group. Here, a user can query for a service to check availability of pooling service by members of the group or start a new service.
