@@ -46,8 +46,8 @@ class User(AbstractUser):
     # # Status for terms and conditions, enforce in HTML
     # tc_status = models.BooleanField(default=False)
 
-    # USERNAME_FIELD = "email" # we wish to keep the default username scenario
-    # REQUIRED_FIELDS = ["username", "gender"] # removed gender
+    USERNAME_FIELD = "email" # NEED TO CHANGE THIS, we wish to keep the default username scenario
+    REQUIRED_FIELDS = ["username"] # removed gender
 
     def __unicode__(self):
         return self.email
