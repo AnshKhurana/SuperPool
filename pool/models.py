@@ -5,15 +5,15 @@ from polymorphic.models import PolymorphicModel
 class Category(models.Model):
 	name=models.CharField(max_length=255)
 
-class Group(models.Model):
-	name=models.CharField(max_length=255)
-
 class User(models.Model):
 	name=models.CharField(max_length=255)
-	groups=models.ManyToManyField(Group,
-	                              through="GroupMember",
-	                              through_fields=("user_id","group_id"),
-	                              related_name="members")
+
+class Group(models.Model):
+	name=models.CharField(max_length=255)
+	members=models.ManyToManyField(User,
+	                               through="GroupMember",
+	                               through_fields=("group_id","user_id"),
+	                               related_name="groups")
 	
 class GroupMember(models.Model):
 	group_id=models.ForeignKey(Group,on_delete=models.DO_NOTHING)
