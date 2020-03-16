@@ -1,3 +1,10 @@
 .idea
 .idea/*
 .idea/**
+db.sqlite3
+pool/migrations
+pool/migrations/*
+pool/__pycache__
+pool/__pycache__/*
+superpool/__pycache__
+superpool/__pycache__/*
