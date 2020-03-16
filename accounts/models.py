@@ -32,7 +32,7 @@ class User(AbstractUser):
         unique="A user with that phone number already exists."))
 
     # any string description
-    about = models.TextField(blank=True)
+    # about = models.TextField(blank=True)
 
     # location specs
 
