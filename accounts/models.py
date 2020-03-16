@@ -2,7 +2,8 @@ from django.db import models
 
 # Create your models here.
 
-gmaps_api_key = "AIzaSyAEdRHs5qFXBpXu3HkQXcRXnwBzSbiYZv4"
+gcp_api_key = "AIzaSyAEdRHs5qFXBpXu3HkQXcRXnwBzSbiYZv4"
+
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -20,8 +21,7 @@ class User(AbstractUser):
         },
     ) #
 
-    first_name = models.CharField(max_length=25)
-    last_name = models.CharField(max_length=25)
+    # first_name and last_name are attributes in AbstractUser
 
     email = models.EmailField(unique=True, blank=False,
                               error_messages={
@@ -36,14 +36,18 @@ class User(AbstractUser):
 
     # location specs
 
+    address = models.CharField(max_length=1000, blank=False, null=False)
 
+    # @Pranay add code to convert addr into internal repr
+
+    # add code here
 
 
     # # Status for terms and conditions, enforce in HTML
     # tc_status = models.BooleanField(default=False)
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username", "gender"]
+    # USERNAME_FIELD = "email" # we wish to keep the default username scenario
+    # REQUIRED_FIELDS = ["username", "gender"] # removed gender
 
     def __unicode__(self):
         return self.email

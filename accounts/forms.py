@@ -10,6 +10,7 @@ class UserRegistrationForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update({'placeholder': 'Enter Username'})
         self.fields['email'].widget.attrs.update({'placeholder': 'Enter Email'})
+        self.fields['phone_number'].widget.attrs.update({'placeholder': 'Enter Phone Number'})
         self.fields['password1'].widget.attrs.update({'placeholder': 'Enter password'})
         self.fields['password2'].widget.attrs.update({'placeholder': 'Repeat your password'})
         # self.fields['email'].widget.attrs['placeholder'] = self.fields['email'].label or 'email@address.nl'
@@ -18,7 +19,7 @@ class UserRegistrationForm(UserCreationForm):
         model = User
         fields = ("username",
                   "email",
-                  "gender",
+                  "phone_number",
                   "password1",
                   "password2")
 
