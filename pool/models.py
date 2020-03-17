@@ -24,6 +24,10 @@ class GroupMember(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING)
 
 
+class FoodVendor(models.Model):
+    vendor = models.CharField(null=False, max_length=1000)
+
+
 class Service(PolymorphicModel):
     group_ids = models.CharField(validators=[validate_comma_separated_integer_list],
                                  max_length=200, blank=True, null=True, default='')
@@ -31,9 +35,8 @@ class Service(PolymorphicModel):
     initiator_id = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     start_time = models.DateTimeField(null=True)
     end_time = models.DateTimeField(null=True)
-    slackness = models.DurationField()
+    slackness = models.DurationField(null=True)
     description = models.CharField(null=False, max_length=1000)  # this is a general description
-    stype = models.CharField(null=False, max_length=255)  # one among ['Food','Travel','Shopping']
     members = models.ManyToManyField(User,
                                      through="ServiceMember",
                                      through_fields=("service_id", "user_id"),
@@ -46,7 +49,7 @@ class TravelService(Service):
 
 
 class FoodService(Service):
-    vendor = models.CharField(null=False, max_length=1000)
+    vendor = models.ForeignKey(FoodVendor, on_delete=models.DO_NOTHING)
 
 
 class ShoppingService(Service):
@@ -63,5 +66,3 @@ class Message(models.Model):
     content = models.CharField(default='', max_length=1000)
     service_id = models.ForeignKey(Service, on_delete=models.DO_NOTHING, related_name="messages")
     user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="messages")
-
-# Create your models here.

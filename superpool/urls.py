@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from main_interface.views import FoodVendorCreateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('main_page/', FoodVendorCreateView.as_view(), name='dropdown'),
 ]
