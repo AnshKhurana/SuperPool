@@ -11,3 +11,4 @@ superpool/__pycache__/*
 accounts/__pycache__
 accounts/__pycache__/*
 accounts/__pycache__/**
+core/__pycache__
