@@ -4,5 +4,6 @@ from .views import *
 app_name = "pool"
 
 urlpatterns = [
-    path('', home, name="home"),
+    path('create', ServiceCreateView.as_view(),name='create')
+
 ]
