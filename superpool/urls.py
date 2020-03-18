@@ -14,10 +14,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from dal import autocomplete
 from django.urls import path
-from main_interface.views import FoodVendorCreateView
+from pool.models import FoodVendor
+from main_interface.views import FoodVendorAutocomplete, FoodVendorCreateView, FoodVendorUpdateView, ServiceView, GroupCreate, group_join
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('main_page/', FoodVendorCreateView.as_view(), name='dropdown'),
+    path('main_page/', ServiceView.as_view(), name='foodservice_view'),
+    path('group_create/', GroupCreate.as_view(), name='groupcreate_view'),
+    path('group_join/<int:hash>/', group_join, name='groupjoin_view'),
+    path('food_autocomplete/', FoodVendorAutocomplete.as_view(), name='food-autocomplete'),
+    path('main_page/add/', FoodVendorCreateView.as_view(), name='foodvendor_create'),
+    path('main_page/update/', FoodVendorUpdateView.as_view(), name='foodvendor_update'),
 ]
+# autocomplete.Select2QuerySetView.as_view(model=FoodVendor)
