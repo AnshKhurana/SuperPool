@@ -12,3 +12,5 @@ accounts/__pycache__
 accounts/__pycache__/*
 accounts/__pycache__/**
 core/__pycache__
+groups/__pycache__
+*__pycache__*

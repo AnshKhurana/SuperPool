@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import validate_comma_separated_integer_list
 from polymorphic.models import PolymorphicModel
+from django import forms
 
 
 class Category(models.Model):
@@ -12,11 +13,18 @@ class User(models.Model):
 
 
 class Group(models.Model):
+    admin=models.ForeignKey(User,on_delete=models.DO_NOTHING)
     name = models.CharField(max_length=255)
+    description=models.CharField(max_length=1000)
     members = models.ManyToManyField(User,
                                      through="GroupMember",
                                      through_fields=("group_id", "user_id"),
                                      related_name="groups")
+
+class GroupForm(forms.ModelForm):
+    class Meta:
+        model=Group
+        fields=['name','description']
 
 
 class GroupMember(models.Model):
