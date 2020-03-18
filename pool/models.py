@@ -17,6 +17,7 @@ class Group(models.Model):
                                      through="GroupMember",
                                      through_fields=("group_id", "user_id"),
                                      related_name="groops")
+    
 
 class GroupForm(forms.ModelForm):
     class Meta:
@@ -26,15 +27,15 @@ class GroupForm(forms.ModelForm):
 
 
 class GroupMember(models.Model):
-    group_id = models.ForeignKey(Group, on_delete=models.DO_NOTHING)
-    user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    group = models.ForeignKey(Group, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
 
 
 class Service(PolymorphicModel):
     group_ids = models.CharField(validators=[validate_comma_separated_integer_list],
                                  max_length=200, blank=True, null=True, default='')
-    category_id = models.ForeignKey(Category, on_delete=models.DO_NOTHING, related_name="%(class)s_services")
-    initiator_id = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, related_name="%(class)s_services")
+    initiator = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     start_time = models.DateTimeField(null=True)
     end_time = models.DateTimeField(null=True)
     slackness = models.DurationField()
@@ -60,14 +61,14 @@ class ShoppingService(Service):
 
 
 class ServiceMember(models.Model):
-    service_id = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
-    user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    service = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
 
 
 class Message(models.Model):
     timestamp = models.DateTimeField(null=False, auto_now=True)
     content = models.CharField(default='', max_length=1000)
-    service_id = models.ForeignKey(Service, on_delete=models.DO_NOTHING, related_name="messages")
-    user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="messages")
+    service = models.ForeignKey(Service, on_delete=models.DO_NOTHING, related_name="messages")
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="messages")
 
 # Create your models here.
