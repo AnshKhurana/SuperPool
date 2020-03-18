@@ -17,4 +17,4 @@ gm2.save()
 gm3 = GroupMember(group=g1, user=u3)
 gm3.save()
 gm4= GroupMember(group=g2, user=u3)
-gm4.save()
+gm4.save()I
