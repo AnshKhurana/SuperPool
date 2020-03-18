@@ -70,6 +70,12 @@
                                 <button class="mtr-btn signup" type="submit"><span>Register</span></button>
                             </div>
                         </form>
+                        {% if error %}
+                        <div class="alert alert-danger" >
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                            {{ error }}
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
