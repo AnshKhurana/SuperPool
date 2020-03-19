@@ -21,7 +21,7 @@
                                         <div class="tab-content">
                                             <div class="tab-pane active fade show " id="frends">
                                                 <ul class="nearby-contct">
-                                                    {% for groups in groups %}
+                                                    {% for group in groups %}
                                                         <li>
                                                             <div class="nearly-pepls">
                                                                 <figure>
@@ -33,7 +33,7 @@
                                                                 </figure>
                                                                 <div class="pepl-info">
                                                                     <h4><a href="#" title="">{{ group.name }}</a></h4>
-                                                                    <span>CSE IITB Group</span>
+                                                                    <span>{{ group.description }}</span>
                                                                     {#                                                                    <a href="#" title="" data-url="{% url 'friends:send-request' user.username %}" class="add-butn add-friend" data-ripple="" data-friend="{{ user.username }}">Add Friend</a>#}
                                                                 </div>
                                                             </div>

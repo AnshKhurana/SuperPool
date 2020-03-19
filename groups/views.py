@@ -15,10 +15,8 @@ class grouphome(ListView):
     template_name = 'groups/groups.html'
 
     def get_queryset(self):
-        # current_user_friends = self.request.user.friends.values('id')
-        # sent_request = list(Friend.objects.filter(user=self.request.user).values_list('friend_id', flat=True))
-        # users = User.objects.exclude(id__in=current_user_friends).exclude(id__in=sent_request).exclude(id=self.request.user.id)
-        groups = self.request.user.groups.values_list()
+        currentuser=User.objects.get(id=self.request.user.id)
+        groups = Group.objects.filter(members=currentuser).all()
         return groups
 
 
@@ -34,6 +32,8 @@ class GroupCreateView(CreateView):
     # def form_valid(self, form):
     #     form.instance.admin=User.objects.get(id=self.request.user.id)
     #     return super(GroupCreateView,self).form_valid(form)
+    
+    
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(self.request, *args, **kwargs)
 
@@ -48,9 +48,11 @@ class GroupCreateView(CreateView):
             group = user_form.save()
             member = self.request.user
             group.members.add(member)
+            group.admin=User.objects.get(id=self.request.user.id)
             group.save()
             client_ip = request.META['REMOTE_ADDR']
-            return HttpResponse("<h>%s</h>" % "http://" + client_ip + ":8080/groups/join/" + str(group.hash))
+            join_url="http://" + client_ip + ":{}/groups/join/".format(request.META['SERVER_PORT']) + str(group.hash)
+            return HttpResponse("<h>%s</h>" % join_url)
         else:
             print(user_form.errors)
             return render(request, 'accounts/register.html', {'form': user_form})
