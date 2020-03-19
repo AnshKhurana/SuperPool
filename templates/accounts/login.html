@@ -61,9 +61,22 @@
                                 <button class="mtr-btn signup" ><span><a href= "{% url 'accounts:register' %}">Register</a> </span>
                                 </button>
                             </div>
+                            <br> <br>
+                            {% if error %}
+                            <div class="alert alert-danger">
+                            <a class="close" href="#" data-dismiss="alert">×</a>
+                                Your login credentials are incorrect.
+                            </div>
+                            {% endif %}
                         </form>
+                        <br>
+<!--                        {% if error %}-->
+
                     </div>
+
+<!--                        {% endif %}-->
                 </div>
+
             </div>
         </div>
     </div>

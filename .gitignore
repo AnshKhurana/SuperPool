@@ -14,3 +14,5 @@ accounts/__pycache__/**
 core/__pycache__
 groups/__pycache__
 *__pycache__*
+*.pyo
+*.pyc

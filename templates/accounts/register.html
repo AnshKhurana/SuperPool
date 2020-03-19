@@ -70,14 +70,20 @@
                                 <button class="mtr-btn signup" type="submit"><span>Register</span></button>
                             </div>
                         </form>
+                        {% if error %}
+                        <div class="alert alert-danger" >
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+                            {{ error }}
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 
-<script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script src="{% static 'js/main.min.js' %}"></script>
 <script src="{% static 'js/script.js' %}"></script>
 

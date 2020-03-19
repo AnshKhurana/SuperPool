@@ -41,8 +41,7 @@ class RegisterView(CreateView):
             user.save()
             return redirect('accounts:login')
         else:
-            print(user_form.errors)
-            return render(request, 'accounts/register.html', {'form': user_form})
+            return render(request, 'accounts/register.html', {'form': user_form, 'error': user_form.errors})
 
 
 class LoginView(FormView):
@@ -77,7 +76,9 @@ class LoginView(FormView):
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form):
-        return self.render_to_response(self.get_context_data(form=form))
+        context=self.get_context_data(form=form)
+        context['error']=True
+        return self.render_to_response(context)
 
 
 class LogoutView(RedirectView):
