@@ -1,0 +1,38 @@
+
+{% block content %}
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
+</head>
+<body style="margin-left: 20px">
+  <h1 style="font-family: 'Lobster', serif;">Group Info</h1>
+  {% if group_list %}
+    {% for group in group_list %}
+      <div class="list-group">
+      <a href="#" class="list-group-item list-group-item-success">{{group.admin}}</a>
+      <a href="#" class="list-group-item list-group-item-info">{{group.name}}</a>
+      <a href="#" class="list-group-item list-group-item-danger">{{group.description}}</a>
+      </div>
+      <ul>
+
+
+
+          {% for member in group.members.all %}
+          <li>
+            <a href="#" class="list-group-item list-group-item-warning">{{member}}</a>
+         </li>
+      {% endfor %}
+      </ul>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no books in the library.</p>
+  {% endif %}
+  </body>
+{% endblock %}
