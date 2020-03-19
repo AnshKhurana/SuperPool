@@ -1,7 +1,9 @@
 
 {% block content %}
+<script>var g_id=0;</script>
+<script>var admin={{user}};</script>
 <head>
-  <title>Bootstrap Example</title>
+  <title>Group Info</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -9,11 +11,13 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
+
 </head>
 <body style="margin-left: 20px">
   <h1 style="font-family: 'Lobster', serif;">Group Info</h1>
   {% if group_list %}
     {% for group in group_list %}
+      <script>g_id = {{group.id}}</script>
       <div class="list-group">
       <a href="#" class="list-group-item list-group-item-success">{{group.admin}}</a>
       <a href="#" class="list-group-item list-group-item-info">{{group.name}}</a>
@@ -21,14 +25,80 @@
       </div>
       <ul>
 
+        <form action = "" id="remove_form">
+          <fieldset>
+        <select name = "UserSelect[]" id="UserSelect" size = "10" multiple>
 
 
-          {% for member in group.members.all %}
-          <li>
-            <a href="#" class="list-group-item list-group-item-warning">{{member}}</a>
-         </li>
-      {% endfor %}
+                {% for member in group.members.all %}
+<!--                <li>-->
+                  <option value="{{member.id}}">{{member}}</option>
+      <!--            <a href="#" class="list-group-item list-group-item-warning">{{member}}</a>-->
+<!--               </li>-->
+            {% endfor %}
+
+          </select>
+
+            <input onclick=checkAdmin() type="submit" value="Delete Members" />
+<!--            <textarea name="display" id="display" placeholder="view select list value(s) onchange" cols="20" rows="4" readonly></textarea>-->
+            </fieldset>
+          </form>
+
+ <div id = "output">
+ </div>
+
       </ul>
+  <script>
+  function getSelectedOptions(sel, fn) {
+    var opts = [], opt;
+
+    // loop through options in select list
+    for (var i=0, len=sel.options.length; i<len; i++) {
+        opt = sel.options[i];
+        console.log(opt.value);
+        console.log(g_id);
+
+
+        // check if selected
+        if ( opt.selected ) {
+            // add to array of option elements to return from this function
+            opts.push(opt);
+
+            // invoke optional callback function if provided
+            if (fn) {
+                fn(opt);
+            }
+        }
+    }
+
+    // return array containing references to selected option elements
+    return opts;
+}
+
+  document.getElementById('remove_form').onsubmit = function(e) {
+
+    if(admin==1) {
+
+
+    var opts = getSelectedOptions( this.elements['UserSelect[]'] );
+
+    for (var i=0, len=opts.length; i<len; i++) {
+      // alert( 'The group id is: ' + g_id ); //  number of selected options
+      // alert( 'The options selected is: ' + opts[i].value ); //  number of selected options
+      // window.location,href = '/groups/remove_member/' + g_id + '/' + opts[i].value;
+      window.open('/groups/remove_member/' + g_id + '/' + opts[i].value, "popup", 'width=400,height=300, top=400, left=700');
+     }
+
+    window.location = '/groups/display/' + g_id;
+    // alert("Members removed from group");
+    }
+
+    else {
+        alert("You don't have permission to remove members");
+    }
+};
+
+ </script>
     {% endfor %}
   </ul>
   {% else %}

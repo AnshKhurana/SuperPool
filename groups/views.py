@@ -16,13 +16,14 @@ class grouphome(ListView):
     template_name = 'groups/groups.html'
 
     def get_queryset(self):
-        currentuser=User.objects.get(id=self.request.user.id)
+        currentuser = User.objects.get(id=self.request.user.id)
         groups = Group.objects.filter(members=currentuser).all()
         return groups
 
 
 class GroupListView(ListView):
     model = Group
+
     # queryset = Group.objects.filter(id=g_id)
     # form_class = GroupCreateForm
     # success_url = '/groups'
@@ -40,6 +41,13 @@ class GroupListView(ListView):
         print(context)
         return context
 
+    def get_context_data(self, **kwargs):
+        context = super(GroupListView, self).get_context_data(**kwargs)
+        print(context['group_list'][0])
+        context['user'] = 0
+        if context['group_list'][0] in Group.objects.filter(admin=self.request.user):
+            context['user'] = 1
+        return context
 
 
 class GroupCreateView(CreateView):
@@ -54,8 +62,7 @@ class GroupCreateView(CreateView):
     # def form_valid(self, form):
     #     form.instance.admin=User.objects.get(id=self.request.user.id)
     #     return super(GroupCreateView,self).form_valid(form)
-    
-    
+
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(self.request, *args, **kwargs)
 
@@ -70,10 +77,10 @@ class GroupCreateView(CreateView):
             group = user_form.save()
             member = self.request.user
             group.members.add(member)
-            group.admin=User.objects.get(id=self.request.user.id)
+            group.admin = User.objects.get(id=self.request.user.id)
             group.save()
             client_ip = request.META['REMOTE_ADDR']
-            join_url="http://" + client_ip + ":{}/groups/join/".format(request.META['SERVER_PORT']) + str(group.hash)
+            join_url = "http://" + client_ip + ":{}/groups/join/".format(request.META['SERVER_PORT']) + str(group.hash)
             return HttpResponse("<h>%s</h>" % join_url)
         else:
             print(user_form.errors)
@@ -87,3 +94,11 @@ def group_join(request, hash):
     member = GroupMember(group=group, user=cur_user)
     member.save()
     return HttpResponse("<h>%s</h>" % "Added to group successfully")
+
+
+def remove_member(request, g_id, user_id):
+    group = Group.objects.get(id=g_id)
+    user = User.objects.get(id=user_id)
+    group_member = GroupMember.objects.get(group=group, user=user)
+    group_member.delete()
+    return HttpResponse("<h>%s</h>" % "Removed from group successfully")
