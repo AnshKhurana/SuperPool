@@ -26,7 +26,7 @@ class ServiceCreateView(FormView):
             return redirect('pool:home')
         else:
             print(service_create_form.errors)
-            return render(request, 'services/create.html', {'form': service_create_form})
+            return render(request, 'services/create.html', {'form_cat': service_create_form})
 
 
     # fields=['name','description']
