@@ -8,7 +8,21 @@ CAT_CHOICES= [
     ]
 
 
+class DateTimeInput(forms.DateTimeInput):
+    input_type = "datetime-local"
+
+    def __init__(self, **kwargs):
+        kwargs["format"] = "%Y-%m-%dT%H:%M"
+        super().__init__(**kwargs)
+
+
 class FoodCreationForm(forms.Form):
+
+    # start_time = forms.DateTimeField(required=False, input_formats=['%d/%m/%Y %H:%M'],
+    #     widget=forms.DateTimeInput(attrs={
+    #         'class': 'form-control datetimepicker-input',
+    #         'data-target': '#datetimepicker1'
+    #     }))
 
     start_time = forms.DateTimeField(required=False)
     end_time = forms.DateTimeField(required=False)
@@ -34,6 +48,40 @@ class FoodCreationForm(forms.Form):
         sm= ServiceMember(service=f, user=u)
         sm.save()
 
+
+class newFoodCreationForm(forms.ModelForm):
+    class Meta:
+        model = FoodService
+        fields = ("start_time", "end_time", "slackness", "description", "vendor")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["start_time"].widget = DateTimeInput()
+        self.fields["start_time"].input_formats = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"]
+
+        self.fields["end_time"].widget = DateTimeInput()
+        self.fields["end_time"].input_formats = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"]
+
+    def clean(self):
+        super(newFoodCreationForm, self).clean()
+        stime = self.cleaned_data.get('start_time')
+        etime = self.cleaned_data.get('end_time')
+        if (stime is not None) and (etime is not None) and stime>etime:
+            raise ValidationError('Start time after end time')
+
+    def save(self, commit=False):
+        start_time = self.cleaned_data['start_time']
+        end_time = self.cleaned_data['end_time']
+        slackness = self.cleaned_data['slackness']
+        description = self.cleaned_data['description']
+        vendor = self.cleaned_data['vendor']
+
+        return {'start_time': start_time, 'end_time' : end_time, 'slackness': slackness, 'description': description, 'vendor': vendor}
+
+        # f=FoodService(category=Category.objects.get(name='Food'), initiator=u, vendor=vendor, description=description, start_time=start_time, end_time=end_time, slackness=slackness, stype='Food')
+        # f.save()
+        # sm=ServiceMember(service=f, user=u)
+        # sm.save()
 
 
 class ServiceCreationForm(forms.Form):

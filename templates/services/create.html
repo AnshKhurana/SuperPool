@@ -42,8 +42,10 @@ hr {
 {% block content %}
     <h2>New post</h2>
     <form method="POST">{% csrf_token %}
-        {{ form }}
+        <table border="1">
+        {{ form}}
         <button type="submit" class="save btn btn-default">Save</button>
+        </table>
     </form>
 {% endblock %}
 
