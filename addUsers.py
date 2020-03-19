@@ -1,10 +1,10 @@
 from accounts.models import User
 from pool.models import Group, GroupMember
-u1=User.objects.create_user(username='john', email='a@bc.com', phone_number='+1234567890', address='xy')
+u1=User.objects.create_user(username='john', email='a@bc.com', phone_number='+1234567890', address='xy', password='Abcd123$')
 u1.save()
-u2=User.objects.create_user(username='john2', email='x@bc.com', phone_number='+1234567891', address='xyz')
+u2=User.objects.create_user(username='john2', email='x@bc.com', phone_number='+1234567891', address='xyz', password='Abcd123$')
 u2.save()
-u3=User.objects.create_user(username='john3', email='y@bc.com', phone_number='+1234567893', address='xyw')
+u3=User.objects.create_user(username='john3', email='y@bc.com', phone_number='+1234567893', address='xyw', password='Abcd123$')
 u3.save()
 g1=Group(admin=u1, name='g1', description='d')
 g1.save()
