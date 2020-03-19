@@ -21,6 +21,8 @@
                                         <div class="tab-content">
                                             <div class="tab-pane active fade show " id="frends">
                                                 <ul class="nearby-contct">
+                                                    <button style="align: center; border: 1px solid"
+                                                        onclick=myFunction() id="CreateGroup" class="btn btn-primary btn-lg" >Create New Group</button><br><br><br>
                                                     {% for group in groups %}
                                                         <li>
                                                             <div class="nearly-pepls">
@@ -32,8 +34,7 @@
                                                                     {#                                                                    {% endif %}#}
                                                                 </figure>
                                                                 <div class="pepl-info">
-                                                                    <h4><a href="#" title="">{{ group.name }}</a></h4>
-                                                                    <span>{{ group.description }}</span>
+                                                                    <h4><button onclick="window.open('/groups/display/{{group.id}}', 'popup', 'width=800,height=600, top=200, left=500');" title="">{{ group.name }}</button></h4>
                                                                     {#                                                                    <a href="#" title="" data-url="{% url 'friends:send-request' user.username %}" class="add-butn add-friend" data-ripple="" data-friend="{{ user.username }}">Add Friend</a>#}
                                                                 </div>
                                                             </div>
@@ -43,9 +44,14 @@
                                                 <div class="lodmore">
                                                     <button class="btn-view btn-load-more"></button>
                                                 </div>
-                                                <button style="align: cenater; border: 1px solid"
-                                                        onclick="location.href = 'create';" id="CreateGroup" class="btn btn-primary btn-lg" >Create New Group</button>
+
                                             </div>
+                                            <script>
+                                            function myFunction() {
+                                                window.open("/groups/create", "popup", 'width=400,height=300, top=400, left=700');
+                                             }
+                                            </script>
+
                                         </div>
                                     </div>
                                 </div>

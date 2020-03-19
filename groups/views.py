@@ -4,6 +4,7 @@ import random
 # Create your views here.
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
+from django.views.generic.detail import DetailView
 from pool.models import *
 from .forms import *
 from accounts.models import User
@@ -18,6 +19,27 @@ class grouphome(ListView):
         currentuser=User.objects.get(id=self.request.user.id)
         groups = Group.objects.filter(members=currentuser).all()
         return groups
+
+
+class GroupListView(ListView):
+    model = Group
+    # queryset = Group.objects.filter(id=g_id)
+    # form_class = GroupCreateForm
+    # success_url = '/groups'
+
+    # def get_initial(self):
+    #     initial=super(GroupCreateView,self).get_initial()
+    #     initial['admin_id']=self.request.user.id
+    #     return initial
+    # def form_valid(self, form):
+    #     form.instance.admin=User.objects.get(id=self.request.user.id)
+    #     return super(GroupCreateView,self).form_valid(form)
+
+    def get_queryset(self):
+        context = Group.objects.filter(id=self.kwargs['g_id'])
+        print(context)
+        return context
+
 
 
 class GroupCreateView(CreateView):
