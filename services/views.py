@@ -1,15 +1,15 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, FormView
 from pool.models import *
 from .forms import ServiceCreationForm
 from accounts.models import User
 
 # Create your views here.
 
-class ServiceCreateView(CreateView):
+class ServiceCreateView(FormView):
 
-    model = Service
+    # model = Service
     form_class = ServiceCreationForm
     success_url = '/'
     template_name = 'services/create.html'
