@@ -1,5 +1,5 @@
 from accounts.models import User
-from pool.models import Group, GroupMember
+from pool.models import Group, GroupMember, Category
 u1=User.objects.create_user(username='john', email='a@bc.com', phone_number='+1234567890', address='xy', password='Abcd123$')
 u1.save()
 u2=User.objects.create_user(username='john2', email='x@bc.com', phone_number='+1234567891', address='xyz', password='Abcd123$')
@@ -18,3 +18,7 @@ gm3 = GroupMember(group=g1, user=u3)
 gm3.save()
 gm4= GroupMember(group=g2, user=u3)
 gm4.save()
+c1= Category(name='Food')
+c1.save()
+c1= Category(name='Travel')
+c1.save()
