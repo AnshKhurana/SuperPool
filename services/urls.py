@@ -4,6 +4,6 @@ from .views import *
 app_name = "services"
 
 urlpatterns = [
-    path('services/create', create, name="create_service"),
+    path('create', ServiceCreateView.as_view(), name="create"),
 
 ]

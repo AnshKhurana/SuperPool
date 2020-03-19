@@ -10,9 +10,9 @@ from accounts.models import User
 class ServiceCreateView(CreateView):
 
     model = Service
-    form = ServiceCreationForm
+    form_class = ServiceCreationForm
     success_url = '/'
-    template_name = 'groups/create.html'
+    template_name = 'services/create.html'
 
     def get_success_url(self):
         return self.success_url
@@ -26,7 +26,7 @@ class ServiceCreateView(CreateView):
             return redirect('pool:home')
         else:
             print(service_create_form.errors)
-            return render(request, 'services/create.html', {'form': service_create_form})
+            return render(request, 'services/create.html', {'form_cat': service_create_form})
 
 
     # fields=['name','description']

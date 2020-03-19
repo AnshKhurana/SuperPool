@@ -5,5 +5,5 @@ app_name = "pool"
 
 urlpatterns = [
     # path('create', ServiceCreateView.as_view(),name='create')
-
+    path('', home, name='home')
 ]
