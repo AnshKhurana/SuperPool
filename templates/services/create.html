@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+
+{% load static %}
 <html>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <head>
@@ -36,17 +38,30 @@ hr {
 }
 
 </style>
+
+
+    <script>
+  $(function () {
+    $("#id_start_time").datetimepicker({
+      format: 'd/m/Y H:i',
+    });
+  });
+    </script>
 </head>
 <body>
 
 {% block content %}
     <h2>New post</h2>
-    <form method="POST">{% csrf_token %}
+    <form method="POST">
+        {% csrf_token %}
         <table border="1">
-        {{ form}}
-        <button type="submit" class="save btn btn-default">Save</button>
+
+            {{ form }}
         </table>
+        <br>
+        <button type="submit">Submit</button>
     </form>
+
 {% endblock %}
 
 </body>
