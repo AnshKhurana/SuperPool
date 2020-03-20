@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 import random
 # Create your views here.
 from django.urls import reverse_lazy
@@ -87,6 +88,7 @@ class GroupCreateView(CreateView):
             return render(request, 'accounts/register.html', {'form': user_form})
 
 
+@login_required(login_url="/accounts/login/")
 def group_join(request, hash):
     data = request.POST
     cur_user = request.user
