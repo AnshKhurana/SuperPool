@@ -3,7 +3,21 @@
 {% load static %}
 
 {% block content %}
-
+<head>
+<script type="text/javascript">
+window.onload = function(){
+    if({{ message }}==1) {
+        alert("Added to group successfully");
+    }
+}
+</script>
+</head>
+<body>
+<script>
+function alertFunc() {
+  alert("Page is loaded");
+}
+</script>
     <section>
         <div class="gap gray-bg">
             <div class="container-fluid">
@@ -150,5 +164,6 @@
             </div>
         </div>
     </section>
+</body>
 
 {% endblock %}
