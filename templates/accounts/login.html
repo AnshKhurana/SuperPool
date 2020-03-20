@@ -41,6 +41,7 @@
                         </p>
                         <form method="post" action="">
                             {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ next }}" />
                             <div class="form-group">
                                 <input type="email" id="input" name="email" required="required"/>
                                 <label class="control-label" for="input">Email</label><i class="mtrl-select"></i>
