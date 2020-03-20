@@ -95,7 +95,7 @@ def group_join(request, hash):
     group = Group.objects.filter(hash=hash)[0]
     member = GroupMember(group=group, user=cur_user)
     member.save()
-    return HttpResponse("<h>%s</h>" % "Added to group successfully")
+    return render(request, 'home.html', {'message': 1})
 
 
 def remove_member(request, g_id, user_id):
