@@ -73,7 +73,11 @@ class LoginView(FormView):
 
     def form_valid(self, form):
         auth.login(self.request, form.get_user())
-        return HttpResponseRedirect(self.get_success_url())
+        keys = list(self.request.GET.keys())
+        if 'next' in keys:
+            return HttpResponseRedirect(self.request.GET['next'])
+        else:
+            return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form):
         context=self.get_context_data(form=form)

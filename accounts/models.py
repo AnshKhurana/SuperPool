@@ -50,4 +50,4 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ["username"] # removed gender
 
     def __unicode__(self):
-        return self.email
+        return self.username
