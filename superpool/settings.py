@@ -14,10 +14,48 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
+redis_host = os.environ.get('REDIS_HOST', '192.168.43.108')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
+CHANNEL_LAYERS = {
+    "default": {
+        # This example app uses the Redis channel layer implementation channels_redis
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [(redis_host, 6380)],
+        },
+    },
+}
+
+ASGI_APPLICATION = 'superpool.routing.application'
+
+NOTIFY_USERS_ON_ENTER_OR_LEAVE_ROOMS = True
+
+MSG_TYPE_MESSAGE = 0  # For standard messages
+MSG_TYPE_WARNING = 1  # For yellow messages
+MSG_TYPE_ALERT = 2  # For red & dangerous alerts
+MSG_TYPE_MUTED = 3  # For just OK information that doesn't bother users
+MSG_TYPE_ENTER = 4  # For just OK information that doesn't bother users
+MSG_TYPE_LEAVE = 5  # For just OK information that doesn't bother users
+
+MESSAGE_TYPES_CHOICES = (
+    (MSG_TYPE_MESSAGE, 'MESSAGE'),
+    (MSG_TYPE_WARNING, 'WARNING'),
+    (MSG_TYPE_ALERT, 'ALERT'),
+    (MSG_TYPE_MUTED, 'MUTED'),
+    (MSG_TYPE_ENTER, 'ENTER'),
+    (MSG_TYPE_LEAVE, 'LEAVE'),
+)
+
+MESSAGE_TYPES_LIST = [
+    MSG_TYPE_MESSAGE,
+    MSG_TYPE_WARNING,
+    MSG_TYPE_ALERT,
+    MSG_TYPE_MUTED,
+    MSG_TYPE_ENTER,
+    MSG_TYPE_LEAVE,
+]
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '3o^)rc46u87^o)kopo-b9vb+vh^75uot75wx(r6!3nd*aixjmf'
 
@@ -25,7 +63,6 @@ SECRET_KEY = '3o^)rc46u87^o)kopo-b9vb+vh^75uot75wx(r6!3nd*aixjmf'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -40,7 +77,9 @@ INSTALLED_APPS = [
     'pool',
     'services',
     'accounts',
-    'groups'
+    'groups',
+    'channels',
+    'chat'
 ]
 
 MIDDLEWARE = [
