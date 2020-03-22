@@ -1,5 +1,5 @@
 from django import forms
-from pool.models import Service, TravelService, FoodService, ShoppingService, Category, ServiceMember
+from pool.models import Service, TravelService, FoodService, ShoppingService, Category, ServiceMember, Group
 from django.utils.dateparse import parse_duration
 from django.forms import ValidationError
 
@@ -199,3 +199,16 @@ class ServiceCreationForm(forms.Form):
 #         f.save()
 #         sm= ServiceMember(service=f, user=u)
 #         sm.save()
+
+class GroupSelectForm(forms.Form):
+    groups = forms.ModelMultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple,
+        queryset=Group.objects.all()
+    )
+    def __init__(self, *args, **kwargs):
+        currentuser = kwargs.pop('currentuser')
+        super(GroupSelectForm, self).__init__(*args, **kwargs)
+        self.fields['groups'].queryset = Group.objects.filter(members=currentuser).all()
+
+
+

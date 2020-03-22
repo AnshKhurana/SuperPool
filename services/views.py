@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 from pool.models import *
-from .forms import ServiceCreationForm, newFoodCreationForm, ShoppingCreationForm, TravelCreationForm
+from .forms import ServiceCreationForm, newFoodCreationForm, ShoppingCreationForm, TravelCreationForm, GroupSelectForm
 from accounts.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.urls import reverse_lazy
+from django.core import serializers
 
 # Create your views here.
 
@@ -26,15 +27,25 @@ class FoodCreateView(LoginRequiredMixin, FormView):
     template_name = 'services/create.html'
 
     def form_valid(self, form):
+        if not ('servicegroups' in self.request.session):
+            form.add_error(None, "Session expired")
+            return super().form_invalid(form)
+        else:
+            groups=self.request.session['servicegroups']
+            del self.request.session['servicegroups']
+
         u = self.request.user
         data = form.save()
         f = FoodService(category=Category.objects.get(name='Food'), initiator=u, vendor=data['vendor'],
                         description=data['description'],
                         start_time=data['start_time'], end_time=data['end_time'], slackness=data['slackness'],
-                        stype='Food')
+                        )
         f.save()
         sm = ServiceMember(service=f, user=u)
         sm.save()
+        for group in serializers.deserialize("json", groups):
+            gs= ServiceGroup(group= group.object, service=f)
+            gs.save()
         # form.save(self.request.user)
         return super().form_valid(form)
 
@@ -45,15 +56,25 @@ class ShoppingCreateView(LoginRequiredMixin, FormView):
     template_name = 'services/create.html'
 
     def form_valid(self, form):
+        if not ('servicegroups' in self.request.session):
+            form.add_error(None, "Session expired")
+            return super().form_invalid(form)
+        else:
+            groups=self.request.session['servicegroups']
+            del self.request.session['servicegroups']
+
         u = self.request.user
         data = form.save()
         f = ShoppingService(category=Category.objects.get(name='Shopping'), initiator=u, vendor=data['vendor'],
                             description=data['description'],
                             start_time=data['start_time'], end_time=data['end_time'], slackness=data['slackness'],
-                            stype='Shopping')
+                            )
         f.save()
         sm = ServiceMember(service=f, user=u)
         sm.save()
+        for group in serializers.deserialize("json", groups):
+            gs= ServiceGroup(group= group.object, service=f)
+            gs.save()
         # form.save(self.request.user)
         return super().form_valid(form)
 
@@ -64,16 +85,49 @@ class TravelCreateView(LoginRequiredMixin, FormView):
     template_name = 'services/create.html'
 
     def form_valid(self, form):
+        if not ('servicegroups' in self.request.session):
+            form.add_error(None, "Session expired")
+            return super().form_invalid(form)
+        else:
+            groups=self.request.session['servicegroups']
+            del self.request.session['servicegroups']
         u = self.request.user
         data = form.save()
         f = TravelService(category=Category.objects.get(name='Travel'), initiator=u, start_point=data["start_point"],
                           end_point=data["end_point"], description=data['description'],
                           start_time=data['start_time'], end_time=data['end_time'],
-                          slackness=data['slackness'], stype='Travel')
+                          slackness=data['slackness']
+                          )
         f.save()
         sm = ServiceMember(service=f, user=u)
         sm.save()
+        for group in serializers.deserialize("json", groups):
+            gs= ServiceGroup(group= group.object, service=f)
+            gs.save()
         # form.save(self.request.user)
+        return super().form_valid(form)
+
+class GroupSelectView(LoginRequiredMixin, FormView):
+
+    form_class = GroupSelectForm
+    success_url = reverse_lazy('create')
+    template_name = 'services/groupselect.html'
+
+    def get_success_url(self):
+        if 'Food' in self.request.POST:
+            return reverse_lazy('services:foodcreate')
+        elif 'Shopping' in self.request.POST:
+            return reverse_lazy('services:shoppingcreate')
+        else:
+            return reverse_lazy('services:travelcreate')
+
+    def get_form_kwargs(self):
+        kwargs = super(GroupSelectView, self).get_form_kwargs()
+        kwargs['currentuser'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        self.request.session['servicegroups'] = serializers.serialize("json", form.cleaned_data['groups'].all(), fields=())
         return super().form_valid(form)
 
 # @login_required

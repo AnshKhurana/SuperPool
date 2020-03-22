@@ -16,6 +16,9 @@ class Group(models.Model):
                                      through="GroupMember",
                                      through_fields=("group", "user"),
                                      related_name="groops")
+
+    def __str__(self):
+        return f'{self.name}'
     
 
 class GroupForm(forms.ModelForm):
@@ -31,8 +34,8 @@ class GroupMember(models.Model):
 
 
 class Service(PolymorphicModel):
-    group_ids = models.CharField(validators=[validate_comma_separated_integer_list],
-                                 max_length=200, blank=True, null=True, default='')
+    # group_ids = models.CharField(validators=[validate_comma_separated_integer_list],
+    #                              max_length=200, blank=True, null=True, default='')
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, related_name="%(class)s_services")
     initiator = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
     start_time = models.DateTimeField(null=True)
@@ -45,6 +48,10 @@ class Service(PolymorphicModel):
                                      through_fields=("service_id", "user_id"),
                                      related_name="%(class)s_services")
 
+
+class ServiceGroup(models.Model):
+    service = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
+    group = models.ForeignKey(Group, on_delete=models.DO_NOTHING)
 
 class TravelService(Service):
     start_point = models.CharField(null=False, max_length=1000)
