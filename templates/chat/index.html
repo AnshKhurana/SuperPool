@@ -1,0 +1,159 @@
+{% extends "chat/base.html" %}
+
+{% block title %}Service-Chat Window{% endblock %}
+{% block header_text %}Services{% endblock %}
+
+{% block content %}
+
+    <ul class="services">
+        {% for service in services %}
+            <li class="service-link" data-service-id="{{ service.id }}">{{ service }}</li>
+        {% endfor %}
+        {% for service in other_serv %}
+            <li class="service-link" data-service-id="{{ service.id }}">{{ service }}</li>
+        {% empty %}
+<!--            <p class="empty">No chat services defined. Maybe make some in the <a href="{% url 'admin:index' %}">admin</a>?</p>-->
+        {% endfor %}
+    </ul>
+
+    <div id="chats">
+    </div>
+
+{% endblock %}
+
+
+{% block extra_body %}
+    <script>
+        $(function () {
+            // Correctly decide between ws:// and wss://
+            var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+            var ws_path = ws_scheme + '://' + window.location.host + "/chat/stream/";
+            console.log("Connecting to " + ws_path);
+            var socket = new ReconnectingWebSocket(ws_path);
+            console.log(socket);
+
+            // Handle incoming messages
+            socket.onmessage = function (message) {
+                // Decode the JSON
+                console.log(message);
+                console.log("Got websocket message " + message.data);
+                var data = JSON.parse(message.data);
+                // Handle errors
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+                // Handle joining
+                if (data.join) {
+                    console.log("Joining service " + data.join);
+                    console.log(data);
+                    var servicediv = $(
+                            "<div class='service' id='service-" + data.join + "'>" +
+                            "<h2>" + data.description + "</h2>" +
+                            "<div class='messages'></div>" +
+                            "<form><input><br><button>Send</button></form>" +
+                            "</div>"
+                    );
+                    // Hook up send button to send a message
+                    servicediv.find("form").on("submit", function () {
+                        socket.send(JSON.stringify({
+                            "command": "send",
+                            "service": data.join,
+                            "message": servicediv.find("input").val()
+                        }));
+                        servicediv.find("input").val("");
+                        return false;
+                    });
+                    $("#chats").append(servicediv);
+                    // Handle leaving
+                } else if (data.leave) {
+                    console.log("Leaving service " + data.leave);
+                    $("#service-" + data.leave).remove();
+                    // Handle getting a message
+                } else if (data.message || data.msg_type != 0) {
+                    var msgdiv = $("#service-" + data.service + " .messages");
+                    var ok_msg = "";
+                    // msg types are defined in chat/settings.py
+                    // Only for demo purposes is hardcoded, in production scenarios, consider call a service.
+                    switch (data.msg_type) {
+                        case 0:
+                            // Message
+                            ok_msg = "<div class='message'>" +
+                                    "<span class='username'>" + data.username + "</span>" +
+                                    "<span class='body'>" + data.message + "</span>" +
+                                    "</div>";
+                            break;
+                        case 1:
+                            // Warning / Advice messages
+                            ok_msg = "<div class='contextual-message text-warning'>" + data.message +
+                                    "</div>";
+                            break;
+                        case 2:
+                            // Alert / Danger messages
+                            ok_msg = "<div class='contextual-message text-danger'>" + data.message +
+                                    "</div>";
+                            break;
+                        case 3:
+                            // "Muted" messages
+                            ok_msg = "<div class='contextual-message text-muted'>" + data.message +
+                                    "</div>";
+                            break;
+                        case 4:
+                            // User joined service
+                            ok_msg = "<div class='contextual-message text-muted'>" + data.username +
+                                    " joined the service!" +
+                                    "</div>";
+                            break;
+                        case 5:
+                            // User left service
+                            ok_msg = "<div class='contextual-message text-muted'>" + data.username +
+                                    " left the service!" +
+                                    "</div>";
+                            break;
+                        default:
+                            console.log("Unsupported message type!");
+                            return;
+                    }
+                    msgdiv.append(ok_msg);
+
+                    msgdiv.scrollTop(msgdiv.prop("scrollHeight"));
+                } else {
+                    console.log("Cannot handle message!");
+                }
+            };
+
+            // Says if we joined a service or not by if there's a div for it
+            inservice = function (serviceId) {
+                return $("#service-" + serviceId).length > 0;
+            };
+
+            // service join/leave
+            $("li.service-link").click(function () {
+                serviceId = $(this).attr("data-service-id");
+                if (inservice(serviceId)) {
+                    // Leave service
+                    $(this).removeClass("joined");
+                    socket.send(JSON.stringify({
+                        "command": "leave",
+                        "service": serviceId
+                    }));
+                } else {
+                    // Join service
+                    $(this).addClass("joined");
+                    socket.send(JSON.stringify({
+                        "command": "join",
+                        "service": serviceId
+                    }));
+                }
+            });
+
+            // Helpful debugging
+            socket.onopen = function () {
+                console.log("Connected to chat socket");
+            };
+            socket.onclose = function () {
+                console.log("Disconnected from chat socket");
+            }
+        });
+    </script>
+{% endblock %}

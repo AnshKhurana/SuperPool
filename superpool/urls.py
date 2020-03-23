@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from chat.views import index
 
 
 urlpatterns = [
@@ -22,5 +23,6 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('',include('pool.urls')),
     path('groups/',include('groups.urls')),
-    path('services/', include('services.urls'))
+    path('services/', include('services.urls')),
+    path('chat/', include('chat.urls')),
 ]
