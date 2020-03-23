@@ -1,15 +1,18 @@
 {% extends "chat/base.html" %}
 
 {% block title %}Service-Chat Window{% endblock %}
-{% block header_text %}Service-Chat Window{% endblock %}
+{% block header_text %}Services{% endblock %}
 
 {% block content %}
 
-    <ul class="rooms">
-        {% for room in rooms %}
-            <li class="room-link" data-room-id="{{ room.id }}">{{ room }}</li>
+    <ul class="services">
+        {% for service in services %}
+            <li class="service-link" data-service-id="{{ service.id }}">{{ service }}</li>
+        {% endfor %}
+        {% for service in other_serv %}
+            <li class="service-link" data-service-id="{{ service.id }}">{{ service }}</li>
         {% empty %}
-            <p class="empty">No chat rooms defined. Maybe make some in the <a href="{% url 'admin:index' %}">admin</a>?</p>
+<!--            <p class="empty">No chat services defined. Maybe make some in the <a href="{% url 'admin:index' %}">admin</a>?</p>-->
         {% endfor %}
     </ul>
 
@@ -27,10 +30,12 @@
             var ws_path = ws_scheme + '://' + window.location.host + "/chat/stream/";
             console.log("Connecting to " + ws_path);
             var socket = new ReconnectingWebSocket(ws_path);
+            console.log(socket);
 
             // Handle incoming messages
             socket.onmessage = function (message) {
                 // Decode the JSON
+                console.log(message);
                 console.log("Got websocket message " + message.data);
                 var data = JSON.parse(message.data);
                 // Handle errors
@@ -40,32 +45,33 @@
                 }
                 // Handle joining
                 if (data.join) {
-                    console.log("Joining room " + data.join);
-                    var roomdiv = $(
-                            "<div class='room' id='room-" + data.join + "'>" +
-                            "<h2>" + data.title + "</h2>" +
+                    console.log("Joining service " + data.join);
+                    console.log(data);
+                    var servicediv = $(
+                            "<div class='service' id='service-" + data.join + "'>" +
+                            "<h2>" + data.description + "</h2>" +
                             "<div class='messages'></div>" +
-                            "<form><input><button>Send</button></form>" +
+                            "<form><input><br><button>Send</button></form>" +
                             "</div>"
                     );
                     // Hook up send button to send a message
-                    roomdiv.find("form").on("submit", function () {
+                    servicediv.find("form").on("submit", function () {
                         socket.send(JSON.stringify({
                             "command": "send",
-                            "room": data.join,
-                            "message": roomdiv.find("input").val()
+                            "service": data.join,
+                            "message": servicediv.find("input").val()
                         }));
-                        roomdiv.find("input").val("");
+                        servicediv.find("input").val("");
                         return false;
                     });
-                    $("#chats").append(roomdiv);
+                    $("#chats").append(servicediv);
                     // Handle leaving
                 } else if (data.leave) {
-                    console.log("Leaving room " + data.leave);
-                    $("#room-" + data.leave).remove();
+                    console.log("Leaving service " + data.leave);
+                    $("#service-" + data.leave).remove();
                     // Handle getting a message
                 } else if (data.message || data.msg_type != 0) {
-                    var msgdiv = $("#room-" + data.room + " .messages");
+                    var msgdiv = $("#service-" + data.service + " .messages");
                     var ok_msg = "";
                     // msg types are defined in chat/settings.py
                     // Only for demo purposes is hardcoded, in production scenarios, consider call a service.
@@ -93,15 +99,15 @@
                                     "</div>";
                             break;
                         case 4:
-                            // User joined room
+                            // User joined service
                             ok_msg = "<div class='contextual-message text-muted'>" + data.username +
-                                    " joined the room!" +
+                                    " joined the service!" +
                                     "</div>";
                             break;
                         case 5:
-                            // User left room
+                            // User left service
                             ok_msg = "<div class='contextual-message text-muted'>" + data.username +
-                                    " left the room!" +
+                                    " left the service!" +
                                     "</div>";
                             break;
                         default:
@@ -116,27 +122,27 @@
                 }
             };
 
-            // Says if we joined a room or not by if there's a div for it
-            inRoom = function (roomId) {
-                return $("#room-" + roomId).length > 0;
+            // Says if we joined a service or not by if there's a div for it
+            inservice = function (serviceId) {
+                return $("#service-" + serviceId).length > 0;
             };
 
-            // Room join/leave
-            $("li.room-link").click(function () {
-                roomId = $(this).attr("data-room-id");
-                if (inRoom(roomId)) {
-                    // Leave room
+            // service join/leave
+            $("li.service-link").click(function () {
+                serviceId = $(this).attr("data-service-id");
+                if (inservice(serviceId)) {
+                    // Leave service
                     $(this).removeClass("joined");
                     socket.send(JSON.stringify({
                         "command": "leave",
-                        "room": roomId
+                        "service": serviceId
                     }));
                 } else {
-                    // Join room
+                    // Join service
                     $(this).addClass("joined");
                     socket.send(JSON.stringify({
                         "command": "join",
-                        "room": roomId
+                        "service": serviceId
                     }));
                 }
             });

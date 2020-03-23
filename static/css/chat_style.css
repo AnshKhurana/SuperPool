@@ -1,4 +1,4 @@
-/* http://meyerweb.com/eric/tools/css/reset/ 
+/* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
 */
@@ -83,42 +83,47 @@ p {
     font-style: italic;
 }
 
-.rooms li {
+.services li {
     padding: 5px 7px;
-    background: #def;
     display: inline;
     margin: 5px 2px;
     border: 1px solid #bcd;
     border-radius: 2px;
     cursor: pointer;
 }
-    .rooms li.joined {
+    .services li.joined {
         background: #5898D9;
         border: 1px solid #35485C;
     }
 
 #chats {
 }
-    #chats .room {
+    #chats .service {
         border: 1px solid #ccc;
         padding: 5px;
         margin: 30px 0 0 0;
     }
     #chats h2 {
-        color: #333;
+        color: #3352FF;
         margin: 2px 0 5px 0;
         font-weight: bold;
+        background:#EEFE96;
+        font-size:25px
     }
     #chats .messages {
-        height: 200px;
+        height: 600px;
         overflow: auto;
-        background: #eee;
         margin: 2px 0 5px 0;
+        background: #FEE596;
+        color: blue;
+        font-family:"Tangerine";
+        font-size:20px;
     }
     #chats .username {
         display: inline-block;
         color: #C07A36;
-        width: 100px;
+        width: 150px;
+        font-family: "Comic Sans MS", cursive, sans-serif;
         font-weight: bold;
     }
     #chats .contextual-message{

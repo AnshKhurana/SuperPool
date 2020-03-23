@@ -30,7 +30,8 @@ CHANNEL_LAYERS = {
 
 ASGI_APPLICATION = 'superpool.routing.application'
 
-NOTIFY_USERS_ON_ENTER_OR_LEAVE_ROOMS = True
+NOTIFY_USERS_ON_ENTER_OR_LEAVE_SERVICES = True
+os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
 MSG_TYPE_MESSAGE = 0  # For standard messages
 MSG_TYPE_WARNING = 1  # For yellow messages

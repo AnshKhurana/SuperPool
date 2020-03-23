@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import Room
+from pool.models import Service, FoodService, TravelService, ShoppingService
 
 
 admin.site.register(
-    Room,
-    list_display=["id", "title", "staff_only"],
-    list_display_links=["id", "title"],
+    Service,
+    list_display=["id", "description", "get_members"],
+    list_display_links=["id", "description", "get_members"],
 )
