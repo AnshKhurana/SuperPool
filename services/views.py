@@ -24,7 +24,7 @@ from django.core import serializers
 class FoodCreateView(LoginRequiredMixin, FormView):
     form_class = newFoodCreationForm
     success_url = '/'
-    template_name = 'services/create.html'
+    template_name = 'services/integrated_create.html'
 
     def form_valid(self, form):
         if not ('servicegroups' in self.request.session):
@@ -53,7 +53,7 @@ class FoodCreateView(LoginRequiredMixin, FormView):
 class ShoppingCreateView(LoginRequiredMixin, FormView):
     form_class = ShoppingCreationForm
     success_url = '/'
-    template_name = 'services/create.html'
+    template_name = 'services/shoppingcreate.html'
 
     def form_valid(self, form):
         if not ('servicegroups' in self.request.session):
@@ -82,7 +82,7 @@ class ShoppingCreateView(LoginRequiredMixin, FormView):
 class TravelCreateView(LoginRequiredMixin, FormView):
     form_class = TravelCreationForm
     success_url = '/'
-    template_name = 'services/create.html'
+    template_name = 'services/travelcreate.html'
 
     def form_valid(self, form):
         if not ('servicegroups' in self.request.session):

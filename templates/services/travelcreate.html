@@ -15,37 +15,26 @@
                                 <div class="central-meta">
                                     <div class="frnds">
                                         {#                                        <ul class="nav nav-tabs">#}
-                                        <h5 class="f-title"><i class="ti-user"></i>Your Groups </h5>
+                                        <h5 class="f-title"><i class="ti-user"></i>Travel Service</h5>
                                         {#                                        </ul>#}
 
                                         <div class="tab-content">
                                             <div class="tab-pane active fade show " id="frends">
+
+{#                                                insert stuff here#}
+
+                                                <h2>Enter details:</h2>
                                                 <form method="POST">
                                                     {% csrf_token %}
-<!--                                                <ul class="nearby-contct">-->
-<!--                                                        {% for group in groups %}&ndash;&gt;-->
-<!--                                                        <li>-->
-<!--                                                            <div class="nearly-pepls">-->
-<!--                                                                <figure>-->
-<!--                                                                    {#                                                                    {% if user.profile.profile_image.url %}#}-->
-<!--                                                                    {#                                                                        <a href="#" title=""><img src="{{ user.profile.profile_image.url }}" alt=""></a>#}-->
-<!--                                                                    {#                                                                    {% else %}#}-->
-<!--                                                                    <a href="#" title=""><img src="{% static 'images/default.jpg' %}" alt=""></a>-->
-<!--                                                                    {#                                                                    {% endif %}#}-->
-<!--                                                                </figure>-->
-<!--                                                                <div class="pepl-info">-->
-<!--                                                                    <h4><button onclick="window.open('/groups/display/{{group.id}}', 'popup', 'width=800,height=600, top=200, left=500');" title="">{{ group.name }}</button></h4>-->
-<!--                                                                    {#                                                                    <a href="#" title="" data-url="{% url 'friends:send-request' user.username %}" class="add-butn add-friend" data-ripple="" data-friend="{{ user.username }}">Add Friend</a>#}-->
-<!--                                                                </div>-->
-<!--                                                            </div>-->
-<!--                                                        </li>-->
-<!--                                                    {% endfor %}-->
-                                                    {{ form.as_table }}
-                                                    <button type="submit", id="Food", name="Food">Food</button>
-                                                    <button type="submit", id="Travel", name="Travel">Travel</button>
-                                                    <button type="submit", id="Shopping", name="Shopping">Shopping</button>
+                                                    <table>
+                                                        {{ form }}
+                                                    </table>
+                                                    <br>
+                                                    <button type="submit">Submit</button>
                                                 </form>
-<!--                                                </ul>-->
+
+
+
 
                                                 <div class="lodmore">
                                                     <button class="btn-view btn-load-more"></button>
