@@ -24,5 +24,5 @@ urlpatterns = [
     path('',include('pool.urls')),
     path('groups/',include('groups.urls')),
     path('services/', include('services.urls')),
-    path('chat/', index),
+    path('chat/', include('chat.urls')),
 ]
