@@ -50,7 +50,7 @@ class Service(PolymorphicModel):
                                      related_name="service_member")
     groups = models.ManyToManyField(Group,
                                     through="ServiceGroup",
-                                    through_fields=("service_id", "group_id"),
+                                    through_fields=("service", "group"),
                                     related_name="group_of_service")
 
     def __str__(self):
