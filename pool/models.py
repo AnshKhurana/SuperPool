@@ -48,6 +48,10 @@ class Service(PolymorphicModel):
                                      through="ServiceMember",
                                      through_fields=("service_id", "user_id"),
                                      related_name="service_member")
+    groups = models.ManyToManyField(Group,
+                                    through="ServiceGroup",
+                                    through_fields=("service_id", "group_id"),
+                                    related_name="group_of_service")
 
     def __str__(self):
         return self.description

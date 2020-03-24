@@ -48,7 +48,7 @@ sm1 = ServiceMember(service=ss1, user=u1)
 sm1.save()
 
 # add service to all groups of the user
-gs1= ServiceGroup(group= g1, service=ss1)
+gs1= ServiceGroup(group=g1, service=ss1)
 gs1.save()
 
 gs2= ServiceGroup(group= g2, service=ss1)
@@ -66,7 +66,7 @@ sm2 = ServiceMember(service=sf1, user=u2)
 sm2.save()
 
 # add service to all groups of the user
-gs3= ServiceGroup(group= g2, service=sf1)
+gs3= ServiceGroup(group=g2, service=sf1)
 gs3.save()
 
 
