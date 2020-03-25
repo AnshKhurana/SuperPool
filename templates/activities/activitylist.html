@@ -2,8 +2,28 @@
 {% load static %}
 {% block content %}
     {% csrf_token %}
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-        <script>
+    <script>
+    function fetchServices()
+
+    {
+        const foodinstance = axios.create({
+                baseURL: '{% url 'groups:home' %}',
+                timeout: 1000,
+            });
+        const shoppinginstance = axios.create({
+                baseURL: '{% url 'groups:home' %}',
+                timeout: 1000,
+            });
+        const travelinstance = axios.create({
+                baseURL: '{% url 'groups:home' %}',
+                timeout: 1000,
+            });
+
+
+
+    }
 
 {#javascript for main loader function#}
 
@@ -143,25 +163,7 @@
                                         <div class="tab-content">
                                             <div class="tab-pane active fade show " id="frends">
                                                 <ul class="nearby-contct">
-<!--                                                    <button style="align: center; border: 1px solid"-->
-<!--                                                            onclick=myFunction() id="CreateGroup" class="btn btn-primary btn-lg" >Create New Group</button><br><br><br>-->
-<!--                                                        {% for group in groups %}-->
-<!--                                                        <li>-->
-<!--                                                            <div class="nearly-pepls">-->
-<!--                                                                <figure>-->
-<!--                                                                    {#                                                                    {% if user.profile.profile_image.url %}#}-->
-<!--                                                                    {#                                                                        <a href="#" title=""><img src="{{ user.profile.profile_image.url }}" alt=""></a>#}-->
-<!--                                                                    {#                                                                    {% else %}#}-->
-<!--                                                                    <a href="#" title=""><img src="{% static 'images/default.jpg' %}" alt=""></a>-->
-<!--                                                                    {#                                                                    {% endif %}#}-->
-<!--                                                                </figure>-->
-<!--                                                                <div class="pepl-info">-->
-<!--                                                                    <h4><button onclick="window.open('/groups/display/{{group.id}}', 'popup', 'width=800,height=600, top=200, left=500');" title="">{{ group.name }}</button></h4>-->
-<!--                                                                    {#                                                                    <a href="#" title="" data-url="{% url 'friends:send-request' user.username %}" class="add-butn add-friend" data-ripple="" data-friend="{{ user.username }}">Add Friend</a>#}-->
-<!--                                                                </div>-->
-<!--                                                            </div>-->
-<!--                                                        </li>-->
-<!--                                                    {% endfor %}-->
+{#                                                        insert here?#}
                                                 </ul>
                                                 <div class="lodmore">
                                                     <button class="btn-view btn-load-more"></button>
@@ -187,17 +189,17 @@
                                         <ul class="followers">
                                             <li>
                                                 <div class="friend-meta">
-                                                    <h4><input type="checkbox" id="Food" name="Food" value="Food" checked="true"> Food</h4>
+                                                    <h4><input type="radio" id=food_sel" name="category" value="Food" checked> Food</h4>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="friend-meta">
-                                                    <h4><input type="checkbox" id="Travel" name="Travel" value="Travel" checked="true"> Travel</h4>
+                                                    <h4><input type="radio" id="travel_sel" name="category" value="Travel" checked> Travel</h4>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="friend-meta">
-                                                    <h4><input type="checkbox" id="Shopping" name="Shopping" value="Shopping" checked="true"> Shopping</h4>
+                                                    <h4><input type="radio" id="shopping_sel" name="category" value="Shopping" checked> Shopping</h4>
                                                 </div>
                                             </li>
                                         </ul>
@@ -210,7 +212,8 @@
                                             {% for group in groups %}
                                             <li>
                                                 <div class="friend-meta">
-                                                   <h4> <input type="checkbox" id="{{ group.id }}" name="{{ group.name }}" checked="false"> {{ group.name }} </h4>
+                                                   <h4> <input checked id="{{ group.id }}"
+                                                               name="{{ group.name }}" type="checkbox"> {{ group.name }} </h4>
                                                 </div>
                                             </li>
                                             {% endfor %}

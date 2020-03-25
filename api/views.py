@@ -33,4 +33,3 @@ class ShoppingServiceList(generics.ListAPIView):
         gids = self.request.GET.get('gids').split(',')
         return Service.objects.filter(Q(groups__id__in=gids) & Q(category__name='Shopping') & Q(groups__members=user)).all()
 
-

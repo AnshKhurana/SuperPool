@@ -15,3 +15,9 @@ class ShoppingServiceSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ShoppingService
         fields = ['start_time', 'end_time', 'slackness', 'description', 'vendor']
+
+
+class ServiceSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ShoppingService
+        fields = ['category','initiator', 'start_time', 'end_time', 'slackness', 'description']
