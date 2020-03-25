@@ -155,29 +155,48 @@
                             {% include 'includes/sidebar.html' %}
                             <div class="col-lg-6">
                                 <div class="central-meta">
+
+
+{#                                    ENTER HERE#}
                                     <div class="frnds">
-                                        {#                                        <ul class="nav nav-tabs">#}
-                                        <h5 class="f-title"><i class="ti-user"></i>Interesting Activities </h5>
-                                        {#                                        </ul>#}
+                                        <ul class="nav nav-tabs">
+{#                                            <h5 class="f-title"><i class="ti-user"></i>Interesting Activities </h5>#}
+                                            <li class="nav-item"><a class="active" href="#frends" data-toggle="tab">Interesting Activities</a></li>
+                                        </ul>
 
                                         <div class="tab-content">
-                                            <div class="tab-pane active fade show " id="frends">
-                                                <ul class="nearby-contct">
+                                            <div class="tab-pane active fade show ">
+                                                <ul class="nearby-contct"  id="service_list">
 {#                                                        insert here?#}
+                                                    <li>
+                                                        <div class="nearly-pepls">
+{#                                                            <figure>#}
+{#                                                                <a href="#" title=""><img src="{% static 'images/fav.png' %}" alt=""></a>#}
+{#                                                            </figure>#}
+                                                            <div class="pepl-info">
+                                                                <h4><a href="#" title="">Food Service</a></h4>
+                                                                <a href="#" title=""><h5>Domino's Pizza</h5></a>
+                                                                <p> by initiator </p>
+                                                                <h4><p>Start Time: <br>
+                                                                End Time: </p> </h4>
+                                                                <span>A very long line of text which will be equivalent to the description of the thing that I want to show</span>
+{#                                                                here add the url to join a service, assumption a request will be sent#}
+                                                                <a href="#" title="" data-url="{% url 'pool:home' %}" class="add-butn add-friend" data-ripple="">Join Service</a>
+                                                            </div>
+                                                        </div>
+                                                    </li>
                                                 </ul>
+
                                                 <div class="lodmore">
+{#                                                    set action of this button to refresh page or select fetchAll#}
                                                     <button class="btn-view btn-load-more"></button>
                                                 </div>
-
                                             </div>
-                                            <script>
-                                            function myFunction() {
-                                                window.open("/groups/create", "popup", 'width=400,height=300, top=400, left=700');
-                                             }
-                                            </script>
-
                                         </div>
                                     </div>
+
+
+
                                 </div>
                             </div><!-- centerl meta -->
                             <div class="col-lg-3">
