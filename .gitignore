@@ -16,3 +16,5 @@ groups/__pycache__
 *__pycache__*
 *.pyo
 *.pyc
+scripts/zomato-india-data-set
+scripts/zomato-india-data-set.zip

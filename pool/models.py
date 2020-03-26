@@ -92,4 +92,17 @@ class Message(models.Model):
     service = models.ForeignKey(Service, on_delete=models.DO_NOTHING, related_name="messages")
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True, related_name="messages")
 
+class Restaurant(models.Model):
+    name=models.CharField(null=False,max_length=1000)
+    price=models.FloatField()
+    cusine_category=models.CharField(max_length=500)
+    city=models.CharField(max_length=100)
+    region=models.CharField(max_length=100)
+    url=models.URLField()
+    page_no=models.IntegerField()
+    cusine_type=models.CharField(max_length=100)
+    timing=models.CharField(max_length=100)
+    rating=models.CharField(max_length=100)
+    votes=models.CharField(max_length=100)
+    
 # Create your models here.
