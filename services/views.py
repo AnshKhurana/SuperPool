@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 from pool.models import *
-from .forms import ServiceCreationForm, newFoodCreationForm, ShoppingCreationForm, TravelCreationForm, GroupSelectForm
+from .forms import ServiceCreationForm, ShoppingCreationForm, TravelCreationForm, GroupSelectForm, \
+    FoodCreationForm
 from accounts.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -24,7 +25,7 @@ from dal import autocomplete
 
 
 class FoodCreateView(LoginRequiredMixin, FormView):
-    form_class = newFoodCreationForm
+    form_class = FoodCreationForm
     success_url = '/'
     template_name = 'services/integrated_create.html'
 
@@ -140,13 +141,16 @@ class FoodVendorAutocomplete(autocomplete.Select2QuerySetView):
     # template_name = 'pool/foodvendor_form.html'
 
     def get_queryset(self):
-        qs = FoodVendor.objects.all()
+        print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+        # qs = FoodVendor.objects.all()
+        qs = FoodService.objects.all()
         print('In FoodAutoComplete')
         # print(qs)
         if self.q:
-            qs = qs.filter(vendor__scontains=self.q)
+            qs = qs.filter(vendor__contains=self.q)
         print(qs)
         return qs
+
 
 class ShoppingVendorAutocomplete(autocomplete.Select2QuerySetView):
     # model = FoodVendor
@@ -154,12 +158,12 @@ class ShoppingVendorAutocomplete(autocomplete.Select2QuerySetView):
     # template_name = 'pool/foodvendor_form.html'
 
     def get_queryset(self):
-        qs = ShoppingVendor.objects.all()
+        # qs = ShoppingVendor.objects.all()
         # qs = qs.filter(vendor__istartswith='K')
         print('In ShoppingAutocomplete')
         # print(qs)
         if self.q:
-            qs = qs.filter(vendor__scontains=self.q)
+            qs = qs.filter(vendor__contains=self.q)
         print(qs)
         return qs
 

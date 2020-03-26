@@ -1,4 +1,6 @@
 from django import forms
+from django.urls import reverse_lazy
+
 from pool.models import Service, TravelService, FoodService, ShoppingService, Category, ServiceMember, Group
 from django.utils.dateparse import parse_duration
 from django.forms import ValidationError
@@ -34,13 +36,13 @@ class DurationInput(forms.widgets.TextInput):
         return '{:02d} days:{:02d}:{:02d}'.format(days, minutes, seconds)
 
 
-class newFoodCreationForm(forms.ModelForm):
+class FoodCreationForm(autocomplete.FutureModelForm):
     class Meta:
         model = FoodService
         fields = ("start_time", "end_time", "slackness", "description", "vendor")
         widgets = {
-            'vendor': autocomplete.ModelSelect2(
-                url='services/food-autocomplete',
+            'vendor': autocomplete.Select2Multiple(
+                url=reverse_lazy('services:food-autocomplete'),
                 attrs={
                     'data-placeholder': 'Vendors ...',
                     'data-minimum-input-length': 1,
@@ -60,7 +62,7 @@ class newFoodCreationForm(forms.ModelForm):
         self.fields["slackness"].input_formats = ["%dT%H:%M", "%d %H:%M"]
 
     def clean(self):
-        super(newFoodCreationForm, self).clean()
+        super(FoodCreationForm, self).clean()
         stime = self.cleaned_data.get('start_time')
         etime = self.cleaned_data.get('end_time')
         if (stime is not None) and (etime is not None) and stime > etime:

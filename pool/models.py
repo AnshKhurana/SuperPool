@@ -76,6 +76,9 @@ class TravelService(Service):
 class FoodService(Service):
     vendor = models.CharField(null=False, max_length=1000)
 
+    def __str__(self):
+        return '%s' % self.vendor
+
 
 class ShoppingService(Service):
     vendor = models.CharField(null=False, max_length=1000)
