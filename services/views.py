@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import FormView
+from django.views.generic import FormView, CreateView
 from pool.models import *
 from .forms import ServiceCreationForm, ShoppingCreationForm, TravelCreationForm, GroupSelectForm, \
     FoodCreationForm
@@ -24,10 +24,10 @@ from dal import autocomplete
 #         return super().form_valid(form)
 
 
-class FoodCreateView(LoginRequiredMixin, FormView):
+class FoodCreateView(LoginRequiredMixin, CreateView):
     form_class = FoodCreationForm
-    success_url = '/'
     template_name = 'services/integrated_create.html'
+    success_url = '/'
 
     def form_valid(self, form):
         if not ('servicegroups' in self.request.session):
@@ -143,11 +143,11 @@ class FoodVendorAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
         # qs = FoodVendor.objects.all()
-        qs = FoodService.objects.all()
+        qs = Restaurant.objects.all()
         print('In FoodAutoComplete')
         # print(qs)
         if self.q:
-            qs = qs.filter(vendor__contains=self.q)
+            qs = qs.filter(name__contains=self.q)
         print(qs)
         return qs
 

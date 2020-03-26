@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
     {% csrf_token %}
     <section>
         <div class="gap gray-bg">
@@ -27,7 +27,8 @@
                                                 <form method="POST">
                                                     {% csrf_token %}
                                                     <table>
-                                                        {{ form }}
+                                                        {{ form.as_p }}
+<!--                                                        {{ form.media }}-->
                                                     </table>
                                                     <br>
                                                     <button type="submit">Submit</button>
@@ -268,7 +269,6 @@
 {% endblock %}
 
 {% block footer %}
-    <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'autocomplete_light/select2.css' %}" />
     <script type="text/javascript" src="{% static 'autocomplete_light/jquery.init.js' %}"></script>
     <script type="text/javascript" src="{% static 'autocomplete_light/autocomplete.init.js' %}"></script>
@@ -276,5 +276,5 @@
     <link rel="stylesheet" type="text/css" href="{% static 'autocomplete_light/vendor/select2/dist/css/select2.css' %}" />
     <script type="text/javascript" src="{% static 'autocomplete_light/vendor/select2/dist/js/select2.full.js' %}"></script>
     <script type="text/javascript" src="{% static 'autocomplete_light/forward.js' %}"></script>
-    {{ form.media }}
+<!--    {{ form.media }}-->
 {% endblock %}

@@ -33,6 +33,22 @@ class GroupMember(models.Model):
     group = models.ForeignKey(Group, on_delete=models.DO_NOTHING)
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
 
+class Restaurant(models.Model):
+    name = models.CharField(null=False, max_length=1000)
+    price = models.FloatField()
+    cusine_category = models.CharField(max_length=500)
+    city = models.CharField(max_length=100)
+    region = models.CharField(max_length=100)
+    url = models.URLField()
+    page_no = models.IntegerField()
+    cusine_type = models.CharField(max_length=100)
+    timing = models.CharField(max_length=100)
+    rating = models.CharField(max_length=100)
+    votes = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
 
 class Service(PolymorphicModel):
     # group_ids = models.CharField(validators=[validate_comma_separated_integer_list],
@@ -72,13 +88,14 @@ class ServiceGroup(models.Model):
     service = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
     group = models.ForeignKey(Group, on_delete=models.DO_NOTHING)
 
+
 class TravelService(Service):
     start_point = models.CharField(null=False, max_length=1000)
     end_point = models.CharField(null=False, max_length=1000)
 
 
 class FoodService(Service):
-    vendor = models.CharField(null=False, max_length=1000)
+    vendor = models.ForeignKey(Restaurant, on_delete=models.DO_NOTHING, null=False)
 
     def __str__(self):
         return '%s' % self.vendor
@@ -99,4 +116,5 @@ class Message(models.Model):
     service = models.ForeignKey(Service, on_delete=models.DO_NOTHING, related_name="messages")
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True, related_name="messages")
 
-# Create your models here.
+
+

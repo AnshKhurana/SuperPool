@@ -40,15 +40,15 @@ class FoodCreationForm(autocomplete.FutureModelForm):
     class Meta:
         model = FoodService
         fields = ("start_time", "end_time", "slackness", "description", "vendor")
-        widgets = {
-            'vendor': autocomplete.Select2Multiple(
-                url=reverse_lazy('services:food-autocomplete'),
-                attrs={
-                    'data-placeholder': 'Vendors ...',
-                    'data-minimum-input-length': 1,
-                },
-            )
-        }
+        # widgets = {
+        #     'vendor': autocomplete.ModelSelect2(
+        #         url='services:food-autocomplete',
+        #         attrs={
+        #             'data-placeholder': 'Vendors ...',
+        #             'data-minimum-input-length': 1,
+        #         },
+        #     )
+        # }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -60,6 +60,13 @@ class FoodCreationForm(autocomplete.FutureModelForm):
 
         self.fields["slackness"].widget = DurationInput()
         self.fields["slackness"].input_formats = ["%dT%H:%M", "%d %H:%M"]
+
+        # self.fields["vendor"].widget = autocomplete.ListSelect2(
+        #         url='services:food-autocomplete',
+        #         attrs={
+        #             'data-placeholder': 'Vendors ...',
+        #             'data-minimum-input-length': 1,
+        #         })
 
     def clean(self):
         super(FoodCreationForm, self).clean()
