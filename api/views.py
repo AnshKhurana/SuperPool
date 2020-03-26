@@ -12,8 +12,7 @@ class FoodServiceList(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         gids = self.request.GET.get('gids').split(',')
-        return Service.objects.filter(Q(groups__id__in=gids) & Q(category__name='Food') & Q(groups__members=user)).all()
-        # return FoodService.objects.all()
+        return Service.objects.filter(Q(groups__id__in=gids) & Q(category__name='Food') & Q(groups__members=user.id)).all()
 
 class TravelServiceList(generics.ListAPIView):
 
@@ -22,7 +21,7 @@ class TravelServiceList(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         gids = self.request.GET.get('gids').split(',')
-        return Service.objects.filter(Q(groups__id__in=gids) & Q(category__name='Travel') & Q(groups__members=user)).all()
+        return Service.objects.filter(Q(groups__id__in=gids) & Q(category__name='Travel') & Q(groups__members=user.id)).all()
 
 class ShoppingServiceList(generics.ListAPIView):
 
@@ -31,5 +30,5 @@ class ShoppingServiceList(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         gids = self.request.GET.get('gids').split(',')
-        return Service.objects.filter(Q(groups__id__in=gids) & Q(category__name='Shopping') & Q(groups__members=user)).all()
+        return Service.objects.filter(Q(groups__id__in=gids) & Q(category__name='Shopping') & Q(groups__members=user.id)).all()
 
