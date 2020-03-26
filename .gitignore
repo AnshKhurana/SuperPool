@@ -18,3 +18,6 @@ groups/__pycache__
 *.pyc
 scripts/zomato-india-data-set
 scripts/zomato-india-data-set.zip
+scripts/sec-edgar-companies-list/sec__edgar_company_info.csv
+scripts/sec-edgar-companies-list.zip
+scripts/sec-edgar-companies-list/database.sqlite
