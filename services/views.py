@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView
+from notifications.signals import notify
+
 from pool.models import *
 from .forms import ServiceCreationForm, newFoodCreationForm, ShoppingCreationForm, TravelCreationForm, GroupSelectForm
 from accounts.models import User
@@ -8,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.core import serializers
+
 
 # Create your views here.
 
@@ -31,7 +34,7 @@ class FoodCreateView(LoginRequiredMixin, FormView):
             form.add_error(None, "Session expired")
             return super().form_invalid(form)
         else:
-            groups=self.request.session['servicegroups']
+            groups = self.request.session['servicegroups']
             del self.request.session['servicegroups']
 
         u = self.request.user
@@ -43,9 +46,21 @@ class FoodCreateView(LoginRequiredMixin, FormView):
         f.save()
         sm = ServiceMember(service=f, user=u)
         sm.save()
+
+        notified_members = set()
         for group in serializers.deserialize("json", groups):
-            gs= ServiceGroup(group= group.object, service=f)
+            gs = ServiceGroup(group=group.object, service=f)
             gs.save()
+
+            members = GroupMember.objects.filter(group=group.object).values('user')
+            print(members)
+            for member in members:
+                print(member)
+                notified_members.add(User.objects.get(id=member['user']))
+
+        for member in notified_members:
+            notify.send(self.request.user, recipient=member, verb=data['description'], description="Food " + str(f.id))
+
         # form.save(self.request.user)
         return super().form_valid(form)
 
@@ -60,7 +75,7 @@ class ShoppingCreateView(LoginRequiredMixin, FormView):
             form.add_error(None, "Session expired")
             return super().form_invalid(form)
         else:
-            groups=self.request.session['servicegroups']
+            groups = self.request.session['servicegroups']
             del self.request.session['servicegroups']
 
         u = self.request.user
@@ -73,7 +88,7 @@ class ShoppingCreateView(LoginRequiredMixin, FormView):
         sm = ServiceMember(service=f, user=u)
         sm.save()
         for group in serializers.deserialize("json", groups):
-            gs= ServiceGroup(group= group.object, service=f)
+            gs = ServiceGroup(group=group.object, service=f)
             gs.save()
         # form.save(self.request.user)
         return super().form_valid(form)
@@ -89,7 +104,7 @@ class TravelCreateView(LoginRequiredMixin, FormView):
             form.add_error(None, "Session expired")
             return super().form_invalid(form)
         else:
-            groups=self.request.session['servicegroups']
+            groups = self.request.session['servicegroups']
             del self.request.session['servicegroups']
         u = self.request.user
         data = form.save()
@@ -102,13 +117,13 @@ class TravelCreateView(LoginRequiredMixin, FormView):
         sm = ServiceMember(service=f, user=u)
         sm.save()
         for group in serializers.deserialize("json", groups):
-            gs= ServiceGroup(group= group.object, service=f)
+            gs = ServiceGroup(group=group.object, service=f)
             gs.save()
         # form.save(self.request.user)
         return super().form_valid(form)
 
-class GroupSelectView(LoginRequiredMixin, FormView):
 
+class GroupSelectView(LoginRequiredMixin, FormView):
     form_class = GroupSelectForm
     success_url = reverse_lazy('create')
     template_name = 'services/groupselect.html'
@@ -127,7 +142,8 @@ class GroupSelectView(LoginRequiredMixin, FormView):
         return kwargs
 
     def form_valid(self, form):
-        self.request.session['servicegroups'] = serializers.serialize("json", form.cleaned_data['groups'].all(), fields=())
+        self.request.session['servicegroups'] = serializers.serialize("json", form.cleaned_data['groups'].all(),
+                                                                      fields=())
         return super().form_valid(form)
 
 # @login_required

@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+import notifications.urls
 from chat.views import index
 
 
@@ -25,4 +26,6 @@ urlpatterns = [
     path('groups/',include('groups.urls')),
     path('services/', include('services.urls')),
     path('chat/', include('chat.urls')),
+    path('notification/', include('notification.urls')),
+    path('notifications/', include(notifications.urls, namespace='notifications')),
 ]
