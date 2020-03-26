@@ -41,13 +41,17 @@ class Service(PolymorphicModel):
     initiator = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
     start_time = models.DateTimeField(null=True)
     end_time = models.DateTimeField(null=True)
-    slackness = models.DurationField()
+    slackness = models.DurationField(null=True)
     description = models.CharField(null=False, max_length=1000)  # this is a general description
     # stype = models.CharField(null=False, max_length=255)  # one among ['Food','Travel','Shopping']
     members = models.ManyToManyField(User,
                                      through="ServiceMember",
                                      through_fields=("service_id", "user_id"),
                                      related_name="service_member")
+    groups = models.ManyToManyField(Group,
+                                    through="ServiceGroup",
+                                    through_fields=("service", "group"),
+                                    related_name="group_of_service")
 
     def __str__(self):
         return self.description

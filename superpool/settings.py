@@ -83,6 +83,7 @@ INSTALLED_APPS = [
     'chat',
     'dal',
     'dal_select2'
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
