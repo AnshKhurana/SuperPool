@@ -80,7 +80,9 @@ INSTALLED_APPS = [
     'accounts',
     'groups',
     'channels',
-    'chat'
+    'chat',
+    'dal',
+    'dal_select2'
 ]
 
 MIDDLEWARE = [

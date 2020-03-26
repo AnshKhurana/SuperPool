@@ -140,15 +140,11 @@ class FoodVendorAutocomplete(autocomplete.Select2QuerySetView):
     # template_name = 'pool/foodvendor_form.html'
 
     def get_queryset(self):
-        print('Arnab')
         qs = FoodVendor.objects.all()
-        # qs = qs.filter(vendor__istartswith='K')
-        print('Arnab1')
+        print('In FoodAutoComplete')
         # print(qs)
         if self.q:
-            print('In if')
             qs = qs.filter(vendor__scontains=self.q)
-        print('Out')
         print(qs)
         return qs
 
@@ -158,15 +154,12 @@ class ShoppingVendorAutocomplete(autocomplete.Select2QuerySetView):
     # template_name = 'pool/foodvendor_form.html'
 
     def get_queryset(self):
-        print('Arnab')
         qs = ShoppingVendor.objects.all()
         # qs = qs.filter(vendor__istartswith='K')
-        print('Arnab1')
+        print('In ShoppingAutocomplete')
         # print(qs)
         if self.q:
-            print('In if')
             qs = qs.filter(vendor__scontains=self.q)
-        print('Out')
         print(qs)
         return qs
 
