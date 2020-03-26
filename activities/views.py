@@ -12,7 +12,7 @@ class ActivitiesHome(TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context= super(ActivitiesHome, self).get_context_data(*args, **kwargs)
-        context["groups"] = Group.objects.filter(members=self.request.user).all()
+        context["groups"] = Group.objects.filter(members=self.request.user.id).all()
         context["gid_string"] = ",".join([str(group.id) for group in context["groups"]])
 
         return context
