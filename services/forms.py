@@ -2,6 +2,7 @@ from django import forms
 from pool.models import Service, TravelService, FoodService, ShoppingService, Category, ServiceMember, Group
 from django.utils.dateparse import parse_duration
 from django.forms import ValidationError
+from dal import autocomplete
 
 CAT_CHOICES = [
     ('food', 'Oranges'),
@@ -37,6 +38,15 @@ class newFoodCreationForm(forms.ModelForm):
     class Meta:
         model = FoodService
         fields = ("start_time", "end_time", "slackness", "description", "vendor")
+        widgets = {
+            'vendor': autocomplete.ModelSelect2(
+                url='services/food-autocomplete',
+                attrs={
+                    'data-placeholder': 'Vendors ...',
+                    'data-minimum-input-length': 1,
+                },
+            )
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -106,6 +116,15 @@ class ShoppingCreationForm(forms.ModelForm):
     class Meta:
         model = ShoppingService
         fields = ("start_time", "end_time", "slackness", "description", "vendor")
+        widgets = {
+            'vendor': autocomplete.ModelSelect2(
+                url='services/shopping-autocomplete',
+                attrs={
+                    'data-placeholder': 'Vendors ...',
+                    'data-minimum-input-length': 1,
+                },
+            )
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

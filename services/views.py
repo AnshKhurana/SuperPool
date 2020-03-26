@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.core import serializers
+from dal import autocomplete
+
 
 # Create your views here.
 
@@ -31,7 +33,7 @@ class FoodCreateView(LoginRequiredMixin, FormView):
             form.add_error(None, "Session expired")
             return super().form_invalid(form)
         else:
-            groups=self.request.session['servicegroups']
+            groups = self.request.session['servicegroups']
             del self.request.session['servicegroups']
 
         u = self.request.user
@@ -44,7 +46,7 @@ class FoodCreateView(LoginRequiredMixin, FormView):
         sm = ServiceMember(service=f, user=u)
         sm.save()
         for group in serializers.deserialize("json", groups):
-            gs= ServiceGroup(group= group.object, service=f)
+            gs = ServiceGroup(group=group.object, service=f)
             gs.save()
         # form.save(self.request.user)
         return super().form_valid(form)
@@ -60,7 +62,7 @@ class ShoppingCreateView(LoginRequiredMixin, FormView):
             form.add_error(None, "Session expired")
             return super().form_invalid(form)
         else:
-            groups=self.request.session['servicegroups']
+            groups = self.request.session['servicegroups']
             del self.request.session['servicegroups']
 
         u = self.request.user
@@ -73,7 +75,7 @@ class ShoppingCreateView(LoginRequiredMixin, FormView):
         sm = ServiceMember(service=f, user=u)
         sm.save()
         for group in serializers.deserialize("json", groups):
-            gs= ServiceGroup(group= group.object, service=f)
+            gs = ServiceGroup(group=group.object, service=f)
             gs.save()
         # form.save(self.request.user)
         return super().form_valid(form)
@@ -89,7 +91,7 @@ class TravelCreateView(LoginRequiredMixin, FormView):
             form.add_error(None, "Session expired")
             return super().form_invalid(form)
         else:
-            groups=self.request.session['servicegroups']
+            groups = self.request.session['servicegroups']
             del self.request.session['servicegroups']
         u = self.request.user
         data = form.save()
@@ -102,13 +104,13 @@ class TravelCreateView(LoginRequiredMixin, FormView):
         sm = ServiceMember(service=f, user=u)
         sm.save()
         for group in serializers.deserialize("json", groups):
-            gs= ServiceGroup(group= group.object, service=f)
+            gs = ServiceGroup(group=group.object, service=f)
             gs.save()
         # form.save(self.request.user)
         return super().form_valid(form)
 
-class GroupSelectView(LoginRequiredMixin, FormView):
 
+class GroupSelectView(LoginRequiredMixin, FormView):
     form_class = GroupSelectForm
     success_url = reverse_lazy('create')
     template_name = 'services/groupselect.html'
@@ -127,8 +129,46 @@ class GroupSelectView(LoginRequiredMixin, FormView):
         return kwargs
 
     def form_valid(self, form):
-        self.request.session['servicegroups'] = serializers.serialize("json", form.cleaned_data['groups'].all(), fields=())
+        self.request.session['servicegroups'] = serializers.serialize("json", form.cleaned_data['groups'].all(),
+                                                                      fields=())
         return super().form_valid(form)
+
+
+class FoodVendorAutocomplete(autocomplete.Select2QuerySetView):
+    # model = FoodVendor
+    # context_object_name = 'Food Vendor'
+    # template_name = 'pool/foodvendor_form.html'
+
+    def get_queryset(self):
+        print('Arnab')
+        qs = FoodVendor.objects.all()
+        # qs = qs.filter(vendor__istartswith='K')
+        print('Arnab1')
+        # print(qs)
+        if self.q:
+            print('In if')
+            qs = qs.filter(vendor__scontains=self.q)
+        print('Out')
+        print(qs)
+        return qs
+
+class ShoppingVendorAutocomplete(autocomplete.Select2QuerySetView):
+    # model = FoodVendor
+    # context_object_name = 'Food Vendor'
+    # template_name = 'pool/foodvendor_form.html'
+
+    def get_queryset(self):
+        print('Arnab')
+        qs = ShoppingVendor.objects.all()
+        # qs = qs.filter(vendor__istartswith='K')
+        print('Arnab1')
+        # print(qs)
+        if self.q:
+            print('In if')
+            qs = qs.filter(vendor__scontains=self.q)
+        print('Out')
+        print(qs)
+        return qs
 
 # @login_required
 # class ServiceCreateView(FormView):
