@@ -1,0 +1,82 @@
+
+{% block content %}
+<script xmlns="http://www.w3.org/1999/html">var g_id=0;</script>
+<!--<script>var admin={{user}};</script>-->
+<head>
+  <title>Group Info</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+</head>
+<body style="margin-left: 20px; background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSMrGih1xF1tk2-8M9jgf5QyWzP3llg7tf85mtKoKJUgYVgOioQ');
+        background-repeat: no-repeat; background-size: cover; ">
+<script>g_id={{ object.id }}</script>
+  <h1 style="font-family: 'Lobster', serif; color:red">Group Info</h1><br><br>
+
+      <div class="list-group">
+          <a href="#" class="list-group-item list-group-item-success" style="font-family: 'Times New Roman', Times, serif; font-size:40px; font-weight:bold; color:blue">{{ object.name }}
+              <h4 style="font-family: 'Times New Roman', Times, serif; font-size:20px; font-weight:bold; color:brown">Created by {{ object.admin }}</h4></a>
+
+          <a href="#" class="list-group-item list-group-item-danger" style="font-family: 'Times New Roman', Times, serif; font-size:20px; font-weight:bold; color:black">Description
+              <h4 style="font-family: 'Times New Roman', Times, serif; font-size:20px; font-weight:bold; color:purple">Created by {{ object.description }}</h4></a>
+
+<!--        <form action = "" id="remove_form">-->
+<!--          <fieldset>-->
+<!--        <select name = "UserSelect[]" id="UserSelect" size = "10" multiple>-->
+
+
+<!--                {% for member in group.members.all %}-->
+<!--&lt;!&ndash;                <li>&ndash;&gt;-->
+<!--                  <option value="{{member.id}}">{{member}}</option>-->
+<!--      &lt;!&ndash;            <a href="#" class="list-group-item list-group-item-warning">{{member}}</a>&ndash;&gt;-->
+<!--&lt;!&ndash;               </li>&ndash;&gt;-->
+<!--            {% endfor %}-->
+
+<!--          </select>-->
+            <a href="#" class="list-group-item list-group-item-info">
+            <div id="checkbox">
+                <label style="font-family: 'Lucida Console', Courier, monospace; font-size:20px; font-weight:bold; color:black">Participants</label>
+                <ul>
+                {% for member in group.members.all %}
+<!--                <li>-->
+                    <li style="font-family: 'Comic Sans MS', serif; font-size:20px; font-weight:bold; color: purple"><input type="checkbox" id="{{ member.id }}"> {{ member }}</li>
+      <!--            <a href="#" class="list-group-item list-group-item-warning">{{member}}</a>-->
+<!--               </li>-->
+                 {% endfor %}
+                </ul>
+<!--          </select>-->
+                <br>
+                <button type="button" class="btn btn-primary btn-md" onclick="deleteMembers()">Delete Members</button>
+            </div></a>
+      </div>
+
+<!--            <textarea name="display" id="display" placeholder="view select list value(s) onchange" cols="20" rows="4" readonly></textarea>-->
+<!--            </fieldset>-->
+<!--          </form>-->
+
+<!-- <div id = "output">-->
+<!-- </div>-->
+<script>
+function deleteMembers() {
+var el = document.getElementById("checkbox");
+var products = el.getElementsByTagName("input");
+var len = products.length;
+for (var i = 0; i < len; i++) {
+    if (products[i].type === 'checkbox' && products[i].checked) {
+        window.open('/groups/remove_member/' + g_id + '/' + products[i].id, "popup", 'width=400,height=300, top=400, left=700');
+    }
+}
+}
+</script>
+
+  </body>
+{% endblock %}

@@ -27,19 +27,31 @@
 
         <form action = "" id="remove_form">
           <fieldset>
-        <select name = "UserSelect[]" id="UserSelect" size = "10" multiple>
+<!--        <select name = "UserSelect[]" id="UserSelect" size = "10" multiple>-->
 
 
+<!--                {% for member in group.members.all %}-->
+<!--&lt;!&ndash;                <li>&ndash;&gt;-->
+<!--                  <option value="{{member.id}}">{{member}}</option>-->
+<!--      &lt;!&ndash;            <a href="#" class="list-group-item list-group-item-warning">{{member}}</a>&ndash;&gt;-->
+<!--&lt;!&ndash;               </li>&ndash;&gt;-->
+<!--            {% endfor %}-->
+
+<!--          </select>-->
+
+            <div id="checkbox">
+                <label>Participants</label>
+                <ul>
                 {% for member in group.members.all %}
 <!--                <li>-->
-                  <option value="{{member.id}}">{{member}}</option>
+                    <li><input type="checkbox" id="{{ member.id }}"> {{ member }}</li>
       <!--            <a href="#" class="list-group-item list-group-item-warning">{{member}}</a>-->
 <!--               </li>-->
             {% endfor %}
-
+                </ul>
           </select>
 
-            <input onclick=checkAdmin() type="submit" value="Delete Members" />
+            <input onclick=checkAdmin() type="submit" value="Delete Members" /></div>
 <!--            <textarea name="display" id="display" placeholder="view select list value(s) onchange" cols="20" rows="4" readonly></textarea>-->
             </fieldset>
           </form>

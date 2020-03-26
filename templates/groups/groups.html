@@ -2,7 +2,10 @@
 {% load static %}
 
 {% block content %}
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
     {% csrf_token %}
     <section>
         <div class="gap gray-bg">
@@ -12,7 +15,7 @@
                         <div class="row" id="page-contents">
                             {% include 'includes/sidebar.html' %}
                             <div class="col-lg-6">
-                                <div class="central-meta">
+                                <div class="central-meta" style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ2JiEgzmAb4VkaL7mfYqtE4ALQj_MIqG2M0f8RluXcrpKYkfWJ'); background-repeat: no-repeat; background-size: cover;">
                                     <div class="frnds">
                                         {#                                        <ul class="nav nav-tabs">#}
                                         <h5 class="f-title"><i class="ti-user"></i>Your Groups </h5>
@@ -21,21 +24,23 @@
                                         <div class="tab-content">
                                             <div class="tab-pane active fade show " id="frends">
                                                 <ul class="nearby-contct">
-                                                    <button style="align: center; border: 1px solid"
+                                                    <button style="align: center; border: 1px solid; font-size:30px"
                                                             onclick=myFunction() id="CreateGroup" class="btn btn-primary btn-lg" >Create New Group</button><br><br><br>
                                                         {% for group in groups %}
                                                         <li>
-                                                            <div class="nearly-pepls">
+                                                            <div class="nearly-pepls" style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSOWXlmzJe27w3q1z0UnBPdgvslViiQmB5SYO7Sdnp4kFeWqPuu'); background-repeat: no-repeat; background-size: cover;">
+<!--                                                                <a href="#" class="list-group-item list-group-item-success">-->
                                                                 <figure>
                                                                     {#                                                                    {% if user.profile.profile_image.url %}#}
                                                                     {#                                                                        <a href="#" title=""><img src="{{ user.profile.profile_image.url }}" alt=""></a>#}
                                                                     {#                                                                    {% else %}#}
                                                                     <a href="#" title=""><img src="{% static 'images/default.jpg' %}" alt=""></a>
+                                                                     <h4><button style="font-family: 'Lobster', serif; color:maroon; position: relative; left: 100px; top: -60px; font-size:40px" onclick="window.open('/groups/display/{{group.id}}', 'popup', 'width=800,height=600, top=200, left=500');" title="">{{ group.name }}</button></h4>
                                                                     {#                                                                    {% endif %}#}
                                                                 </figure>
-                                                                <div class="pepl-info">
-                                                                    <h4><button onclick="window.open('/groups/display/{{group.id}}', 'popup', 'width=800,height=600, top=200, left=500');" title="">{{ group.name }}</button></h4>
-                                                                    {#                                                                    <a href="#" title="" data-url="{% url 'friends:send-request' user.username %}" class="add-butn add-friend" data-ripple="" data-friend="{{ user.username }}">Add Friend</a>#}
+                                                                <div class="list-group">
+
+<!--                                                                    </a>-->
                                                                 </div>
                                                             </div>
                                                         </li>
@@ -48,7 +53,7 @@
                                             </div>
                                             <script>
                                             function myFunction() {
-                                                window.open("/groups/create", "popup", 'width=400,height=300, top=400, left=700');
+                                                window.open("/groups/create", "popup", 'width=600,height=300, top=400, left=700');
                                              }
                                             </script>
 

@@ -1,5 +1,27 @@
-<form action="" method="post">
+
+{% block content %}
+
+<head>
+    <h1 style="font-family: 'Lobster', serif; color:purple; margin-left:30px; font-size:40px;">Create New Group</h1>
+</head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+<body style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSMrGih1xF1tk2-8M9jgf5QyWzP3llg7tf85mtKoKJUgYVgOioQ')">
+<form style="margin-left:20px; " action="" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Save" />
+    <table style="font-size:25px;" border="5">
+    {{ form }}
+  </table>
+  <button style="position: relative; left:120px; top:10px;" type="submit" class="btn btn-primary btn-lg">Submit</button>
 </form>
+</body>
+
+{% endblock %}
