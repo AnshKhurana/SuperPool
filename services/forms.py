@@ -208,7 +208,7 @@ class GroupSelectForm(forms.Form):
     def __init__(self, *args, **kwargs):
         currentuser = kwargs.pop('currentuser')
         super(GroupSelectForm, self).__init__(*args, **kwargs)
-        self.fields['groups'].queryset = Group.objects.filter(members=currentuser).all()
+        self.fields['groups'].queryset = Group.objects.filter(members=currentuser.id).all()
 
 
 

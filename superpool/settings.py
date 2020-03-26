@@ -80,7 +80,8 @@ INSTALLED_APPS = [
     'accounts',
     'groups',
     'channels',
-    'chat'
+    'chat',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
