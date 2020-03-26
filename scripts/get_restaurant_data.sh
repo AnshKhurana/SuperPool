@@ -5,4 +5,4 @@
 # unzip zomato-mumbai-restaurant-analysis.zip
 
 kaggle datasets download -d ronidas39/zomato-india-data-set
-unzip ronidas39/zomato-india-data-set.zip
+unzip zomato-india-data-set.zip
