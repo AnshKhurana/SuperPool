@@ -86,48 +86,13 @@ class FoodCreationForm(autocomplete.FutureModelForm):
                 'vendor': vendor}
 
 
-class TravelCreationForm(forms.ModelForm):
-    class Meta:
-        model = TravelService
-        fields = ("start_point", "end_point", "start_time", "end_time", "slackness", "description")
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["start_time"].widget = DateTimeInput()
-        self.fields["start_time"].input_formats = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"]
-
-        self.fields["end_time"].widget = DateTimeInput()
-        self.fields["end_time"].input_formats = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"]
-
-        self.fields["slackness"].widget = DurationInput()
-        self.fields["slackness"].input_formats = ["%dT%H:%M", "%d %H:%M"]
-
-    def clean(self):
-        super(TravelCreationForm, self).clean()
-        stime = self.cleaned_data.get('start_time')
-        etime = self.cleaned_data.get('end_time')
-        if (stime is not None) and (etime is not None) and stime > etime:
-            raise ValidationError('Start time after end time')
-
-    def save(self, commit=False):
-        start_point = self.cleaned_data['start_point']
-        end_point = self.cleaned_data['end_point']
-        start_time = self.cleaned_data['start_time']
-        end_time = self.cleaned_data['end_time']
-        slackness = self.cleaned_data['slackness']
-        description = self.cleaned_data['description']
-
-        return {'start_point': start_point, 'end_point': end_point, 'start_time': start_time, 'end_time': end_time,
-                'slackness': slackness, 'description': description}
-
-
-class ShoppingCreationForm(forms.ModelForm):
+class ShoppingCreationForm(autocomplete.FutureModelForm):
     class Meta:
         model = ShoppingService
         fields = ("start_time", "end_time", "slackness", "description", "vendor")
         widgets = {
             'vendor': autocomplete.ModelSelect2(
-                url='services/shopping-autocomplete',
+                url='services:shopping-autocomplete',
                 attrs={
                     'data-placeholder': 'Vendors ...',
                     'data-minimum-input-length': 1,
@@ -163,6 +128,41 @@ class ShoppingCreationForm(forms.ModelForm):
         return {'start_time': start_time, 'end_time': end_time, 'slackness': slackness, 'description': description,
                 'vendor': vendor}
 
+
+class TravelCreationForm(forms.ModelForm):
+    class Meta:
+        model = TravelService
+        fields = ("start_point", "end_point", "start_time", "end_time", "slackness", "description")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["start_time"].widget = DateTimeInput()
+        self.fields["start_time"].input_formats = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"]
+
+        self.fields["end_time"].widget = DateTimeInput()
+        self.fields["end_time"].input_formats = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"]
+
+        self.fields["slackness"].widget = DurationInput()
+        self.fields["slackness"].input_formats = ["%dT%H:%M", "%d %H:%M"]
+
+    def clean(self):
+        super(TravelCreationForm, self).clean()
+        stime = self.cleaned_data.get('start_time')
+        etime = self.cleaned_data.get('end_time')
+        if (stime is not None) and (etime is not None) and stime > etime:
+            raise ValidationError('Start time after end time')
+
+    def save(self, commit=False):
+        start_point = self.cleaned_data['start_point']
+        end_point = self.cleaned_data['end_point']
+        start_time = self.cleaned_data['start_time']
+        end_time = self.cleaned_data['end_time']
+        slackness = self.cleaned_data['slackness']
+        description = self.cleaned_data['description']
+
+        return {'start_point': start_point, 'end_point': end_point, 'start_time': start_time, 'end_time': end_time,
+                'slackness': slackness, 'description': description}
+
         # f=FoodService(category=Category.objects.get(name='Food'), initiator=u, vendor=vendor, description=description, start_time=start_time, end_time=end_time, slackness=slackness, stype='Food')
         # f.save()
         # sm=ServiceMember(service=f, user=u)
@@ -195,6 +195,7 @@ class ServiceCreationForm(forms.Form):
     #           "address",
     #           "password1",
     #           "password2")
+
 
 # class FoodCreationForm(forms.Form):
 #
@@ -233,10 +234,8 @@ class GroupSelectForm(forms.Form):
         widget=forms.CheckboxSelectMultiple,
         queryset=Group.objects.all()
     )
+
     def __init__(self, *args, **kwargs):
         currentuser = kwargs.pop('currentuser')
         super(GroupSelectForm, self).__init__(*args, **kwargs)
         self.fields['groups'].queryset = Group.objects.filter(members=currentuser.id).all()
-
-
-

@@ -33,6 +33,7 @@ class GroupMember(models.Model):
     group = models.ForeignKey(Group, on_delete=models.DO_NOTHING)
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
 
+
 class Restaurant(models.Model):
     name = models.CharField(null=False, max_length=1000)
     price = models.FloatField()
@@ -45,6 +46,16 @@ class Restaurant(models.Model):
     timing = models.CharField(max_length=100)
     rating = models.CharField(max_length=100)
     votes = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
+class Company(models.Model):
+    name = models.CharField(null=False, max_length=1000)
+    domain = models.CharField(max_length=100)
+    logo = models.URLField()
+    timestamp = models.DateTimeField()
 
     def __str__(self):
         return self.name
@@ -102,8 +113,10 @@ class FoodService(Service):
 
 
 class ShoppingService(Service):
-    vendor = models.CharField(null=False, max_length=1000)
+    vendor = models.ForeignKey(Company, on_delete=models.DO_NOTHING, null=False)
 
+    def __str__(self):
+        return '%s' % self.vendor
 
 class ServiceMember(models.Model):
     service = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
@@ -115,6 +128,3 @@ class Message(models.Model):
     content = models.CharField(default='', max_length=1000)
     service = models.ForeignKey(Service, on_delete=models.DO_NOTHING, related_name="messages")
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True, related_name="messages")
-
-
-

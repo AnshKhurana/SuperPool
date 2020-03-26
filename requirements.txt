@@ -1,3 +1,4 @@
+requests
 pathlib2
 pandas
 django

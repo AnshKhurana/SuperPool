@@ -10,6 +10,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.core import serializers
 from dal import autocomplete
+import subprocess
+import requests
+from datetime import datetime
+from django.conf import settings
 
 
 # Create your views here.
@@ -141,14 +145,10 @@ class FoodVendorAutocomplete(autocomplete.Select2QuerySetView):
     # template_name = 'pool/foodvendor_form.html'
 
     def get_queryset(self):
-        print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-        # qs = FoodVendor.objects.all()
         qs = Restaurant.objects.all()
-        print('In FoodAutoComplete')
-        # print(qs)
         if self.q:
             qs = qs.filter(name__contains=self.q)
-        print(qs)
+        # print(qs)
         return qs
 
 
@@ -158,13 +158,17 @@ class ShoppingVendorAutocomplete(autocomplete.Select2QuerySetView):
     # template_name = 'pool/foodvendor_form.html'
 
     def get_queryset(self):
-        # qs = ShoppingVendor.objects.all()
-        # qs = qs.filter(vendor__istartswith='K')
-        print('In ShoppingAutocomplete')
-        # print(qs)
+        current_time = datetime.now()
         if self.q:
-            qs = qs.filter(vendor__contains=self.q)
-        print(qs)
+            responses = requests.get(settings.COMPANY_API_URL, params={'query': self.q}).json()
+            for response in responses:
+                company = Company(name=response['name'],
+                                  domain=response['domain'],
+                                  logo=response['logo'],
+                                  timestamp=current_time)
+                company.save()
+        qs = Company.objects.filter(timestamp=current_time)
+        # print(qs)
         return qs
 
 # @login_required
