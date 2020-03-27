@@ -5,10 +5,11 @@ from accounts.models import *
 class FoodServiceSerializer(serializers.HyperlinkedModelSerializer):
 
     initiator = serializers.StringRelatedField(read_only=True)
+    # vendor = serializers.HyperlinkedIdentityField(view_name="restaurant-detail")
 
     class Meta:
         model = FoodService
-        fields = ['start_time', 'end_time', 'initiator', 'description', 'vendor']
+        fields = ['start_time', 'end_time', 'initiator', 'description']
 
 
 class TravelServiceSerializer(serializers.HyperlinkedModelSerializer):
