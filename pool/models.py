@@ -7,6 +7,7 @@ from accounts.models import User
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
+
     def __str__(self):
         return self.name
 
@@ -39,15 +40,15 @@ class GroupMember(models.Model):
 class Restaurant(models.Model):
     name = models.CharField(null=False, max_length=1000)
     price = models.FloatField(null=True)
-    cusine_category = models.CharField(null=True,max_length=500)
-    city = models.CharField(null=True,max_length=100)
-    region = models.CharField(null=True,max_length=100)
+    cusine_category = models.CharField(null=True, max_length=500)
+    city = models.CharField(null=True, max_length=100)
+    region = models.CharField(null=True, max_length=100)
     url = models.URLField(null=True)
     page_no = models.IntegerField(null=True)
-    cusine_type = models.CharField(null=True,max_length=100)
-    timing = models.CharField(null=True,max_length=100)
-    rating = models.CharField(null=True,max_length=100)
-    votes = models.CharField(null=True,max_length=100)
+    cusine_type = models.CharField(null=True, max_length=100)
+    timing = models.CharField(null=True, max_length=100)
+    rating = models.CharField(null=True, max_length=100)
+    votes = models.CharField(null=True, max_length=100)
 
     def __str__(self):
         return self.name
@@ -119,6 +120,7 @@ class ShoppingService(Service):
 
     def __str__(self):
         return '%s' % self.vendor
+
 
 class ServiceMember(models.Model):
     service = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
