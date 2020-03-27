@@ -5,11 +5,11 @@
 {% block header_text %}Services{% endblock %}
 
 {% block content %}
-<script>var user="{{ user.username }}";</script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -34,6 +34,7 @@
         {% endfor %}
     </ul>
     </div>
+    <a style="font-size:50px; margin-left: 500px;" href="/"><i class='fa fa-home'></i></a>
 
     <div id="chats">
     </div>
@@ -88,7 +89,7 @@
                             "<div class='service' id='service-" + data.join + "'>" +
                             "<h2>" + data.description + "</h2>" +
                             "<div class='messages'></div>" +
-                            "<form><input><br><button>Send</button></form>" +
+                            "<form><input placeholder='  Type here    .....'><button ><i class='fa fa-paper-plane'></i></button></form>" +
                             "</div>"
                     );
                     // Hook up send button to send a message
@@ -116,7 +117,7 @@
                     switch (data.msg_type) {
                         case 0:
                             // Message
-                            if (user == data.username) {
+                            if (data.login_user == data.username) {
                             ok_msg = "<div class='chat-message-me sb1'>" +
                                     //"<span class='username'>" + data.username + "</span><br>" +
                                     "<span class='body'>" + data.message + "</span><br>" +

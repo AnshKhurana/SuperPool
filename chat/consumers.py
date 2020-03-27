@@ -200,6 +200,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                     "username": event["username"],
                     "message": event["message"],
                     "timestamp": event["timestamp"],
+                    "login_user": self.scope['user'].username,
                 },
             )
         else:
@@ -210,5 +211,6 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                     "username": event["username"],
                     "message": event["message"],
                     "timestamp": str(datetime.now()),
+                    "login_user": self.scope['user'].username,
                 },
             )

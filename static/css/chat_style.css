@@ -79,7 +79,7 @@ p {
 }
 
 .empty {
-    color: #666;
+    color: pink;
     font-style: italic;
 }
 
@@ -90,6 +90,7 @@ p {
     border: 1px solid #bcd;
     border-radius: 2px;
     cursor: pointer;
+    background-color:pink;
 }
     .services li.joined {
         background: #5898D9;
@@ -165,16 +166,17 @@ text-align: left;
   position:relative;
   font-family:"Tangerine";
   font-size:20px;
+  background-color: pink;
     }
 
-    .sb2:before {
+    .chat-message-other:after {
   content: "";
   width: 0px;
   height: 0px;
   position: absolute;
-  border-right: 10px solid #00bfb6;
+  border-right: 10px solid pink;
   border-left: 10px solid transparent;
-  border-top: 10px solid #00bfb6;
+  border-top: 10px solid pink;
   border-bottom: 10px solid transparent;
   left: -20px;
   top: 6px;
