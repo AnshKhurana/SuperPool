@@ -36,16 +36,16 @@ class GroupMember(models.Model):
 
 class Restaurant(models.Model):
     name = models.CharField(null=False, max_length=1000)
-    price = models.FloatField()
-    cusine_category = models.CharField(max_length=500)
-    city = models.CharField(max_length=100)
-    region = models.CharField(max_length=100)
-    url = models.URLField()
-    page_no = models.IntegerField()
-    cusine_type = models.CharField(max_length=100)
-    timing = models.CharField(max_length=100)
-    rating = models.CharField(max_length=100)
-    votes = models.CharField(max_length=100)
+    price = models.FloatField(null=True)
+    cusine_category = models.CharField(null=True,max_length=500)
+    city = models.CharField(null=True,max_length=100)
+    region = models.CharField(null=True,max_length=100)
+    url = models.URLField(null=True)
+    page_no = models.IntegerField(null=True)
+    cusine_type = models.CharField(null=True,max_length=100)
+    timing = models.CharField(null=True,max_length=100)
+    rating = models.CharField(null=True,max_length=100)
+    votes = models.CharField(null=True,max_length=100)
 
     def __str__(self):
         return self.name
@@ -54,8 +54,8 @@ class Restaurant(models.Model):
 class Company(models.Model):
     name = models.CharField(null=False, max_length=1000)
     domain = models.CharField(max_length=100)
-    logo = models.URLField()
-    timestamp = models.DateTimeField()
+    logo = models.URLField(null=True)
+    timestamp = models.DateTimeField(null=True)
 
     def __str__(self):
         return self.name
