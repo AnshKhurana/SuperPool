@@ -161,11 +161,63 @@ input:checked + .slider:before {
         }
         else if (cat_selected == "shopping")
         {
+            instance.get('/api/shoppingservice', {
+                    params: {
+                      gids: gid_string
+                    }
+                  }).then(
+                    function (response) {
+                        reply = response.data;
+                        console.log(reply);
 
+                        for (item in reply)
+                        {
+                            {#here, reply[item] is our service object, can access fields directly,#}
+                            select.innerHTML += "<li> <div class=\'nearly-pepls\'> <div class=\"pepl-info\">" +
+                                "<h4><a href=\"#\" title=\"\">Shopping Service</a></h4>" +
+                    "<a href=\"#\" title=\"\"><h5>" + reply[item].vendor + "</h5></a>" +
+                    "<p> by " + reply[item].initiator + "</p>" +
+                    "<h4><p>Start Time: " + reply[item].start_time + "<br> End Time: " + reply[item].end_time + "</p> </h4>" +
+                    "<span> " + reply[item].description + "</span>" +
+                    "<a href=\"#\" title=\"\" data-url=\"{% url 'groups:create' %}\" class=\"add-butn add-friend\" data-ripple=\"\">Join Service</a>"
+               + "</div> </div> </li>";
+                        }
+                }).catch(function (error) {
+                    // handle error
+                    alert(error);
+                    console.log(error);
+                })
         }
         else
         {
         {#    travel#}
+            instance.get('/api/travelservice', {
+                    params: {
+                      gids: gid_string
+                    }
+                  }).then(
+                    function (response) {
+                        reply = response.data;
+                        console.log(reply);
+
+                        for (item in reply)
+                        {
+                            {#here, reply[item] is our service object, can access fields directly,#}
+                            select.innerHTML += "<li> <div class=\'nearly-pepls\'> <div class=\"pepl-info\">" +
+                                "<h4><a href=\"#\" title=\"\">Travel Service</a></h4>" +
+                    "<a href=\"#\" title=\"\"><h5>" + "reply[item].vendor" + "</h5></a>" +
+                    "<p> by " + reply[item].initiator + "</p>" +
+                    "<h4><p>Source: " + reply[item].start_point + "<br> Destination: " + reply[item].end_point + "</p> </h4> <br>" +
+                    "<h4><p>Start Time: " + reply[item].start_time + "<br> End Time: " + reply[item].end_time + "</p> </h4>" +
+                    "<span> " + reply[item].description + "</span>" +
+                    "<a href=\"#\" title=\"\" data-url=\"{% url 'groups:create' %}\" class=\"add-butn add-friend\" data-ripple=\"\">Join Service</a>"
+               + "</div> </div> </li>";
+                        }
+                }).catch(function (error) {
+                    // handle error
+                    alert(error);
+                    console.log(error);
+                })
         }
         {#console.log("new html");#}
         {#console.log(new_html);#}
@@ -196,7 +248,7 @@ input:checked + .slider:before {
 
 
 
-    <section>
+    <section onload="fetchServices()" >
         <div class="gap gray-bg">
             <div class="container-fluid">
                 <div class="row">
@@ -234,6 +286,7 @@ input:checked + .slider:before {
 
 
                                 </div>
+
                             </div><!-- centerl meta -->
                             <div class="col-lg-3">
                                 <aside class="sidebar static">
@@ -249,16 +302,16 @@ input:checked + .slider:before {
                                             </li>
                                             <li>
                                                 <div class="friend-meta">
-                                                    <h4><input type="radio" id="travel_sel" name="category" value="travel" checked onclick="fetchServices()"> Travel</h4>
+                                                    <h4><input type="radio" id="travel_sel" name="category" value="travel"  onclick="fetchServices()"> Travel</h4>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="friend-meta">
-                                                    <h4><input type="radio" id="shopping_sel" name="category" value="shopping" checked onclick="fetchServices()" > Shopping</h4>
+                                                    <h4><input type="radio" id="shopping_sel" name="category" value="shopping"  onclick="fetchServices()" > Shopping</h4>
                                                 </div>
                                             </li>
                                         </ul>
-                                    </div><!-- who's following -->
+                                    </div><!-- category sidebar -->
 
                                     <div class="widget">
                                         <h4 class="widget-title">Interested Period</h4>
@@ -304,6 +357,10 @@ input:checked + .slider:before {
                 </div>
             </div>
         </div>
+    <script type="text/javascript">
+        fetchServices();
+    </script>
+
     </section>
 
 
