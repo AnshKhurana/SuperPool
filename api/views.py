@@ -3,14 +3,11 @@ from rest_framework import generics
 from .serializers import *
 from pool.models import *
 from django.db.models import Q
-from rest_framework import filters
 
 # Create your views here.
 class FoodServiceList(generics.ListAPIView):
 
     serializer_class = FoodServiceSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields=
     def get_queryset(self):
         user = self.request.user
         gids = self.request.GET.get('gids').split(',')
