@@ -3,12 +3,14 @@ from rest_framework import generics
 from .serializers import *
 from pool.models import *
 from django.db.models import Q
+from rest_framework import filters
 
 # Create your views here.
 class FoodServiceList(generics.ListAPIView):
 
     serializer_class = FoodServiceSerializer
-
+    filter_backends = [filters.SearchFilter]
+    search_fields=
     def get_queryset(self):
         user = self.request.user
         gids = self.request.GET.get('gids').split(',')
@@ -26,7 +28,7 @@ class TravelServiceList(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         gids = self.request.GET.get('gids').split(',')
-        filt= Q(groups__id__in=gids) & Q(category__name='Food') & Q(groups__members=user.id)
+        filt= Q(groups__id__in=gids) & Q(category__name='Travel') & Q(groups__members=user.id)
         if 'start' in self.request.GET and 'end' in self.request.GET:
             start= self.request.GET.get('start')
             end= self.request.GET.get('end')
@@ -40,7 +42,7 @@ class ShoppingServiceList(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         gids = self.request.GET.get('gids').split(',')
-        filt= Q(groups__id__in=gids) & Q(category__name='Food') & Q(groups__members=user.id)
+        filt= Q(groups__id__in=gids) & Q(category__name='Shopping') & Q(groups__members=user.id)
         if 'start' in self.request.GET and 'end' in self.request.GET:
             start= self.request.GET.get('start')
             end= self.request.GET.get('end')
