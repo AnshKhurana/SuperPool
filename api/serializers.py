@@ -5,6 +5,7 @@ from accounts.models import *
 class FoodServiceSerializer(serializers.HyperlinkedModelSerializer):
 
     initiator = serializers.StringRelatedField(read_only=True)
+    vendor = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = FoodService
@@ -20,6 +21,7 @@ class TravelServiceSerializer(serializers.HyperlinkedModelSerializer):
 
 class ShoppingServiceSerializer(serializers.HyperlinkedModelSerializer):
     initiator = serializers.StringRelatedField(read_only=True)
+    vendor = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = ShoppingService
