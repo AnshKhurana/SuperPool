@@ -26,7 +26,7 @@ class TravelServiceList(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         gids = self.request.GET.get('gids').split(',')
-        filt= Q(groups__id__in=gids) & Q(category__name='Food') & Q(groups__members=user.id)
+        filt= Q(groups__id__in=gids) & Q(category__name='Travel') & Q(groups__members=user.id)
         if 'start' in self.request.GET and 'end' in self.request.GET:
             start= self.request.GET.get('start')
             end= self.request.GET.get('end')
@@ -40,7 +40,7 @@ class ShoppingServiceList(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         gids = self.request.GET.get('gids').split(',')
-        filt= Q(groups__id__in=gids) & Q(category__name='Food') & Q(groups__members=user.id)
+        filt= Q(groups__id__in=gids) & Q(category__name='Shopping') & Q(groups__members=user.id)
         if 'start' in self.request.GET and 'end' in self.request.GET:
             start= self.request.GET.get('start')
             end= self.request.GET.get('end')

@@ -163,7 +163,9 @@ input:checked + .slider:before {
         {
             instance.get('/api/shoppingservice', {
                     params: {
-                      gids: gid_string
+                      gids: gid_string,
+                        start: start,
+                      end: end
                     }
                   }).then(
                     function (response) {
@@ -193,7 +195,9 @@ input:checked + .slider:before {
         {#    travel#}
             instance.get('/api/travelservice', {
                     params: {
-                      gids: gid_string
+                      gids: gid_string,
+                        start: start,
+                      end: end
                     }
                   }).then(
                     function (response) {
