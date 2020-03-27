@@ -1,10 +1,85 @@
 {% extends 'base.html' %}
+<style>
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+</style>
 {% load static %}
 {% block content %}
     {% csrf_token %}
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
+    var start= undefined;
+    var end= undefined;
+    function dateTime()
+    {
+        start= document.getElementById("start").value;
+        end= document.getElementById("end").value;
+        if (start==undefined || end==undefined || start=="" || end=="")
+        {
+            start= undefined;
+            end= undefined;
+        }
+        fetchServices();
+    }
+
     function fetchServices()
 
     {
@@ -24,7 +99,6 @@
 
        {# get which category has been selected#}
 
-        console.log("hello");
         var cat_selected = document.querySelector('input[name="category"]:checked').value;
         console.log(cat_selected);
         var num_groups = {{ groups.count }};
@@ -45,19 +119,20 @@
 
         var gid_string =selected_gids.join(",");
 
+        console.log(gid_string);
+        console.log("start");
+        console.log(start);
         if (gid_string == "")
         {
             return;
         }
-
-        console.log(gid_string);
-
-
         if (cat_selected == "food")
         {
             instance.get('/api/foodservice', {
                     params: {
-                      gids: gid_string
+                      gids: gid_string,
+                      start: start,
+                      end: end
                     }
                   }).then(
                     function (response) {
@@ -182,6 +257,28 @@
                                                     <h4><input type="radio" id="shopping_sel" name="category" value="shopping" checked onclick="fetchServices()" > Shopping</h4>
                                                 </div>
                                             </li>
+                                        </ul>
+                                    </div><!-- who's following -->
+
+                                    <div class="widget">
+                                        <h4 class="widget-title">Interested Period</h4>
+                                        <ul class="followers">
+                                            <li>
+                                                <div class="friend-meta">
+                                                    <h4>From<input type="datetime-local" id="start" name="period"></h4>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="friend-meta">
+                                                    <h4>Until<input type="datetime-local" id="end" name="period"></h4>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="friend-meta">
+                                                    <button onclick="dateTime()">Find Services</button>
+                                                </div>
+                                            </li>
+
                                         </ul>
                                     </div><!-- who's following -->
 
