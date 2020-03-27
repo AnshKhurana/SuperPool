@@ -1,9 +1,11 @@
 {% extends "chat/base.html" %}
+{% load static %}
 
 {% block title %}Service-Chat Window{% endblock %}
 {% block header_text %}Services{% endblock %}
 
 {% block content %}
+<script>var user="{{ user.username }}";</script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -36,11 +38,29 @@
     <div id="chats">
     </div>
 
+<!--    <div class="peoples-mesg-box">-->
+<!--&lt;!&ndash;        <div class="conversation-head">&ndash;&gt;-->
+<!--&lt;!&ndash;            <figure><img src="images/resources/friend-avatar.jpg" alt=""></figure>&ndash;&gt;-->
+<!--&lt;!&ndash;            <span>Chat with {{ friend_name_json|slice:"1:-1" }}</span>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--        <ul class="chatting-area">-->
+<!--        </ul>-->
+<!--        <div class="message-text-container">-->
+<!--            <form onsubmit="return false;">-->
+<!--                <textarea id="chat-message-input"></textarea>-->
+<!--                <em id="typing"></em>-->
+<!--                <button title="send" id="chat-message-submit"><i class="fa fa-paper-plane"></i></button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+
 {% endblock %}
 
 
 {% block extra_body %}
     <script>
+
+
         $(function () {
             // Correctly decide between ws:// and wss://
             var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
@@ -96,10 +116,25 @@
                     switch (data.msg_type) {
                         case 0:
                             // Message
-                            ok_msg = "<div class='message'>" +
-                                    "<span class='username'>" + data.username + "</span>" +
-                                    "<span class='body'>" + data.message + "</span>" +
-                                    "</div>";
+                            if (user == data.username) {
+                            ok_msg = "<div class='chat-message-me sb1'>" +
+                                    //"<span class='username'>" + data.username + "</span><br>" +
+                                    "<span class='body'>" + data.message + "</span><br>" +
+                                    // "&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp " +
+                                    "<span class='date'>" + data.timestamp + "</span>" +
+                                    "</div><br>";
+
+                            //ok_msg = "<li style=' direction: rtl; text-align: right;'>"+
+                            //    "<figure><img src='images/resources/userlist-1.jpg' alt=''></figure>" +
+                            //    "<p style='margin-left: 0; margin-right: 10px; text-align: left; direction: ltr;'>" + data.message + "</p></li>";
+                            }
+                            else {
+                            ok_msg = "<div class='chat-message-other sb2'>" +
+                                    "<span class='username'>" + data.username + ":</span><br>" +
+                                    "<span class='body'>" + data.message + "</span><br>" +
+                                    "<span class='date'>" + data.timestamp + "</span>" +
+                                    "</div><br>";
+                            }
                             break;
                         case 1:
                             // Warning / Advice messages

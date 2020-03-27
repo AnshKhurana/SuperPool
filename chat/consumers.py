@@ -99,7 +99,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         # await self.send_service(service_id, 'default_message')
         messages = Message.objects.filter(service__id=service_id)
         for message in messages:
-            event = {"service_id": service_id, "username": message.user.username, "message": message.content}
+            event = {"service_id": service_id, "username": message.user.username, "message": message.content, "timestamp": str(message.timestamp).split(' ')[1].split('.')[0][:-3]}
             await self.chat_message(event, init=True)
 
     async def leave_service(self, service_id):
@@ -199,6 +199,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                     "service": event["service_id"],
                     "username": event["username"],
                     "message": event["message"],
+                    "timestamp": event["timestamp"],
                 },
             )
         else:
@@ -208,5 +209,6 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                     "service": event["service_id"],
                     "username": event["username"],
                     "message": event["message"],
+                    "timestamp": str(datetime.now()),
                 },
             )
