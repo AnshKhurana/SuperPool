@@ -54,7 +54,7 @@ class FoodCreateView(LoginRequiredMixin, CreateView):
             gs = ServiceGroup(group=group.object, service=f)
             gs.save()
         # form.save(self.request.user)
-        return super().form_valid(form)
+        return render(self.request, "home.html")
 
 
 class ShoppingCreateView(LoginRequiredMixin, FormView):
@@ -83,7 +83,7 @@ class ShoppingCreateView(LoginRequiredMixin, FormView):
             gs = ServiceGroup(group=group.object, service=f)
             gs.save()
         # form.save(self.request.user)
-        return super().form_valid(form)
+        return render(self.request, "home.html")
 
 
 class TravelCreateView(LoginRequiredMixin, FormView):
