@@ -4,7 +4,7 @@ from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from .exceptions import ClientError
 from .utils import get_service_or_error
-from pool.models import FoodService, Message
+from pool.models import Service, Message
 from datetime import datetime
 
 
@@ -138,7 +138,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         # print(service_id)
         # print(self.scope["user"].username)
         # print(message)
-        message_instance = Message(timestamp=datetime.now(), content=message, service=FoodService.objects.get(id=service_id), user=self.scope["user"])
+        message_instance = Message(timestamp=datetime.now(), content=message, service=Service.objects.get(id=service_id), user=self.scope["user"])
         message_instance.save()
         # Check they are in this service
         if service_id not in self.services:
@@ -210,7 +210,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                     "service": event["service_id"],
                     "username": event["username"],
                     "message": event["message"],
-                    "timestamp": str(datetime.now()),
+                    "timestamp": str(datetime.now()).split(' ')[1].split('.')[0][:-3],
                     "login_user": self.scope['user'].username,
                 },
             )
