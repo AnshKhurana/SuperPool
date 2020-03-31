@@ -9,7 +9,7 @@ class FoodServiceSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = FoodService
-        fields = ['start_time', 'end_time', 'initiator', 'description']
+        fields = ['start_time', 'end_time', 'initiator', 'description','vendor']
 
 
 class TravelServiceSerializer(serializers.HyperlinkedModelSerializer):
