@@ -15,7 +15,7 @@
                         <div class="row" id="page-contents">
                             {% include 'includes/sidebar.html' %}
                             <div class="col-lg-6">
-                                <div class="central-meta" style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ2JiEgzmAb4VkaL7mfYqtE4ALQj_MIqG2M0f8RluXcrpKYkfWJ'); background-repeat: no-repeat; background-size: cover;">
+                                <div class="central-meta" style="">
                                     <div class="frnds">
                                         {#                                        <ul class="nav nav-tabs">#}
                                         <h5 class="f-title"><i class="ti-user"></i>Your Groups </h5>
@@ -24,7 +24,7 @@
                                         <div class="tab-content">
                                             <div class="tab-pane active fade show " id="frends">
                                                 <ul class="nearby-contct">
-                                                    <button style="align: center; border: 1px solid; font-size:30px"
+                                                    <button style="align: center; border: 1px solid; font-size:20px"
                                                             onclick=myFunction() id="CreateGroup" class="btn btn-primary btn-lg" >Create New Group</button><br><br><br>
                                                         {% for group in groups %}
                                                         <li>
@@ -35,7 +35,7 @@
                                                                     {#                                                                        <a href="#" title=""><img src="{{ user.profile.profile_image.url }}" alt=""></a>#}
                                                                     {#                                                                    {% else %}#}
                                                                     <a href="#" title=""><img src="{% static 'images/default.jpg' %}" alt=""></a>
-                                                                     <h4><button style="font-family: 'Lobster', serif; color:maroon; position: relative; left: 100px; top: -60px; font-size:40px" onclick="window.open('/groups/display/{{group.id}}', 'popup', 'width=800,height=600, top=200, left=500');" title="">{{ group.name }}</button></h4>
+                                                                     <h4><button style="font-family: 'Lobster', serif; color:maroon; position: relative; left: 100px; top: -60px; font-size:30px" onclick="window.open('/groups/display/{{group.id}}', 'popup', 'width=800,height=600, top=200, left=500');" title="">{{ group.name }}</button></h4>
                                                                     {#                                                                    {% endif %}#}
                                                                 </figure>
                                                                 <div class="list-group">

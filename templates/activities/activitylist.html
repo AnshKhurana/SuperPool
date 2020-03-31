@@ -1,65 +1,140 @@
 {% extends 'base.html' %}
+<style>
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+</style>
 {% load static %}
 {% block content %}
     {% csrf_token %}
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-        function fetchServices()
-
+    var start= undefined;
+    var end= undefined;
+    function dateTime()
+    {
+        start= document.getElementById("start").value;
+        end= document.getElementById("end").value;
+        if (start==undefined || end==undefined || start=="" || end=="")
         {
-            const instance = axios.create({
+            start= undefined;
+            end= undefined;
+        }
+        fetchServices();
+    }
+
+    function fetchServices()
+
+    {
+        const instance = axios.create({
                 baseURL: '{% url 'pool:home' %}',
                 timeout: 1000,
             });
-            {#const shoppinginstance = axios.create({#}
-            {#        baseURL: '{% url 'api:' %}',#}
-            {#        timeout: 1000,#}
-            {#    });#}
-            {#const travelinstance = axios.create({#}
-            {#        baseURL: '{% url 'groups:home' %}',#}
-            {#        timeout: 1000,#}
-            {#    });#}
-            {##}
+        {#const shoppinginstance = axios.create({#}
+        {#        baseURL: '{% url 'api:' %}',#}
+        {#        timeout: 1000,#}
+        {#    });#}
+        {#const travelinstance = axios.create({#}
+        {#        baseURL: '{% url 'groups:home' %}',#}
+        {#        timeout: 1000,#}
+        {#    });#}
+        {##}
 
-            {# get which category has been selected#}
+       {# get which category has been selected#}
 
-            console.log("hello");
-            var cat_selected = document.querySelector('input[name="category"]:checked').value;
-            console.log(cat_selected);
-            var num_groups = {{ groups.count }};
-            var gids_to_choose_from = "{{ gid_string }}";
-            console.log(gids_to_choose_from)
-            var all_gids = gids_to_choose_from.split(",");
-            var selected_gids = [];
-            var select = document.getElementById("service_list");
-            select.innerHTML = "";
-            for (gid in all_gids)
+        var cat_selected = document.querySelector('input[name="category"]:checked').value;
+        console.log(cat_selected);
+        var num_groups = {{ groups.count }};
+        var gids_to_choose_from = "{{ gid_string }}";
+        console.log(gids_to_choose_from)
+        var all_gids = gids_to_choose_from.split(",");
+        var selected_gids = [];
+        var select = document.getElementById("service_list");
+        select.innerHTML = "";
+        for (gid in all_gids)
+        {
+            var selected = document.getElementById('group_' + all_gids[gid]).checked;
+            if (selected)
             {
-                var selected = document.getElementById('group_' + all_gids[gid]).checked;
-                if (selected)
-                {
-                    selected_gids.push(all_gids[gid]);
-                }
+                selected_gids.push(all_gids[gid]);
             }
+        }
 
-            var gid_string =selected_gids.join(",");
+        var gid_string =selected_gids.join(",");
 
-            if (gid_string == "")
-            {
-                return;
-            }
-
-            console.log(gid_string);
-
-
-            if (cat_selected == "food")
-            {
-                instance.get('/api/foodservice', {
+        console.log(gid_string);
+        console.log("start");
+        console.log(start);
+        if (gid_string == "")
+        {
+            return;
+        }
+        if (cat_selected == "food")
+        {
+            instance.get('/api/foodservice', {
                     params: {
-                        gids: gid_string
+                      gids: gid_string,
+                      start: start,
+                      end: end
                     }
-                }).then(
+                  }).then(
                     function (response) {
                         reply = response.data;
                         console.log(reply);
@@ -69,28 +144,30 @@
                             {#here, reply[item] is our service object, can access fields directly,#}
                             select.innerHTML += "<li> <div class=\'nearly-pepls\'> <div class=\"pepl-info\">" +
                                 "<h4><a href=\"#\" title=\"\">Food Service</a></h4>" +
-                                "<a href=\"#\" title=\"\"><h5>" + reply[item].vendor + "</h5></a>" +
-                                "<p> by " + reply[item].initiator + "</p>" +
-                                "<h4><p>Start Time: " + reply[item].start_time + "<br> End Time: " + reply[item].end_time + "</p> </h4>" +
-                                "<span> " + reply[item].description + "</span>" +
-                                "<a href=\"#\" title=\"\" data-url=\"{% url 'groups:create' %}\" class=\"add-butn add-friend\" data-ripple=\"\">Join Service</a>"
-                                + "</div> </div> </li>";
+                    "<a href=\"#\" title=\"\"><h5>" + reply[item].vendor + "</h5></a>" +
+                    "<p> by " + reply[item].initiator + "</p>" +
+                    "<h4><p>Start Time: " + reply[item].start_time + "<br> End Time: " + reply[item].end_time + "</p> </h4>" +
+                    "<span> " + reply[item].description + "</span>" +
+                    "<a href=\"#\" title=\"\" data-url=\"{% url 'groups:create' %}\" class=\"add-butn add-friend\" data-ripple=\"\">Join Service</a>"
+               + "</div> </div> </li>";
 
                         }
 
-                    }).catch(function (error) {
+                }).catch(function (error) {
                     // handle error
                     alert(error);
                     console.log(error);
                 })
-            }
-            else if (cat_selected == "shopping")
-            {
-                instance.get('/api/shoppingservice', {
+        }
+        else if (cat_selected == "shopping")
+        {
+            instance.get('/api/shoppingservice', {
                     params: {
-                        gids: gid_string
+                      gids: gid_string,
+                      start: start,
+                      end: end
                     }
-                }).then(
+                  }).then(
                     function (response) {
                         reply = response.data;
                         console.log(reply);
@@ -100,27 +177,29 @@
                             {#here, reply[item] is our service object, can access fields directly,#}
                             select.innerHTML += "<li> <div class=\'nearly-pepls\'> <div class=\"pepl-info\">" +
                                 "<h4><a href=\"#\" title=\"\">Shopping Service</a></h4>" +
-                                "<a href=\"#\" title=\"\"><h5>" + reply[item].vendor + "</h5></a>" +
-                                "<p> by " + reply[item].initiator + "</p>" +
-                                "<h4><p>Start Time: " + reply[item].start_time + "<br> End Time: " + reply[item].end_time + "</p> </h4>" +
-                                "<span> " + reply[item].description + "</span>" +
-                                "<a href=\"#\" title=\"\" data-url=\"{% url 'groups:create' %}\" class=\"add-butn add-friend\" data-ripple=\"\">Join Service</a>"
-                                + "</div> </div> </li>";
+                    "<a href=\"#\" title=\"\"><h5>" + reply[item].vendor + "</h5></a>" +
+                    "<p> by " + reply[item].initiator + "</p>" +
+                    "<h4><p>Start Time: " + reply[item].start_time + "<br> End Time: " + reply[item].end_time + "</p> </h4>" +
+                    "<span> " + reply[item].description + "</span>" +
+                    "<a href=\"#\" title=\"\" data-url=\"{% url 'groups:create' %}\" class=\"add-butn add-friend\" data-ripple=\"\">Join Service</a>"
+               + "</div> </div> </li>";
                         }
-                    }).catch(function (error) {
+                }).catch(function (error) {
                     // handle error
                     alert(error);
                     console.log(error);
                 })
-            }
-            else
-            {
-                {#    travel#}
-                instance.get('/api/travelservice', {
+        }
+        else
+        {
+        {#    travel#}
+            instance.get('/api/travelservice', {
                     params: {
-                        gids: gid_string
+                      gids: gid_string,
+                      start: start,
+                      end: end
                     }
-                }).then(
+                  }).then(
                     function (response) {
                         reply = response.data;
                         console.log(reply);
@@ -130,43 +209,43 @@
                             {#here, reply[item] is our service object, can access fields directly,#}
                             select.innerHTML += "<li> <div class=\'nearly-pepls\'> <div class=\"pepl-info\">" +
                                 "<h4><a href=\"#\" title=\"\">Travel Service</a></h4>" +
-                                "<a href=\"#\" title=\"\"><h5>" + "reply[item].vendor" + "</h5></a>" +
-                                "<p> by " + reply[item].initiator + "</p>" +
-                                "<h4><p>Source: " + reply[item].start_point + "<br> Destination: " + reply[item].end_point + "</p> </h4> <br>" +
-                                "<h4><p>Start Time: " + reply[item].start_time + "<br> End Time: " + reply[item].end_time + "</p> </h4>" +
-                                "<span> " + reply[item].description + "</span>" +
-                                "<a href=\"#\" title=\"\" data-url=\"{% url 'groups:create' %}\" class=\"add-butn add-friend\" data-ripple=\"\">Join Service</a>"
-                                + "</div> </div> </li>";
+                    "<a href=\"#\" title=\"\"><h5>" + "reply[item].vendor" + "</h5></a>" +
+                    "<p> by " + reply[item].initiator + "</p>" +
+                    "<h4><p>Source: " + reply[item].start_point + "<br> Destination: " + reply[item].end_point + "</p> </h4> <br>" +
+                    "<h4><p>Start Time: " + reply[item].start_time + "<br> End Time: " + reply[item].end_time + "</p> </h4>" +
+                    "<span> " + reply[item].description + "</span>" +
+                    "<a href=\"#\" title=\"\" data-url=\"{% url 'groups:create' %}\" class=\"add-butn add-friend\" data-ripple=\"\">Join Service</a>"
+               + "</div> </div> </li>";
                         }
-                    }).catch(function (error) {
+                }).catch(function (error) {
                     // handle error
                     alert(error);
                     console.log(error);
                 })
-            }
-            {#console.log("new html");#}
-            {#console.log(new_html);#}
-            {#select.innerHTML = new_html;#}
         }
+        {#console.log("new html");#}
+        {#console.log(new_html);#}
+        {#select.innerHTML = new_html;#}
+    }
     </script>
 
-    {#       <li>#}
-    {#            <div class="nearly-pepls">#}
-    {#                                                            <figure>#}
-    {#                                                                <a href="#" title=""><img src="{% static 'images/fav.png' %}" alt=""></a>#}
-    {#                                                            </figure>#}
-    {#                <div class="pepl-info">#}
-    {#                    <h4><a href="#" title="">Food Service</a></h4>#}
-    {#                    <a href="#" title=""><h5>Domino's Pizza</h5></a>#}
-    {#                    <p> by initiator </p>#}
-    {#                    <h4><p>Start Time: <br>#}
-    {#                    End Time: </p> </h4>#}
-    {#                    <span>A very long line of text which will be equivalent to the description of the thing that I want to show</span>#}
-    {#                                                                here add the url to join a service, assumption a request will be sent#}
-    {#                    <a href="#" title="" data-url="{% url 'pool:home' %}" class="add-butn add-friend" data-ripple="">Join Service</a>#}
-    {#                </div>#}
-    {#            </div>#}
-    {#        </li>#}
+{#       <li>#}
+{#            <div class="nearly-pepls">#}
+{#                                                            <figure>#}
+{#                                                                <a href="#" title=""><img src="{% static 'images/fav.png' %}" alt=""></a>#}
+{#                                                            </figure>#}
+{#                <div class="pepl-info">#}
+{#                    <h4><a href="#" title="">Food Service</a></h4>#}
+{#                    <a href="#" title=""><h5>Domino's Pizza</h5></a>#}
+{#                    <p> by initiator </p>#}
+{#                    <h4><p>Start Time: <br>#}
+{#                    End Time: </p> </h4>#}
+{#                    <span>A very long line of text which will be equivalent to the description of the thing that I want to show</span>#}
+{#                                                                here add the url to join a service, assumption a request will be sent#}
+{#                    <a href="#" title="" data-url="{% url 'pool:home' %}" class="add-butn add-friend" data-ripple="">Join Service</a>#}
+{#                </div>#}
+{#            </div>#}
+{#        </li>#}
 
     }
 
@@ -186,7 +265,7 @@
 
                                     <div class="frnds">
                                         <ul class="nav nav-tabs">
-                                            {#                                            <h5 class="f-title"><i class="ti-user"></i>Interesting Activities </h5>#}
+{#                                            <h5 class="f-title"><i class="ti-user"></i>Interesting Activities </h5>#}
                                             <li class="nav-item"><a class="active" href="#frends" data-toggle="tab">Interesting Activities</a></li>
                                         </ul>
 
@@ -196,12 +275,12 @@
 
 
 
-                                                    {#                                                        INSERT HERE#}
+{#                                                        INSERT HERE#}
 
                                                 </ul>
 
                                                 <div class="lodmore">
-                                                    {#                                                    set action of this button to refresh page or select fetchAll#}
+{#                                                    set action of this button to refresh page or select fetchAll#}
                                                     <button onclick="fetchServices()" class="btn-view btn-load-more"></button>
                                                 </div>
                                             </div>
@@ -216,7 +295,7 @@
                             <div class="col-lg-3">
                                 <aside class="sidebar static">
 
-                                    {#                                    checkboxes for categories#}
+{#                                    checkboxes for categories#}
                                     <div class="widget">
                                         <h4 class="widget-title">Categories</h4>
                                         <ul class="followers">
@@ -238,17 +317,39 @@
                                         </ul>
                                     </div><!-- category sidebar -->
 
+                                    <div class="widget">
+                                        <h4 class="widget-title">Interested Period</h4>
+                                        <ul class="followers">
+                                            <li>
+                                                <div class="friend-meta">
+                                                    <h4>From<input type="datetime-local" id="start" name="period"></h4>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="friend-meta">
+                                                    <h4>Until<input type="datetime-local" id="end" name="period"></h4>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="friend-meta">
+                                                    <button onclick="dateTime()">Find Services</button>
+                                                </div>
+                                            </li>
+
+                                        </ul>
+                                    </div><!-- who's following -->
+
 
                                     <div class="widget">
                                         <h4 class="widget-title">Groups</h4>
                                         <ul id="group-list" class="followers">
                                             {% for group in groups %}
-                                                <li>
-                                                    <div class="friend-meta">
-                                                        <h4> <input checked id="group_{{ group.id }}"
-                                                                    name="{{ group.name }}" type="checkbox" onclick="fetchServices()"> {{ group.name }} </h4>
-                                                    </div>
-                                                </li>
+                                            <li>
+                                                <div class="friend-meta">
+                                                   <h4> <input checked id="group_{{ group.id }}"
+                                                               name="{{ group.name }}" type="checkbox" onclick="fetchServices()"> {{ group.name }} </h4>
+                                                </div>
+                                            </li>
                                             {% endfor %}
                                         </ul>
                                     </div><!-- friends list sidebar -->
@@ -260,9 +361,9 @@
                 </div>
             </div>
         </div>
-        <script type="text/javascript">
-            fetchServices();
-        </script>
+    <script type="text/javascript">
+        fetchServices();
+    </script>
 
     </section>
 

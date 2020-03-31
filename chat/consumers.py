@@ -4,8 +4,9 @@ from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from .exceptions import ClientError
 from .utils import get_service_or_error
-from pool.models import FoodService, Message
+from pool.models import Service, Message
 from datetime import datetime
+from pytz import timezone
 
 
 class ChatConsumer(AsyncJsonWebsocketConsumer):
@@ -99,7 +100,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         # await self.send_service(service_id, 'default_message')
         messages = Message.objects.filter(service__id=service_id)
         for message in messages:
-            event = {"service_id": service_id, "username": message.user.username, "message": message.content}
+            event = {"service_id": service_id, "username": message.user.username, "message": message.content, "timestamp": str(message.timestamp).split(' ')[1].split('.')[0][:-3]}
             await self.chat_message(event, init=True)
 
     async def leave_service(self, service_id):
@@ -134,11 +135,8 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         """
         Called by receive_json when someone sends a message to a service.
         """
-        # print('sending...')
-        # print(service_id)
-        # print(self.scope["user"].username)
-        # print(message)
-        message_instance = Message(timestamp=datetime.now(), content=message, service=FoodService.objects.get(id=service_id), user=self.scope["user"])
+        cur_time = datetime.now(timezone('Asia/Kolkata'))
+        message_instance = Message(timestamp=cur_time, content=message, service=Service.objects.get(id=service_id), user=self.scope["user"])
         message_instance.save()
         # Check they are in this service
         if service_id not in self.services:
@@ -152,6 +150,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 "service_id": service_id,
                 "username": self.scope["user"].username,
                 "message": message,
+                "timestamp": str(cur_time).split(' ')[1].split('.')[0][:-3]
             }
         )
 
@@ -199,6 +198,8 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                     "service": event["service_id"],
                     "username": event["username"],
                     "message": event["message"],
+                    "timestamp": event["timestamp"],
+                    "login_user": self.scope['user'].username,
                 },
             )
         else:
@@ -208,5 +209,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                     "service": event["service_id"],
                     "username": event["username"],
                     "message": event["message"],
+                    "timestamp": event["timestamp"],
+                    "login_user": self.scope['user'].username,
                 },
             )

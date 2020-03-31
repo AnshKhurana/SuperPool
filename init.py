@@ -3,11 +3,12 @@ from pool.models import Group, GroupMember, Category, ShoppingService, FoodServi
 from pool.models import Company,Restaurant
 
 #create users
-u1=User.objects.create_user(username='john', email='a@c.com', phone_number='+1234567890', address='xy', password='hellopool')
+
+u1=User.objects.create_user(username='john', email='a@bc.com', phone_number='+1234567890', address='xy', password='Abcd123$')
 u1.save()
-u2=User.objects.create_user(username='john2', email='b@c.com', phone_number='+1234567891', address='xyz', password='hellopool')
+u2=User.objects.create_user(username='john2', email='x@bc.com', phone_number='+1234567891', address='xyz', password='Abcd123$')
 u2.save()
-u3=User.objects.create_user(username='john3', email='c@c.com', phone_number='+1234567893', address='xyw', password='hellopool')
+u3=User.objects.create_user(username='john3', email='y@bc.com', phone_number='+1234567893', address='xyw', password='Abcd123$')
 u3.save()
 
 #create groups
@@ -40,7 +41,7 @@ c1.save()
 comp1=Company(name="Adidas",domain="Footwear")
 comp1.save()
 ss1 = ShoppingService(category=Category.objects.get(name='Shopping'), initiator=u1, vendor=comp1,
-                            description="Hair dryer",
+                            description="Buying the best shoes",
                             start_time="2020-01-01 01:01", end_time="2020-01-01 01:02")
 ss1.save()
 
@@ -78,4 +79,3 @@ sm3 = ServiceMember(service=sf1, user=u1)
 sm3.save()
 sm4 = ServiceMember(service=ss1, user=u3)
 sm4.save()
-

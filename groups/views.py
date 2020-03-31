@@ -50,10 +50,8 @@ class GroupListView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if context['group'].admin == self.request.user:
-            print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
             self.template_name = 'groups/group_info_admin.html'
         else:
-            print("####################################################")
             self.template_name = 'groups/group_info_non_admin.html'
         return context
 
