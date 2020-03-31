@@ -1,0 +1,208 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+body {
+    line-height: 1;
+    font-family: sans-serif;
+}
+ol, ul {
+    list-style: none;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* Header */
+
+header {
+    padding: 20px 0;
+    margin: 0 0 40px 0;
+    background: #5778C4;
+    color: #fff;
+}
+    header h1 {
+        width: 800px;
+        margin: 0 auto;
+        font-size: 40px;
+    }
+    header a {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        color: #fff;
+    }
+
+/* Body */
+section {
+    width: 800px;
+    margin: 0 auto;
+}
+
+p {
+    margin: 1em 0 2em 0;
+}
+
+.empty {
+    color: pink;
+    font-style: italic;
+}
+
+.services li {
+    padding: 5px 7px;
+    display: inline;
+    margin: 5px 2px;
+    border: 1px solid #bcd;
+    border-radius: 2px;
+    cursor: pointer;
+    background-color:pink;
+}
+    .services li.joined {
+        background: #5898D9;
+        border: 1px solid #35485C;
+    }
+
+#chats {
+}
+    #chats .service {
+        border: 1px solid #ccc;
+        padding: 5px;
+        margin: 30px 0 0 0;
+    }
+    #chats h2 {
+        color: #3352FF;
+        margin: 2px 0 5px 0;
+        font-weight: bold;
+        background:#EEFE96;
+        font-size:25px
+    }
+    #chats .messages {
+        height: 600px;
+        overflow: auto;
+        margin: 2px 0 5px 0;
+        background: #FEE596;
+        color: blue;
+        font-family:"Tangerine";
+        font-size:20px;
+    }
+
+    #chats .chat-message-me {
+        width: 300px;
+  margin-left: 450px;
+  background: #00bfb6;
+  padding: 0px;
+  text-align: left;
+  font-weight: 900;
+  color: #fff;
+  font-family: arial;
+  position:relative;
+  font-family:"Tangerine";
+  font-size:20px;
+    }
+
+    .sb1:before {
+  content: "";
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  border-left: 10px solid #00bfb6;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #00bfb6;
+  border-bottom: 10px solid transparent;
+  right: -20px;
+  top: 6px;
+}
+
+#chats .date {
+font-size: 15px;
+color: blue;
+text-align: left;
+}
+
+#chats .chat-message-other {
+        width: 300px;
+  margin-left: 20px;
+  background: #00bfb6;
+  padding: 0px;
+  text-align: left;
+  font-weight: 900;
+  color: #234;
+  font-family: arial;
+  position:relative;
+  font-family:"Tangerine";
+  font-size:20px;
+  background-color: pink;
+    }
+
+    .chat-message-other:after {
+  content: "";
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  border-right: 10px solid pink;
+  border-left: 10px solid transparent;
+  border-top: 10px solid pink;
+  border-bottom: 10px solid transparent;
+  left: -20px;
+  top: 6px;
+}
+
+    #chats .username {
+        display: inline-block;
+        color: #C07A36;
+        width: 150px;
+        font-family: "Comic Sans MS", cursive, sans-serif;
+        font-weight: bold;
+    }
+    #chats .contextual-message{
+        text-align: center;
+        margin: 5px 5px 5px 5px;
+    }
+    #chats .text-muted {
+        opacity: .6;
+        font-style: italic;
+    }
+    #chats .text-danger {
+        color: #a94442;
+        font-weight: bold;
+    }
+    #chats .text-warning {
+        color: #DCAD5C;
+        font-weight: bold;
+        font-style: italic;
+    }
