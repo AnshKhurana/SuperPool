@@ -66,6 +66,7 @@ MESSAGE_TYPES_LIST = [
 ]
 
 COMPANY_API_URL = "https://autocomplete.clearbit.com/v1/companies/suggest"
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '3o^)rc46u87^o)kopo-b9vb+vh^75uot75wx(r6!3nd*aixjmf'
 
@@ -90,6 +91,7 @@ INSTALLED_APPS = [
     'groups',
     'channels',
     'chat',
+    'notifications',
     'dal',
     'dal_select2',
     'rest_framework'

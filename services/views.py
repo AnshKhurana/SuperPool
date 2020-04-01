@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from notifications.signals import notify
 from django.views.generic import FormView, CreateView
 from pool.models import *
 from .forms import ServiceCreationForm, ShoppingCreationForm, TravelCreationForm, GroupSelectForm, \
@@ -50,9 +51,21 @@ class FoodCreateView(LoginRequiredMixin, CreateView):
         f.save()
         sm = ServiceMember(service=f, user=u)
         sm.save()
+
+        notified_members = set()
         for group in serializers.deserialize("json", groups):
             gs = ServiceGroup(group=group.object, service=f)
             gs.save()
+
+            members = GroupMember.objects.filter(group=group.object).values('user')
+            print(members)
+            for member in members:
+                print(member)
+                notified_members.add(User.objects.get(id=member['user']))
+
+        # for member in notified_members:
+        #     notify.send(self.request.user, recipient=member, verb=data['description'], description="Food " + str(f.id))
+
         # form.save(self.request.user)
         return render(self.request, "home.html", {'message': 2})
 
@@ -170,6 +183,7 @@ class ShoppingVendorAutocomplete(autocomplete.Select2QuerySetView):
         qs = Company.objects.filter(timestamp=current_time)
         # print(qs)
         return qs
+
 
 # @login_required
 # class ServiceCreateView(FormView):
