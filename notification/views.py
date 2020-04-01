@@ -28,14 +28,15 @@ def mark_as_read(request, notification_id):
     # print('notif_id')
     # print(notification_id)
     notif_just_read.mark_all_as_read()
-    return render(request, 'notification/show.html')
+    unread = currentuser.notifications.unread()
+    return render(request, 'notification/show.html', {'notification': unread})
 
 
 def mark_all_as_read(request):
     print("In mark_all_as_read")
     currentuser = User.objects.get(id=request.user.id)
     currentuser.notifications.mark_all_as_read()
-    return render(request, 'notification/show.html')
+    return render(request, 'home.html')
 
 
 def join_service(request, service_id):

@@ -84,10 +84,10 @@
         {
             var url = "servicejoin/" + x;
             console.log(url);
-            var wnd = window.open(url);
-            console.log(wnd);
-            wnd.close();
-            window.location.reload(true);
+            window.location.href = url;
+            //console.log(wnd);
+            //wnd.close();
+            //window.location.reload(true);
         }
 
         function fetchServices()
