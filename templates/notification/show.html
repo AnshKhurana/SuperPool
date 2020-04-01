@@ -21,7 +21,7 @@
 
                                         <div class="tab-content">
                                             <div class="tab-pane active fade show " id="frends">
-                                                <button onclick="mark_all_as_read()" title="">{{ Mark all as Read }}</button>
+                                                <button onclick="mark_all_as_read()" title="">Mark all as Read</button>
                                                 <ul class="nearby-contct">
                                                         {% for notif in notification %}
                                                         <li>
@@ -33,13 +33,14 @@
                                                                     <a href="#" title=""></a>
                                                                     {#                                                                    {% endif %}#}
                                                                 </figure>
-                                                                {{ notif.description }}
                                                                 <div class="pepl-info">
+                                                                    {{ notif.description }}<br>
                                                                     {{ notif.actor }}<br>
-                                                                    <h4><button onclick="window.open('/groups/display/{{group.id}}', 'popup', 'width=800,height=600, top=200, left=500');" title="">{{ notif.verb }}</button></h4>
-                                                                    <button onclick="join_service({{ notif.description }})" title="">{{ Join Service }}</button>
-                                                                    <button onclick="mark_as_read({{ notif.id }})" title="">{{ Mark as Read }}</button>
-                                                                    {#
+                                                                    <h4>{{ notif.verb }}</h4>
+<!--                                                                    <button onclick="join_service({{ notif.description }})" title=""> Join Service </button>-->
+                                                                    <br>
+                                                                    <button onclick="mark_as_read({{ notif.id }})" title=""> Mark as Read </button>
+                                                                    <script>console.log({{ notif.id }});</script>
                                                                     <br>
                                                                     {{ notif.timestamp }}
                                                                 </div>
@@ -57,12 +58,22 @@
                                                 window.open("/groups/create", "popup", 'width=400,height=300, top=400, left=700');
                                              }
 
-                                             function mark_all_as_read() {
-                                                window.open("/notification/mark_all_as_read/");
+                                             function mark_as_read(x) {
+                                                var url = "/notification/mark_as_read/"+x;
+                                                console.log(url);
+                                                var wnd = window.open(url);
+                                                console.log(wnd);
+                                                wnd.close();
+                                                window.location.reload(true);
                                              }
 
                                              function mark_all_as_read() {
-                                                window.open("/notification/mark_all_as_read/");
+                                               var url = "/notification/mark_all_as_read";
+                                                console.log(url);
+                                                var wnd = window.open(url);
+                                                console.log(wnd);
+                                                wnd.close();
+                                                window.location.reload(true);
                                              }
 
 
