@@ -22,9 +22,10 @@ class grouphome(ListView):
         return groups
 
 
-class GroupListView(ListView):
+class GroupListView(DetailView):
     model = Group
-
+    context_object_name = 'group'
+    # template_name = 'pool/group_list.html'
     # queryset = Group.objects.filter(id=g_id)
     # form_class = GroupCreateForm
     # success_url = '/groups'
@@ -37,18 +38,30 @@ class GroupListView(ListView):
     #     form.instance.admin=User.objects.get(id=self.request.user.id)
     #     return super(GroupCreateView,self).form_valid(form)
 
-    def get_queryset(self):
-        context = Group.objects.filter(id=self.kwargs['g_id'])
-        print(context)
-        return context
+    # def get_queryset(self):
+    #     # group = Group.objects.get(id=self.kwargs['g_id'])
+    #     if group.admin == self.request.user:
+    #         self.template_name = 'groups/group_info_admin.html'
+    #     else:
+    #         self.template_name = 'groups/group_info_non_admin.html'
+    #     print(group)
+    #     return group
 
     def get_context_data(self, **kwargs):
-        context = super(GroupListView, self).get_context_data(**kwargs)
-        print(context['group_list'][0])
-        context['user'] = 0
-        if context['group_list'][0] in Group.objects.filter(admin=self.request.user):
-            context['user'] = 1
+        context = super().get_context_data(**kwargs)
+        if context['group'].admin == self.request.user:
+            self.template_name = 'groups/group_info_admin.html'
+        else:
+            self.template_name = 'groups/group_info_non_admin.html'
         return context
+
+    # def get_context_data(self, **kwargs):
+    #     context = super(GroupListView, self).get_context_data(**kwargs)
+    #     print(context['group_list'][0])
+    #     context['user'] = 0
+    #     if context['group_list'][0] in Group.objects.filter(admin=self.request.user):
+    #         context['user'] = 1
+    #     return context
 
 
 class GroupCreateView(CreateView):

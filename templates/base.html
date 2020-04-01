@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content=""/>
     <meta name="keywords" content=""/>
-    <title>Gatherly Social Network Toolkit</title>
+    <title>SuperPool</title>
 
     {% include 'includes/stylesheets.html' %}
     {% csrf_token %}
@@ -31,26 +31,26 @@
 <!--                <li><a href="'services:create'" title="New Post" data-ripple=""><i class="ti-plus"></i></a></li>-->
                 <li><a href="{% url 'pool:home' %}" title="Home" data-ripple=""><i class="ti-home"></i></a></li>
 
-{#                <li><a href="{% url 'communications:all-messages' %}" class="link">Messenger</a></li>#}
-                <li>
-                    <a href="#" title="Notification" data-ripple="">
-                        <i class="ti-user"></i><span id="total-friend-notifications"></span>
-                    </a>
-                    <div class="dropdowns">
-                        <ul class="drops-menu" id="friend-menu">
-                        </ul>
-                        <a href="#" title="" class="more-mesg">view more</a>
-                    </div>
-                </li>
-                <li>
-                    <a href="#" title="Messages" data-ripple=""><i class="ti-comment"></i><span id="total-like-comment-notifications">0</span></a>
-                    <div class="dropdowns">
-                        <ul class="drops-menu" id="like-comment-menu">
-                        </ul>
-                        <a href="#" title="" class="more-mesg">view more</a>
-{#                        <a href="#" title="" class="more-mesg" data-url="{% url 'notifications:mark-like-comment-notifications-as-read' %}" id="mark-like-comment-notifications-as-read">mark all as read</a>#}
-                    </div>
-                </li>
+<!--{#                <li><a href="{% url 'communications:all-messages' %}" class="link">Messenger</a></li>#}-->
+<!--                <li>-->
+<!--                    <a href="#" title="Notification" data-ripple="">-->
+<!--                        <i class="ti-user"></i><span id="total-friend-notifications"></span>-->
+<!--                    </a>-->
+<!--                    <div class="dropdowns">-->
+<!--                        <ul class="drops-menu" id="friend-menu">-->
+<!--                        </ul>-->
+<!--                        <a href="#" title="" class="more-mesg">view more</a>-->
+<!--                    </div>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <a href="#" title="Messages" data-ripple=""><i class="ti-comment"></i><span id="total-like-comment-notifications">0</span></a>-->
+<!--                    <div class="dropdowns">-->
+<!--                        <ul class="drops-menu" id="like-comment-menu">-->
+<!--                        </ul>-->
+<!--                        <a href="#" title="" class="more-mesg">view more</a>-->
+<!--{#                        <a href="#" title="" class="more-mesg" data-url="{% url 'notifications:mark-like-comment-notifications-as-read' %}" id="mark-like-comment-notifications-as-read">mark all as read</a>#}-->
+<!--                    </div>-->
+<!--                </li>-->
             </ul>
             <div class="user-img">
 {#                <img src="{{ request.user.profile.profile_image.url }}" alt="" style="height: 40px; width: 40px;">#}
