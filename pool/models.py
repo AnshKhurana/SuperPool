@@ -67,6 +67,7 @@ class Company(models.Model):
 class Service(PolymorphicModel):
     # group_ids = models.CharField(validators=[validate_comma_separated_integer_list],
     #                              max_length=200, blank=True, null=True, default='')
+    is_active = models.BooleanField(default=True)
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, related_name="%(class)s_services")
     initiator = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
     start_time = models.DateTimeField(null=True)

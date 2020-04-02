@@ -15,6 +15,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 {% include 'includes/stylesheets.html' %}
+<script>
+    function disable(x) {
+        window.location.href = "active/" + x;
+    }
+</script>
  <div class="col-lg-12">
     <div class="row" id="page-contents">
         {% include 'includes/sidebar.html' %}
@@ -26,7 +31,14 @@
                             {{ service }} &nbsp &nbsp &nbsp &nbsp <span class="badge badge-pill badge-warning">Created by: {{ service.initiator }}</span>
                             &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
                             <span class="badge badge-pill badge-dark">{{ service.category }}</span>
-                        </li><br><br>
+                        </li> &nbsp &nbsp &nbsp
+                    <script>console.log('{{ service.is_active }}');</script>
+                        {% if service.is_active == True %}
+                            <button onclick="disable({{ service.id }})">Disable</button>
+                        {% else %}
+                            <button onclick="disable({{ service.id }})">Enable</button>
+                        {% endif %}
+                    <br><br>
                     {% endfor %}
                     {% for service in other_serv %}
                        <li class="service-link" style="display:inline; background: #ffe5e5; padding: 5px; margin: 5px;" data-service-id="{{ service.id }}">

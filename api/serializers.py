@@ -18,7 +18,7 @@ class FoodServiceSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = FoodService
-        fields = ['id', 'start_time', 'end_time', 'initiator', 'description', 'vendor', 'my_field']
+        fields = ['id', 'start_time', 'end_time', 'initiator', 'description', 'vendor', 'my_field', 'is_active']
 
 
 class ShoppingServiceSerializer(serializers.HyperlinkedModelSerializer):
@@ -35,7 +35,7 @@ class ShoppingServiceSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = ShoppingService
-        fields = ['id', 'start_time', 'end_time', 'initiator', 'description', 'vendor', 'my_field']
+        fields = ['id', 'start_time', 'end_time', 'initiator', 'description', 'vendor', 'my_field', 'is_active']
 
 
 class TravelServiceSerializer(serializers.HyperlinkedModelSerializer):
@@ -51,7 +51,7 @@ class TravelServiceSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = TravelService
-        fields = ['id', 'start_time', 'end_time', 'initiator', 'description', 'start_point', 'end_point', 'my_field']
+        fields = ['id', 'start_time', 'end_time', 'initiator', 'description', 'start_point', 'end_point', 'my_field', 'is_active']
 
 # class ServiceSerializer(serializers.HyperlinkedModelSerializer):
 #     class Meta:

@@ -151,6 +151,7 @@
 
                         for (item in reply)
                         {
+                        if(reply[item].is_active == true) {
                             if(reply[item].my_field == true) {
                             select.innerHTML += "<li> <div class=\'nearly-pepls\'> <div class=\"pepl-info\">" +
                                 "<h4><a href=\"#\" title=\"\">Food Service</a></h4>" +
@@ -174,7 +175,7 @@
                                 "<button onclick=\"join_service(" + reply[item].id + ")\" class=\"add-butn add-friend\" data-ripple=\"\">Join Service</button>"
                                 + "</div> </div> </li>";
                             }
-
+                        }
                         }
 
                     }).catch(function (error) {
@@ -198,6 +199,7 @@
 
                         for (item in reply)
                         {
+                        if(reply[item].is_active == true) {
                             if(reply[item].my_field == true) {
                                 {#here, reply[item] is our service object, can access fields directly,#}
                                 select.innerHTML += "<li> <div class=\'nearly-pepls\'> <div class=\"pepl-info\">" +
@@ -221,6 +223,7 @@
                                     + "</div> </div> </li>";
                             }
                         }
+                        }
                     }).catch(function (error) {
                     // handle error
                     alert(error);
@@ -243,6 +246,7 @@
 
                         for (item in reply)
                         {
+                        if(reply[item].is_active == true) {
                             if(reply[item].my_field == true) {
                                 {#here, reply[item] is our service object, can access fields directly,#}
                                 select.innerHTML += "<li> <div class=\'nearly-pepls\'> <div class=\"pepl-info\">" +
@@ -267,6 +271,7 @@
                                     "<button onclick=\"join_service(" + reply[item].id + ")\" class=\"add-butn add-friend\" data-ripple=\"\">Join Service</button>"
                                     + "</div> </div> </li>";
                             }
+                        }
                         }
                     }).catch(function (error) {
                     // handle error
