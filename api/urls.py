@@ -9,4 +9,7 @@ urlpatterns = [
     re_path(r'^foodservice$', FoodServiceList.as_view(), name='foodservice'),
     re_path(r'^travelservice$',TravelServiceList.as_view(), name = 'travelservice'),
     re_path(r'^shoppingservice$',ShoppingServiceList.as_view(), name = 'shoppingservice'),
+    re_path(r'^foodservicereco$', FoodServiceReco.as_view(), name='foodservicereco'),
+    re_path(r'^travelservicereco$',TravelServiceReco.as_view(), name = 'travelservicereco'),
+    re_path(r'^shoppingservicereco$',ShoppingServiceReco.as_view(), name = 'shoppingservicereco'),
 ]

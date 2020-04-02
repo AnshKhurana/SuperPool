@@ -92,6 +92,7 @@ INSTALLED_APPS = [
     'channels',
     'chat',
     'notifications',
+    'recommendations',
     'dal',
     'dal_select2',
     'rest_framework'
