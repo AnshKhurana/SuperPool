@@ -9,6 +9,7 @@ from accounts.models import User
 from pool.models import Service, Message, ServiceMember
 from datetime import datetime
 from pytz import timezone
+from django.core import serializers
 
 
 class ChatConsumer(AsyncJsonWebsocketConsumer):
@@ -93,10 +94,33 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             service.group_name,
             self.channel_name,
         )
+        clicked_service = Service.objects.get(id=service_id)
+        initiator = clicked_service.initiator
+        start_time = clicked_service.start_time
+        end_time = clicked_service.end_time
+        service_members = ServiceMember.objects.filter(service=clicked_service)
+        members = dict()
+        ctr = 0
+        for member in service_members:
+            if member.user == initiator:
+                continue
+            members[ctr] = member.user.username
+            ctr += 1
+
+        print(members)
+
+        # s_json = serializers.serialize('json', members)
+        # print(s_json)
+
         # Instruct their client to finish opening the service
         await self.send_json({
             "join": str(service.id),
             "description": service.description,
+            "category": str(clicked_service.category),
+            "initiator": str(initiator.username),
+            "start_time": str(start_time),
+            "end_time": str(end_time),
+            "members": members,
         })
 
         # await self.send_service(service_id, 'default_message')

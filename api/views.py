@@ -66,7 +66,6 @@ class FoodServiceReco(generics.ListAPIView):
         current_filt = Q(groups__id__in=groups_containing_user) & Q(vendor__in=prev_vendors) & \
                        ~Q(initiator=user) & Q(is_active=True) & \
                        ~Q(id__in=ServiceMember.objects.filter(user=user).values('service')) & \
-                       Q(start_time__range=(datetime(2000, 1, 1), datetime.now())) & \
                        Q(end_time__range=(datetime.now(), datetime(3000, 1, 1)))
         print('final filt made')
 
@@ -90,7 +89,6 @@ class ShoppingServiceReco(generics.ListAPIView):
         current_filt = Q(groups__id__in=groups_containing_user) & Q(vendor__in=prev_vendors) & \
                        ~Q(initiator=user) & Q(is_active=True) & \
                        ~Q(id__in=ServiceMember.objects.filter(user=user).values('service')) & \
-                       Q(start_time__range=(datetime(2000, 1, 1), datetime.now())) & \
                        Q(end_time__range=(datetime.now(), datetime(3000, 1, 1)))
         print('final filt made')
 
@@ -115,7 +113,6 @@ class TravelServiceReco(generics.ListAPIView):
                        (Q(start_point__in=prev_dest1) | Q(start_point__in=prev_dest2)) & \
                        ~Q(initiator=user) & Q(is_active=True) & \
                        ~Q(id__in=ServiceMember.objects.filter(user=user).values('service')) & \
-                       Q(start_time__range=(datetime(2000, 1, 1), datetime.now())) & \
                        Q(end_time__range=(datetime.now(), datetime(3000, 1, 1)))
         print('final filt made')
 

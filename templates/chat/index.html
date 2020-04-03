@@ -56,6 +56,22 @@
             <div id="chats">
             </div>
         </div>
+
+
+                            <div class="col-lg-3">
+                                <br><br>
+                                <aside class="sidebar static">
+                                    <div class="widget friend-list stick-widget">
+                                        <div id="category"></div>
+                                    </div>
+                                    <div class="widget friend-list stick-widget">
+                                        <div id="time"></div>
+                                    </div>
+                                    <div class="widget friend-list stick-widget">
+                                        <div id="people"></div>
+                                    </div>
+                                    </aside>
+                            </div><!-- sidebar -->
     </div>
  </div>
 
@@ -107,7 +123,7 @@
                     console.log(data);
                     var servicediv = $(
                             "<div class='service' id='service-" + data.join + "'>" +
-                            "<h2>" + data.description + "</h2>" +
+                            "<h2> Description: " + data.description + "</h2>" +
                             "<div class='messages'></div>" +
                             "<form><input placeholder='  Type here    .....'><button ><i class='fa fa-paper-plane'></i></button></form>" +
                             "</div>"
@@ -122,8 +138,42 @@
                         servicediv.find("input").val("");
                         return false;
                     });
+
+                    var category_html =   "<h4 class=\"widget-title\">Category</h4>" +
+                                        "<div id=\"searchDir\"></div>" +
+                                        "<span class=\"status f-online\"></span>" +
+                                        "<h6>" + data.category + "</h6>";
+
+                    var time_html =      "<h4 class=\"widget-title\">Start Time</h4>" +
+                                        "<div id=\"searchDir\"></div>" +
+                                        "<span>" + data.start_time + "</span>" +
+                                        "<h4 class=\"widget-title\">End Time</h4>" +
+                                        "<div id=\"searchDir\"></div>" +
+                                        "<span>" + data.end_time + "</span>";
+
+                    var people_html =   "<h4 class=\"widget-title\">Initiator</h4>" +
+                                        "<div id=\"searchDir\"></div>" +
+                                        "<span>" + data.initiator + "</span><br>" +
+                                        "<h4 class=\"widget-title\">Members</h4>";
+                                           // {#                                            {% for friend in friends %}#}
+                                           // {#                                                <li>#}
+                                           // {#                                                    <figure>#}
+                                           // {#                                                        <img src="images/resources/friend-avatar.jpg" alt="">#}
+                                           // {#                                                        <span class="status f-online"></span>#}
+                                           // {#                                                    </figure>#}
+                      //
+                        //                    {#                                            {% endfor %}#}
+                        //                "</ul>";
+
+                     for(val in data.members){
+                        people_html +="<span>" + data.members[val]+ "</span><br>";
+                     }
+                    // console.log(members);
                     $("#chats").append(servicediv);
                     $("#list").html("");
+                    $("#category").html(category_html);
+                    $("#time").html(time_html);
+                    $("#people").html(people_html);
                     // Handle leaving
                 } else if (data.leave) {
                     console.log("Leaving service " + data.leave);
