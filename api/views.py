@@ -1,9 +1,10 @@
 from django.shortcuts import render
-from _datetime import datetime
 from rest_framework import generics
 from .serializers import *
 from pool.models import *
 from django.db.models import Q
+from datetime import datetime
+from pytz import timezone
 
 
 # Create your views here.
@@ -57,7 +58,7 @@ class FoodServiceReco(generics.ListAPIView):
         user = self.request.user
         # gids = self.request.GET.get('gids').split(',')
         prev_filt = (Q(initiator=user) | Q(id__in=ServiceMember.objects.filter(user=user).values('service'))) \
-                    & Q(start_time__range=(datetime(2000, 1, 1), datetime.now()))
+                    & Q(start_time__range=(datetime(2000, 1, 1), datetime.now(timezone('Asia/Kolkata'))))
         print('filt made')
         prev_vendors = FoodService.objects.filter(prev_filt).values('vendor')
         print(prev_vendors)
@@ -66,7 +67,7 @@ class FoodServiceReco(generics.ListAPIView):
         current_filt = Q(groups__id__in=groups_containing_user) & Q(vendor__in=prev_vendors) & \
                        ~Q(initiator=user) & Q(is_active=True) & \
                        ~Q(id__in=ServiceMember.objects.filter(user=user).values('service')) & \
-                       Q(end_time__range=(datetime.now(), datetime(3000, 1, 1)))
+                       Q(end_time__range=(datetime.now().astimezone(timezone('Asia/Kolkata')), datetime(3000, 1, 1)))
         print('final filt made')
 
         return FoodService.objects.filter(current_filt).all()
@@ -80,7 +81,7 @@ class ShoppingServiceReco(generics.ListAPIView):
         user = self.request.user
         # gids = self.request.GET.get('gids').split(',')
         prev_filt = (Q(initiator=user) | Q(id__in=ServiceMember.objects.filter(user=user).values('service'))) \
-                    & Q(start_time__range=(datetime(2000, 1, 1), datetime.now()))
+                    & Q(start_time__range=(datetime(2000, 1, 1), datetime.now(timezone('Asia/Kolkata'))))
         print('filt made')
         prev_vendors = ShoppingService.objects.filter(prev_filt).values('vendor')
         print(prev_vendors)
@@ -89,7 +90,7 @@ class ShoppingServiceReco(generics.ListAPIView):
         current_filt = Q(groups__id__in=groups_containing_user) & Q(vendor__in=prev_vendors) & \
                        ~Q(initiator=user) & Q(is_active=True) & \
                        ~Q(id__in=ServiceMember.objects.filter(user=user).values('service')) & \
-                       Q(end_time__range=(datetime.now(), datetime(3000, 1, 1)))
+                       Q(end_time__range=(datetime.now(timezone('Asia/Kolkata')), datetime(3000, 1, 1)))
         print('final filt made')
 
         return ShoppingService.objects.filter(current_filt).all()
@@ -103,7 +104,7 @@ class TravelServiceReco(generics.ListAPIView):
         user = self.request.user
         # gids = self.request.GET.get('gids').split(',')
         prev_filt = (Q(initiator=user) | Q(id__in=ServiceMember.objects.filter(user=user).values('service'))) \
-                    & Q(start_time__range=(datetime(2000, 1, 1), datetime.now()))
+                    & Q(start_time__range=(datetime(2000, 1, 1), datetime.now(timezone('Asia/Kolkata'))))
         print('filt made')
         prev_dest1 = TravelService.objects.filter(prev_filt).values('start_point')
         prev_dest2 = TravelService.objects.filter(prev_filt).values('end_point')
@@ -113,7 +114,7 @@ class TravelServiceReco(generics.ListAPIView):
                        (Q(start_point__in=prev_dest1) | Q(start_point__in=prev_dest2)) & \
                        ~Q(initiator=user) & Q(is_active=True) & \
                        ~Q(id__in=ServiceMember.objects.filter(user=user).values('service')) & \
-                       Q(end_time__range=(datetime.now(), datetime(3000, 1, 1)))
+                       Q(end_time__range=(datetime.now(timezone('Asia/Kolkata')), datetime(3000, 1, 1)))
         print('final filt made')
 
         return TravelService.objects.filter(current_filt).all()

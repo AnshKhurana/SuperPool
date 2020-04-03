@@ -427,6 +427,31 @@
     if({{ message }}==1) {
         alert("Added to service successfully");
     }
+
+    var now = new Date();
+    var utcString = now.toISOString().substring(0,19);
+    var year = now.getFullYear();
+    var month = now.getMonth() + 1;
+    var start_day = now.getDate();
+    var end_day = now.getDate() + 1;
+    var hour = now.getHours();
+    var minute = now.getMinutes();
+    var second = now.getSeconds();
+    var start_time = year + "-" +
+                      (month < 10 ? "0" + month.toString() : month) + "-" +
+                      (start_day < 10 ? "0" + start_day.toString() : day) + "T" +
+                      (hour < 10 ? "0" + hour.toString() : hour) + ":" +
+                      (minute < 10 ? "0" + minute.toString() : minute);
+
+     var end_time = year + "-" +
+                      (month < 10 ? "0" + month.toString() : month) + "-" +
+                      (end_day < 10 ? "0" + end_day.toString() : day) + "T" +
+                      (hour < 10 ? "0" + hour.toString() : hour) + ":" +
+                      (minute < 10 ? "0" + minute.toString() : minute);
+    var datetimeField = document.getElementById("start");
+    datetimeField.value = start_time;
+    var datetimeField = document.getElementById("end");
+    datetimeField.value = end_time;
 }
             fetchServices();
         </script>

@@ -46,7 +46,7 @@ class FoodCreateView(LoginRequiredMixin, CreateView):
         data = form.save()
         f = FoodService(category=Category.objects.get(name='Food'), initiator=u, vendor=data['vendor'],
                         description=data['description'],
-                        start_time=data['start_time'], end_time=data['end_time'], slackness=data['slackness'],
+                        start_time=data['start_time'], end_time=data['end_time'],
                         )
         f.save()
         sm = ServiceMember(service=f, user=u)
@@ -87,7 +87,7 @@ class ShoppingCreateView(LoginRequiredMixin, FormView):
         data = form.save()
         f = ShoppingService(category=Category.objects.get(name='Shopping'), initiator=u, vendor=data['vendor'],
                             description=data['description'],
-                            start_time=data['start_time'], end_time=data['end_time'], slackness=data['slackness'],
+                            start_time=data['start_time'], end_time=data['end_time'],
                             )
         f.save()
         sm = ServiceMember(service=f, user=u)
@@ -116,7 +116,6 @@ class TravelCreateView(LoginRequiredMixin, FormView):
         f = TravelService(category=Category.objects.get(name='Travel'), initiator=u, start_point=data["start_point"],
                           end_point=data["end_point"], description=data['description'],
                           start_time=data['start_time'], end_time=data['end_time'],
-                          slackness=data['slackness']
                           )
         f.save()
         sm = ServiceMember(service=f, user=u)

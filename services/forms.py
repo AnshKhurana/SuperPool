@@ -5,6 +5,8 @@ from pool.models import Service, TravelService, FoodService, ShoppingService, Ca
 from django.utils.dateparse import parse_duration
 from django.forms import ValidationError
 from dal import autocomplete
+from datetime import datetime, timedelta
+from pytz import timezone
 
 CAT_CHOICES = [
     ('food', 'Oranges'),
@@ -39,7 +41,7 @@ class DurationInput(forms.widgets.TextInput):
 class FoodCreationForm(autocomplete.FutureModelForm):
     class Meta:
         model = FoodService
-        fields = ("start_time", "end_time", "slackness", "description", "vendor")
+        fields = ("start_time", "end_time", "description", "vendor")
         # widgets = {
         #     'vendor': autocomplete.ModelSelect2(
         #         url='services:food-autocomplete',
@@ -52,14 +54,14 @@ class FoodCreationForm(autocomplete.FutureModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["start_time"].widget = DateTimeInput()
+        self.fields["start_time"].widget = DateTimeInput(attrs={'value': datetime.now().astimezone(timezone('Asia/Kolkata')).strftime("%Y-%m-%dT%H:%M")})
         self.fields["start_time"].input_formats = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"]
 
-        self.fields["end_time"].widget = DateTimeInput()
+        self.fields["end_time"].widget = DateTimeInput(attrs={'value': (datetime.now().astimezone(timezone('Asia/Kolkata')) + timedelta(days=1)).strftime("%Y-%m-%dT%H:%M")})
         self.fields["end_time"].input_formats = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"]
 
-        self.fields["slackness"].widget = DurationInput()
-        self.fields["slackness"].input_formats = ["%dT%H:%M", "%d %H:%M"]
+        # self.fields["slackness"].widget = DurationInput()
+        # self.fields["slackness"].input_formats = ["%dT%H:%M", "%d %H:%M"]
 
         # self.fields["vendor"].widget = autocomplete.ListSelect2(
         #         url='services:food-autocomplete',
@@ -78,18 +80,18 @@ class FoodCreationForm(autocomplete.FutureModelForm):
     def save(self, commit=False):
         start_time = self.cleaned_data['start_time']
         end_time = self.cleaned_data['end_time']
-        slackness = self.cleaned_data['slackness']
+        # slackness = self.cleaned_data['slackness']
         description = self.cleaned_data['description']
         vendor = self.cleaned_data['vendor']
 
-        return {'start_time': start_time, 'end_time': end_time, 'slackness': slackness, 'description': description,
+        return {'start_time': start_time, 'end_time': end_time, 'description': description,
                 'vendor': vendor}
 
 
 class ShoppingCreationForm(autocomplete.FutureModelForm):
     class Meta:
         model = ShoppingService
-        fields = ("start_time", "end_time", "slackness", "description", "vendor")
+        fields = ("start_time", "end_time", "description", "vendor")
         widgets = {
             'vendor': autocomplete.ModelSelect2(
                 url='services:shopping-autocomplete',
@@ -102,14 +104,14 @@ class ShoppingCreationForm(autocomplete.FutureModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["start_time"].widget = DateTimeInput()
+        self.fields["start_time"].widget = DateTimeInput(attrs={'value': datetime.now().astimezone(timezone('Asia/Kolkata')).strftime("%Y-%m-%dT%H:%M")})
         self.fields["start_time"].input_formats = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"]
 
-        self.fields["end_time"].widget = DateTimeInput()
+        self.fields["end_time"].widget = DateTimeInput(attrs={'value': (datetime.now().astimezone(timezone('Asia/Kolkata')) + timedelta(days=1)).strftime("%Y-%m-%dT%H:%M")})
         self.fields["end_time"].input_formats = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"]
 
-        self.fields["slackness"].widget = DurationInput()
-        self.fields["slackness"].input_formats = ["%dT%H:%M", "%d %H:%M"]
+        # self.fields["slackness"].widget = DurationInput()
+        # self.fields["slackness"].input_formats = ["%dT%H:%M", "%d %H:%M"]
 
     def clean(self):
         super(ShoppingCreationForm, self).clean()
@@ -121,29 +123,29 @@ class ShoppingCreationForm(autocomplete.FutureModelForm):
     def save(self, commit=False):
         start_time = self.cleaned_data['start_time']
         end_time = self.cleaned_data['end_time']
-        slackness = self.cleaned_data['slackness']
+        # slackness = self.cleaned_data['slackness']
         description = self.cleaned_data['description']
         vendor = self.cleaned_data['vendor']
 
-        return {'start_time': start_time, 'end_time': end_time, 'slackness': slackness, 'description': description,
+        return {'start_time': start_time, 'end_time': end_time, 'description': description,
                 'vendor': vendor}
 
 
 class TravelCreationForm(forms.ModelForm):
     class Meta:
         model = TravelService
-        fields = ("start_point", "end_point", "start_time", "end_time", "slackness", "description")
+        fields = ("start_point", "end_point", "start_time", "end_time", "description")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["start_time"].widget = DateTimeInput()
+        self.fields["start_time"].widget = DateTimeInput(attrs={'value': datetime.now().astimezone(timezone('Asia/Kolkata')).strftime("%Y-%m-%dT%H:%M")})
         self.fields["start_time"].input_formats = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"]
 
-        self.fields["end_time"].widget = DateTimeInput()
+        self.fields["end_time"].widget = DateTimeInput(attrs={'value': (datetime.now().astimezone(timezone('Asia/Kolkata')) + timedelta(days=1)).strftime("%Y-%m-%dT%H:%M")})
         self.fields["end_time"].input_formats = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"]
 
-        self.fields["slackness"].widget = DurationInput()
-        self.fields["slackness"].input_formats = ["%dT%H:%M", "%d %H:%M"]
+        # self.fields["slackness"].widget = DurationInput()
+        # self.fields["slackness"].input_formats = ["%dT%H:%M", "%d %H:%M"]
 
     def clean(self):
         super(TravelCreationForm, self).clean()
@@ -157,11 +159,11 @@ class TravelCreationForm(forms.ModelForm):
         end_point = self.cleaned_data['end_point']
         start_time = self.cleaned_data['start_time']
         end_time = self.cleaned_data['end_time']
-        slackness = self.cleaned_data['slackness']
+        # slackness = self.cleaned_data['slackness']
         description = self.cleaned_data['description']
 
         return {'start_point': start_point, 'end_point': end_point, 'start_time': start_time, 'end_time': end_time,
-                'slackness': slackness, 'description': description}
+                'description': description}
 
         # f=FoodService(category=Category.objects.get(name='Food'), initiator=u, vendor=vendor, description=description, start_time=start_time, end_time=end_time, slackness=slackness, stype='Food')
         # f.save()
@@ -236,6 +238,6 @@ class GroupSelectForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        currentuser = kwargs.pop('currentuser')
+        current_user = kwargs.pop('currentuser')
         super(GroupSelectForm, self).__init__(*args, **kwargs)
-        self.fields['groups'].queryset = Group.objects.filter(members=currentuser.id).all()
+        self.fields['groups'].queryset = Group.objects.filter(members=current_user.id).all()
