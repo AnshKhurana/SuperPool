@@ -9,4 +9,6 @@ urlpatterns = [
     re_path(r'^foodservice$', FoodServiceList.as_view(), name='foodservice'),
     re_path(r'^travelservice$',TravelServiceList.as_view(), name = 'travelservice'),
     re_path(r'^shoppingservice$',ShoppingServiceList.as_view(), name = 'shoppingservice'),
+    re_path(r'^eventservice$',EventServiceList.as_view(), name = 'eventservice'),
+    re_path(r'^otherservice$',OtherServiceList.as_view(), name = 'otherservice'),
 ]

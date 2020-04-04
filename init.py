@@ -36,6 +36,10 @@ c1= Category(name='Travel')
 c1.save()
 c1= Category(name='Shopping')
 c1.save()
+c1= Category(name='Event')
+c1.save()
+c1= Category(name='Other')
+c1.save()
 
 #create new services
 comp1=Company(name="Adidas",domain="Footwear")
