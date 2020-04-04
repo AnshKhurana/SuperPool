@@ -16,7 +16,7 @@ class FoodServiceList(generics.ListAPIView):
             start= self.request.GET.get('start')
             end= self.request.GET.get('end')
             filt = filt & Q(start_time__range=(start, end))
-        return Service.objects.filter(filt).all()
+        return Service.objects.filter(filt).distinct().all()
 
 class TravelServiceList(generics.ListAPIView):
 
@@ -30,7 +30,7 @@ class TravelServiceList(generics.ListAPIView):
             start= self.request.GET.get('start')
             end= self.request.GET.get('end')
             filt = filt & Q(start_time__range=(start, end))
-        return Service.objects.filter(filt).all()
+        return Service.objects.filter(filt).distinct().all()
 
 class ShoppingServiceList(generics.ListAPIView):
 
@@ -44,7 +44,7 @@ class ShoppingServiceList(generics.ListAPIView):
             start= self.request.GET.get('start')
             end= self.request.GET.get('end')
             filt = filt & Q(start_time__range=(start, end))
-        return Service.objects.filter(filt).all()
+        return Service.objects.filter(filt).distinct().all()
 
 
 
@@ -60,7 +60,7 @@ class EventServiceList(generics.ListAPIView):
             start= self.request.GET.get('start')
             end= self.request.GET.get('end')
             filt = filt & Q(start_time__range=(start, end))
-        return Service.objects.filter(filt).all()
+        return Service.objects.filter(filt).distinct().all()
 
 class OtherServiceList(generics.ListAPIView):
 
@@ -74,4 +74,4 @@ class OtherServiceList(generics.ListAPIView):
             start= self.request.GET.get('start')
             end= self.request.GET.get('end')
             filt = filt & Q(start_time__range=(start, end))
-        return Service.objects.filter(filt).all()
+        return Service.objects.filter(filt).distinct().all()
