@@ -208,9 +208,8 @@
                             {#here, reply[item] is our service object, can access fields directly,#}
                             select.innerHTML += "<li> <div class=\'nearly-pepls\'> <div class=\"pepl-info\">" +
                                 "<h4><a href=\"#\" title=\"\">Travel Service</a></h4>" +
-                                "<a href=\"#\" title=\"\"><h5>" + "reply[item].vendor" + "</h5></a>" +
+                                "<a href=\"#\" title=\"\"><h5>" + reply[item].transport + "</h5></a>" +
                                 "<p> by " + reply[item].initiator + "</p>" +
-                                "<h4><p>Mode of transport: " + reply[item].transport + "</p> </h4> <br>" +
                                 "<h4><p>Source: " + reply[item].start_point + "<br> Destination: " + reply[item].end_point + "</p> </h4> <br>" +
                                 "<h4><p>Start Time: " + reply[item].start_time + "<br> End Time: " + reply[item].end_time + "</p> </h4>" +
                                 "<span> " + reply[item].description + "</span>" +
@@ -241,9 +240,9 @@
                             {#here, reply[item] is our service object, can access fields directly,#}
                             select.innerHTML += "<li> <div class=\'nearly-pepls\'> <div class=\"pepl-info\">" +
                                 "<h4><a href=\"#\" title=\"\">Event Service</a></h4>" +
-                                "<a href=\"#\" title=\"\"><h5>" + "reply[item].vendor" + "</h5></a>" +
+                                "<a href=\"#\" title=\"\"><h5>" + reply[item].event_type + "</h5></a>" +
                                 "<p> by " + reply[item].initiator + "</p>" +
-                                "<h4><p>Location: " + reply[item].location + "</p> </h4> " +
+                                "<h4><p>Location: " + reply[item].location + "</p> </h4> <br>" +
                                 "<h4><p>Start Time: " + reply[item].start_time + "<br> End Time: " + reply[item].end_time + "</p> </h4>" +
                                 "<span> " + reply[item].description + "</span>" +
                                 "<a href=\"#\" title=\"\" data-url=\"{% url 'groups:create' %}\" class=\"add-butn add-friend\" data-ripple=\"\">Join Service</a>"
