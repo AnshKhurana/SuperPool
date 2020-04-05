@@ -41,7 +41,7 @@ class OtherServiceSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = OtherService
-        fields = ['start_time', 'end_time', 'initiator', 'description', 'vendor']
+        fields = ['start_time', 'end_time', 'initiator', 'description']
 
 # class ServiceSerializer(serializers.HyperlinkedModelSerializer):
 #     class Meta:

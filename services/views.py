@@ -142,7 +142,7 @@ class EventCreateView(LoginRequiredMixin, FormView):
         return render(self.request, "home.html", {'message': 5})
 
 class OtherCreateView(LoginRequiredMixin, FormView):
-    form_class = EventCreationForm
+    form_class = OtherCreationForm
     success_url = '/'
     template_name = 'services/othercreate.html'
 
