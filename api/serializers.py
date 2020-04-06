@@ -1,6 +1,6 @@
-from django.db.models import Q
 
-from pool.models import FoodService, TravelService, ShoppingService, Service
+from pool.models import FoodService, TravelService, ShoppingService, EventService, OtherService
+from django.db.models import Q
 from rest_framework import serializers
 from pool.models import ServiceMember
 from accounts.models import *
@@ -62,7 +62,7 @@ class ShoppingServiceSerializer(serializers.HyperlinkedModelSerializer):
         cur_user = self.context['request'].user
         filt = Q(initiator=cur_user) & Q(category__name='Food') \
                & Q(start_time__range=(datetime(2000, 1, 1), datetime.now(timezone('Asia/Kolkata')))) & Q(vendor=vendor)
-        fs = FoodService.objects.filter(filt)
+        fs = ShoppingService.objects.filter(filt)
         print(fs.count())
         return fs.count()
 
@@ -110,6 +110,21 @@ class TravelServiceSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = TravelService
         fields = ['id', 'start_time', 'end_time', 'initiator', 'description', 'start_point', 'end_point', 'my_field', 'is_active', 'use_count_field', 'time_left_field']
+
+class EventServiceSerializer(serializers.HyperlinkedModelSerializer):
+    initiator = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = EventService
+        fields = ['start_time', 'end_time', 'initiator', 'description', 'location', 'event_type']
+
+
+class OtherServiceSerializer(serializers.HyperlinkedModelSerializer):
+    initiator = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = OtherService
+        fields = ['start_time', 'end_time', 'initiator', 'description']
 
 # class ServiceSerializer(serializers.HyperlinkedModelSerializer):
 #     class Meta:

@@ -1,7 +1,7 @@
 from django import forms
 from django.urls import reverse_lazy
 
-from pool.models import Service, TravelService, FoodService, ShoppingService, Category, ServiceMember, Group
+from pool.models import *
 from django.utils.dateparse import parse_duration
 from django.forms import ValidationError
 from dal import autocomplete
@@ -134,7 +134,8 @@ class ShoppingCreationForm(autocomplete.FutureModelForm):
 class TravelCreationForm(forms.ModelForm):
     class Meta:
         model = TravelService
-        fields = ("start_point", "end_point", "start_time", "end_time", "description")
+        fields = ("start_point", "end_point", "start_time", "end_time", "description", "transport")
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -161,9 +162,85 @@ class TravelCreationForm(forms.ModelForm):
         end_time = self.cleaned_data['end_time']
         # slackness = self.cleaned_data['slackness']
         description = self.cleaned_data['description']
+        transport= self.cleaned_data['transport']
 
         return {'start_point': start_point, 'end_point': end_point, 'start_time': start_time, 'end_time': end_time,
-                'description': description}
+                'slackness': slackness, 'description': description, 'transport':transport}
+
+        # f=FoodService(category=Category.objects.get(name='Food'), initiator=u, vendor=vendor, description=description, start_time=start_time, end_time=end_time, slackness=slackness, stype='Food')
+        # f.save()
+        # sm=ServiceMember(service=f, user=u)
+        # sm.save()
+
+class EventCreationForm(forms.ModelForm):
+    class Meta:
+        model = EventService
+        fields = ("start_time", "end_time", "description", "location", "event_type")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["start_time"].widget = DateTimeInput()
+        self.fields["start_time"].input_formats = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"]
+
+        self.fields["end_time"].widget = DateTimeInput()
+        self.fields["end_time"].input_formats = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"]
+
+        # self.fields["slackness"].widget = DurationInput()
+        # self.fields["slackness"].input_formats = ["%dT%H:%M", "%d %H:%M"]
+
+    def clean(self):
+        super(EventCreationForm, self).clean()
+        stime = self.cleaned_data.get('start_time')
+        etime = self.cleaned_data.get('end_time')
+        if (stime is not None) and (etime is not None) and stime > etime:
+            raise ValidationError('Start time after end time')
+
+    def save(self, commit=False):
+        start_time = self.cleaned_data['start_time']
+        end_time = self.cleaned_data['end_time']
+        slackness = self.cleaned_data['slackness']
+        description = self.cleaned_data['description']
+        location = self.cleaned_data['location']
+        event_type= self.cleaned_data['event_type']
+        return {'start_time': start_time, 'end_time': end_time,
+                'slackness': slackness, 'description': description, 'location': location, 'event_type': event_type}
+
+        # f=FoodService(category=Category.objects.get(name='Food'), initiator=u, vendor=vendor, description=description, start_time=start_time, end_time=end_time, slackness=slackness, stype='Food')
+        # f.save()
+        # sm=ServiceMember(service=f, user=u)
+        # sm.save()
+
+class OtherCreationForm(forms.ModelForm):
+    class Meta:
+        model = OtherService
+        fields = ("start_time", "end_time", "description")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["start_time"].widget = DateTimeInput()
+        self.fields["start_time"].input_formats = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"]
+
+        self.fields["end_time"].widget = DateTimeInput()
+        self.fields["end_time"].input_formats = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"]
+
+        # self.fields["slackness"].widget = DurationInput()
+        # self.fields["slackness"].input_formats = ["%dT%H:%M", "%d %H:%M"]
+
+    def clean(self):
+        super(OtherCreationForm, self).clean()
+        stime = self.cleaned_data.get('start_time')
+        etime = self.cleaned_data.get('end_time')
+        if (stime is not None) and (etime is not None) and stime > etime:
+            raise ValidationError('Start time after end time')
+
+    def save(self, commit=False):
+        start_time = self.cleaned_data['start_time']
+        end_time = self.cleaned_data['end_time']
+        slackness = self.cleaned_data['slackness']
+        description = self.cleaned_data['description']
+
+        return {'start_time': start_time, 'end_time': end_time,
+                'slackness': slackness, 'description': description}
 
         # f=FoodService(category=Category.objects.get(name='Food'), initiator=u, vendor=vendor, description=description, start_time=start_time, end_time=end_time, slackness=slackness, stype='Food')
         # f.save()
@@ -199,37 +276,6 @@ class ServiceCreationForm(forms.Form):
     #           "password2")
 
 
-# class FoodCreationForm(forms.Form):
-#
-#     # start_time = forms.DateTimeField(required=False, input_formats=['%d/%m/%Y %H:%M'],
-#     #     widget=forms.DateTimeInput(attrs={
-#     #         'class': 'form-control datetimepicker-input',
-#     #         'data-target': '#datetimepicker1'
-#     #     }))
-#
-#     start_time = forms.DateTimeField(required=False)
-#     end_time = forms.DateTimeField(required=False)
-#     slackness = forms.DurationField()
-#     description = forms.CharField(max_length=1000)  # this is a general description
-#     restaurant = forms.CharField(max_length=1000)
-#
-#     def clean(self):
-#         super(FoodCreationForm, self).clean()
-#         stime = self.cleaned_data.get('start_time')
-#         etime = self.cleaned_data.get('end_time')
-#         if (stime is not None) and (etime is not None) and stime>etime:
-#             raise ValidationError('Start time after end time')
-#
-#     def save(self, u):
-#         start_time = self.cleaned_data['start_time']
-#         end_time = self.cleaned_data['end_time']
-#         slackness = self.cleaned_data['slackness']
-#         description = self.cleaned_data['description']
-#         vendor = self.cleaned_data['restaurant']
-#         f= FoodService(category=Category.objects.get(name='Food'), initiator=u, vendor=vendor, description=description, start_time=start_time, end_time=end_time, slackness=slackness, stype='Food')
-#         f.save()
-#         sm= ServiceMember(service=f, user=u)
-#         sm.save()
 
 class GroupSelectForm(forms.Form):
     groups = forms.ModelMultipleChoiceField(
