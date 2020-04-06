@@ -19,7 +19,7 @@ class FoodServiceList(generics.ListAPIView):
             start = self.request.GET.get('start')
             end = self.request.GET.get('end')
             filt = filt & Q(start_time__range=(start, end))
-        return Service.objects.filter(filt).all()
+        return Service.objects.filter(filt).distinct().all()
 
 
 class ShoppingServiceList(generics.ListAPIView):
@@ -33,7 +33,7 @@ class ShoppingServiceList(generics.ListAPIView):
             start = self.request.GET.get('start')
             end = self.request.GET.get('end')
             filt = filt & Q(start_time__range=(start, end))
-        return Service.objects.filter(filt).all()
+        return Service.objects.filter(filt).distinct().all()
 
 
 class TravelServiceList(generics.ListAPIView):
@@ -47,8 +47,37 @@ class TravelServiceList(generics.ListAPIView):
             start = self.request.GET.get('start')
             end = self.request.GET.get('end')
             filt = filt & Q(start_time__range=(start, end))
-        return Service.objects.filter(filt).all()
+        return Service.objects.filter(filt).distinct().all()
 
+
+class EventServiceList(generics.ListAPIView):
+
+    serializer_class = EventServiceSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        gids = self.request.GET.get('gids').split(',')
+        filt= Q(groups__id__in=gids) & Q(category__name='Event') & Q(groups__members=user.id)
+        if 'start' in self.request.GET and 'end' in self.request.GET:
+            start= self.request.GET.get('start')
+            end= self.request.GET.get('end')
+            filt = filt & Q(start_time__range=(start, end))
+        return Service.objects.filter(filt).distinct().all()
+
+
+class OtherServiceList(generics.ListAPIView):
+
+    serializer_class = OtherServiceSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        gids = self.request.GET.get('gids').split(',')
+        filt= Q(groups__id__in=gids) & Q(category__name='Other') & Q(groups__members=user.id)
+        if 'start' in self.request.GET and 'end' in self.request.GET:
+            start= self.request.GET.get('start')
+            end= self.request.GET.get('end')
+            filt = filt & Q(start_time__range=(start, end))
+        return Service.objects.filter(filt).distinct().all()
 
 class FoodServiceReco(generics.ListAPIView):
     serializer_class = FoodServiceSerializer

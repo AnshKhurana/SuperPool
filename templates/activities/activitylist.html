@@ -230,9 +230,8 @@
                     console.log(error);
                 })
             }
-            else
+            else if (cat_selected == "travel")
             {
-                {#    travel#}
                 instance.get('/api/travelservice', {
                     params: {
                         gids: gid_string,
@@ -251,7 +250,7 @@
                                 {#here, reply[item] is our service object, can access fields directly,#}
                                 select.innerHTML += "<li> <div class=\'nearly-pepls\'> <div class=\"pepl-info\">" +
                                     "<h4><a href=\"#\" title=\"\">Travel Service</a></h4>" +
-                                    "<a href=\"#\" title=\"\"><h5>" + "reply[item].vendor" + "</h5></a>" +
+                                     "<a href=\"#\" title=\"\"><h5>" + reply[item].transport + "</h5></a>" +
                                     "<p> by " + reply[item].initiator + "</p>" +
                                     "<h4><p>Source: " + reply[item].start_point + "<br> Destination: " + reply[item].end_point + "</p> </h4> <br>" +
                                     "<h4><p>Start Time: " + reply[item].start_time + "<br> End Time: " + reply[item].end_time + "</p> </h4>" +
@@ -263,7 +262,7 @@
                                 {#here, reply[item] is our service object, can access fields directly,#}
                                 select.innerHTML += "<li> <div class=\'nearly-pepls\'> <div class=\"pepl-info\">" +
                                     "<h4><a href=\"#\" title=\"\">Travel Service</a></h4>" +
-                                    "<a href=\"#\" title=\"\"><h5>" + "reply[item].vendor" + "</h5></a>" +
+                                    "<a href=\"#\" title=\"\"><h5>" + reply[item].transport + "</h5></a>" +
                                     "<p> by " + reply[item].initiator + "</p>" +
                                     "<h4><p>Source: " + reply[item].start_point + "<br> Destination: " + reply[item].end_point + "</p> </h4> <br>" +
                                     "<h4><p>Start Time: " + reply[item].start_time + "<br> End Time: " + reply[item].end_time + "</p> </h4>" +
@@ -272,6 +271,68 @@
                                     + "</div> </div> </li>";
                             }
                         }
+                        }
+                    }).catch(function (error) {
+                    // handle error
+                    alert(error);
+                    console.log(error);
+                })
+            }
+            else if (cat_selected == "event")
+            {
+                instance.get('/api/eventservice', {
+                    params: {
+                        gids: gid_string,
+                        start: start,
+                        end: end
+                    }
+                }).then(
+                    function (response) {
+                        reply = response.data;
+                        console.log(reply);
+
+                        for (item in reply)
+                        {
+                            {#here, reply[item] is our service object, can access fields directly,#}
+                            select.innerHTML += "<li> <div class=\'nearly-pepls\'> <div class=\"pepl-info\">" +
+                                "<h4><a href=\"#\" title=\"\">Event Service</a></h4>" +
+                                "<a href=\"#\" title=\"\"><h5>" + reply[item].event_type + "</h5></a>" +
+                                "<p> by " + reply[item].initiator + "</p>" +
+                                "<h4><p>Location: " + reply[item].location + "</p> </h4> <br>" +
+                                "<h4><p>Start Time: " + reply[item].start_time + "<br> End Time: " + reply[item].end_time + "</p> </h4>" +
+                                "<span> " + reply[item].description + "</span>" +
+                                "<a href=\"#\" title=\"\" data-url=\"{% url 'groups:create' %}\" class=\"add-butn add-friend\" data-ripple=\"\">Join Service</a>"
+                                + "</div> </div> </li>";
+                        }
+                    }).catch(function (error) {
+                    // handle error
+                    alert(error);
+                    console.log(error);
+                })
+            }
+            else
+            {
+                instance.get('/api/otherservice', {
+                    params: {
+                        gids: gid_string,
+                        start: start,
+                        end: end
+                    }
+                }).then(
+                    function (response) {
+                        reply = response.data;
+                        console.log(reply);
+
+                        for (item in reply)
+                        {
+                            {#here, reply[item] is our service object, can access fields directly,#}
+                            select.innerHTML += "<li> <div class=\'nearly-pepls\'> <div class=\"pepl-info\">" +
+                                "<h4><a href=\"#\" title=\"\">Event Service</a></h4>" +
+                                "<a href=\"#\" title=\"\"><h5>" + reply[item].description + "</h5></a>" +
+                                "<p> by " + reply[item].initiator + "</p>" +
+                                "<h4><p>Start Time: " + reply[item].start_time + "<br> End Time: " + reply[item].end_time + "</p> </h4>" +
+                                "<a href=\"#\" title=\"\" data-url=\"{% url 'groups:create' %}\" class=\"add-butn add-friend\" data-ripple=\"\">Join Service</a>"
+                                + "</div> </div> </li>";
                         }
                     }).catch(function (error) {
                     // handle error
@@ -369,6 +430,18 @@
                                             <li>
                                                 <div class="friend-meta">
                                                     <h4><input type="radio" id="shopping_sel" name="category" value="shopping"  onclick="fetchServices()" > Shopping</h4>
+                                                </div>
+                                            </li>
+
+                                            <li>
+                                                <div class="friend-meta">
+                                                    <h4><input type="radio" id="event_sel" name="category" value="event"  onclick="fetchServices()" > Event</h4>
+                                                </div>
+                                            </li>
+
+                                            <li>
+                                                <div class="friend-meta">
+                                                    <h4><input type="radio" id="other_sel" name="category" value="other"  onclick="fetchServices()" > Other</h4>
                                                 </div>
                                             </li>
                                         </ul>

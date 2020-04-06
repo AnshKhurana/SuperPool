@@ -107,6 +107,12 @@ class ServiceGroup(models.Model):
 class TravelService(Service):
     start_point = models.CharField(null=False, max_length=1000)
     end_point = models.CharField(null=False, max_length=1000)
+    TRAVEL_CHOICES= [
+        ('Taxi', 'Taxi'),
+        ('Train', 'Train'),
+        ('Flight', 'Flight'),
+    ]
+    transport = models.CharField(max_length=10, choices=TRAVEL_CHOICES)
 
 
 class FoodService(Service):
@@ -116,12 +122,23 @@ class FoodService(Service):
         return '%s' % self.vendor
 
 
+
 class ShoppingService(Service):
     vendor = models.ForeignKey(Company, on_delete=models.DO_NOTHING, null=False)
 
     def __str__(self):
         return '%s' % self.vendor
 
+class EventService(Service):
+    EVENT_CHOICES = [
+        ('Movie', 'Movie'),
+        ('Concert', 'Concert'),
+    ]
+    location = models.CharField(null=False, max_length=1000)
+    event_type = models.CharField(max_length=10, choices=EVENT_CHOICES)
+
+class OtherService(Service):
+    pass
 
 class ServiceMember(models.Model):
     service = models.ForeignKey(Service, on_delete=models.DO_NOTHING)

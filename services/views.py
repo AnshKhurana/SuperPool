@@ -3,8 +3,7 @@ from django.urls import reverse_lazy
 from notifications.signals import notify
 from django.views.generic import FormView, CreateView
 from pool.models import *
-from .forms import ServiceCreationForm, ShoppingCreationForm, TravelCreationForm, GroupSelectForm, \
-    FoodCreationForm
+from .forms import *
 from accounts.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -115,7 +114,8 @@ class TravelCreateView(LoginRequiredMixin, FormView):
         data = form.save()
         f = TravelService(category=Category.objects.get(name='Travel'), initiator=u, start_point=data["start_point"],
                           end_point=data["end_point"], description=data['description'],
-                          start_time=data['start_time'], end_time=data['end_time'],
+                          start_time=data['start_time'], end_time=data['end_time'], transport=data['transport'],
+
                           )
         f.save()
         sm = ServiceMember(service=f, user=u)
@@ -125,6 +125,61 @@ class TravelCreateView(LoginRequiredMixin, FormView):
             gs.save()
         # form.save(self.request.user)
         return render(self.request, "home.html", {'message': 4})
+
+class EventCreateView(LoginRequiredMixin, FormView):
+    form_class = EventCreationForm
+    success_url = '/'
+    template_name = 'services/eventcreate.html'
+
+    def form_valid(self, form):
+        if not ('servicegroups' in self.request.session):
+            form.add_error(None, "Session expired")
+            return super().form_invalid(form)
+        else:
+            groups = self.request.session['servicegroups']
+            del self.request.session['servicegroups']
+
+        u = self.request.user
+        data = form.save()
+        f = EventService(category=Category.objects.get(name='Event'), initiator=u, description=data['description'],
+                         start_time=data['start_time'], end_time=data['end_time'], slackness=data['slackness'],
+                         location=data['location'], event_type=data['event_type'],
+                         )
+        f.save()
+        sm = ServiceMember(service=f, user=u)
+        sm.save()
+        for group in serializers.deserialize("json", groups):
+            gs = ServiceGroup(group=group.object, service=f)
+            gs.save()
+        # form.save(self.request.user)
+        return render(self.request, "home.html", {'message': 5})
+
+class OtherCreateView(LoginRequiredMixin, FormView):
+    form_class = OtherCreationForm
+    success_url = '/'
+    template_name = 'services/othercreate.html'
+
+    def form_valid(self, form):
+        if not ('servicegroups' in self.request.session):
+            form.add_error(None, "Session expired")
+            return super().form_invalid(form)
+        else:
+            groups = self.request.session['servicegroups']
+            del self.request.session['servicegroups']
+
+        u = self.request.user
+        data = form.save()
+        f = OtherService(category=Category.objects.get(name='Other'), initiator=u, description=data['description'],
+                         start_time=data['start_time'], end_time=data['end_time'], slackness=data['slackness'],
+                         )
+        f.save()
+        sm = ServiceMember(service=f, user=u)
+        sm.save()
+        for group in serializers.deserialize("json", groups):
+            gs = ServiceGroup(group=group.object, service=f)
+            gs.save()
+        # form.save(self.request.user)
+        return render(self.request, "home.html", {'message': 6})
 
 
 class GroupSelectView(LoginRequiredMixin, FormView):
@@ -137,8 +192,12 @@ class GroupSelectView(LoginRequiredMixin, FormView):
             return reverse_lazy('services:foodcreate')
         elif 'Shopping' in self.request.POST:
             return reverse_lazy('services:shoppingcreate')
-        else:
+        elif 'Travel' in self.request.POST:
             return reverse_lazy('services:travelcreate')
+        elif 'Event' in self.request.POST:
+            return reverse_lazy('services:eventcreate')
+        else:
+            return reverse_lazy('services:othercreate')
 
     def get_form_kwargs(self):
         kwargs = super(GroupSelectView, self).get_form_kwargs()
