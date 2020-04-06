@@ -134,7 +134,7 @@ class ShoppingCreationForm(autocomplete.FutureModelForm):
 class TravelCreationForm(forms.ModelForm):
     class Meta:
         model = TravelService
-        fields = ("start_point", "end_point", "start_time", "end_time", "slackness", "description", "transport")
+        fields = ("start_point", "end_point", "start_time", "end_time", "description", "transport")
 
 
     def __init__(self, *args, **kwargs):
@@ -175,7 +175,7 @@ class TravelCreationForm(forms.ModelForm):
 class EventCreationForm(forms.ModelForm):
     class Meta:
         model = EventService
-        fields = ("start_time", "end_time", "slackness", "description", "location", "event_type")
+        fields = ("start_time", "end_time", "description", "location", "event_type")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -185,8 +185,8 @@ class EventCreationForm(forms.ModelForm):
         self.fields["end_time"].widget = DateTimeInput()
         self.fields["end_time"].input_formats = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"]
 
-        self.fields["slackness"].widget = DurationInput()
-        self.fields["slackness"].input_formats = ["%dT%H:%M", "%d %H:%M"]
+        # self.fields["slackness"].widget = DurationInput()
+        # self.fields["slackness"].input_formats = ["%dT%H:%M", "%d %H:%M"]
 
     def clean(self):
         super(EventCreationForm, self).clean()
@@ -213,7 +213,7 @@ class EventCreationForm(forms.ModelForm):
 class OtherCreationForm(forms.ModelForm):
     class Meta:
         model = OtherService
-        fields = ("start_time", "end_time", "slackness", "description")
+        fields = ("start_time", "end_time", "description")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -223,8 +223,8 @@ class OtherCreationForm(forms.ModelForm):
         self.fields["end_time"].widget = DateTimeInput()
         self.fields["end_time"].input_formats = ["%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M"]
 
-        self.fields["slackness"].widget = DurationInput()
-        self.fields["slackness"].input_formats = ["%dT%H:%M", "%d %H:%M"]
+        # self.fields["slackness"].widget = DurationInput()
+        # self.fields["slackness"].input_formats = ["%dT%H:%M", "%d %H:%M"]
 
     def clean(self):
         super(OtherCreationForm, self).clean()

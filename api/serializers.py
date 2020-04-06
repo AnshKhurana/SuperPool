@@ -62,7 +62,7 @@ class ShoppingServiceSerializer(serializers.HyperlinkedModelSerializer):
         cur_user = self.context['request'].user
         filt = Q(initiator=cur_user) & Q(category__name='Food') \
                & Q(start_time__range=(datetime(2000, 1, 1), datetime.now(timezone('Asia/Kolkata')))) & Q(vendor=vendor)
-        fs = FoodService.objects.filter(filt)
+        fs = ShoppingService.objects.filter(filt)
         print(fs.count())
         return fs.count()
 
