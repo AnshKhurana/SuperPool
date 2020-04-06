@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}Service-Chat Window{% endblock %}
-{% block header_text %}Services{% endblock %}
+{% block header_text %}&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp My Services{% endblock %}
 
 {% block content %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -14,30 +14,66 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<div id="list">
-    <ul class="services" style="padding: 40px; width:100%">
-        {% for service in services %}
-            <li class="service-link" style="display:inline; background: #cce5ff; padding: 5px; margin: 5px" data-service-id="{{ service.id }}">
-                {{ service }} &nbsp &nbsp &nbsp &nbsp <span class="badge badge-pill badge-warning">Created by: {{ service.initiator }}</span>
-                &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
-                <span class="badge badge-pill badge-dark">{{ service.category }}</span>
-            </li><br><br>
-        {% endfor %}
-        {% for service in other_serv %}
-           <li class="service-link" style="display:inline; background: #ffe5e5; padding: 5px; margin: 5px;" data-service-id="{{ service.id }}">
-                {{ service }}&nbsp &nbsp &nbsp &nbsp <span class="badge badge-pill badge-warning">Created by: {{ service.initiator }}</span>
-                &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
-                <span class="badge badge-pill badge-dark">{{ service.category }}</span>
-            </li><br><br>
-        {% empty %}
-<!--            <p class="empty">No chat services defined. Maybe make some in the <a href="{% url 'admin:index' %}">admin</a>?</p>-->
-        {% endfor %}
-    </ul>
-    </div>
-    <a style="font-size:50px; margin-left: 500px;" href="/"><i class='fa fa-home'></i></a>
+{% include 'includes/stylesheets.html' %}
+<script>
+    function disable(x) {
+        window.location.href = "active/" + x;
+    }
+</script>
+ <div class="col-lg-12">
+    <div class="row" id="page-contents">
+        {% include 'includes/sidebar.html' %}
+        <div class="col-lg-6">
+            <div id="list">
+                <ul class="services" style="padding: 40px; width:100%">
+                    {% for service in services %}
+                        <li class="service-link" style="display:inline; background: #cce5ff; padding: 5px; margin: 5px" data-service-id="{{ service.id }}">
+                            {{ service }} &nbsp &nbsp &nbsp &nbsp <span class="badge badge-pill badge-warning">Created by: {{ service.initiator }}</span>
+                            &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                            <span class="badge badge-pill badge-dark">{{ service.category }}</span>
+                        </li> &nbsp &nbsp &nbsp
+                    <script>console.log('{{ service.is_active }}');</script>
+                        {% if service.is_active == True %}
+                            <button onclick="disable({{ service.id }})">Disable</button>
+                        {% else %}
+                            <button onclick="disable({{ service.id }})">Enable</button>
+                        {% endif %}
+                    <br><br>
+                    {% endfor %}
+                    {% for service in other_serv %}
+                       <li class="service-link" style="display:inline; background: #ffe5e5; padding: 5px; margin: 5px;" data-service-id="{{ service.id }}">
+                            {{ service }}&nbsp &nbsp &nbsp &nbsp <span class="badge badge-pill badge-warning">Created by: {{ service.initiator }}</span>
+                            &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                            <span class="badge badge-pill badge-dark">{{ service.category }}</span>
+                        </li><br><br>
+                    {% empty %}
+            <!--            <p class="empty">No chat services defined. Maybe make some in the <a href="{% url 'admin:index' %}">admin</a>?</p>-->
+                    {% endfor %}
+                </ul>
+            </div>
+<!--    <a style="font-size:50px; margin-left: 500px;" href="/"><i class='fa fa-home'></i></a>-->
 
-    <div id="chats">
+            <div id="chats">
+            </div>
+        </div>
+
+
+                            <div class="col-lg-3">
+                                <br><br>
+                                <aside class="sidebar static">
+                                    <div class="widget friend-list stick-widget">
+                                        <div id="category"></div>
+                                    </div>
+                                    <div class="widget friend-list stick-widget">
+                                        <div id="time"></div>
+                                    </div>
+                                    <div class="widget friend-list stick-widget">
+                                        <div id="people"></div>
+                                    </div>
+                                    </aside>
+                            </div><!-- sidebar -->
     </div>
+ </div>
 
 <!--    <div class="peoples-mesg-box">-->
 <!--&lt;!&ndash;        <div class="conversation-head">&ndash;&gt;-->
@@ -87,7 +123,7 @@
                     console.log(data);
                     var servicediv = $(
                             "<div class='service' id='service-" + data.join + "'>" +
-                            "<h2>" + data.description + "</h2>" +
+                            "<h2> Description: " + data.description + "</h2>" +
                             "<div class='messages'></div>" +
                             "<form><input placeholder='  Type here    .....'><button ><i class='fa fa-paper-plane'></i></button></form>" +
                             "</div>"
@@ -102,8 +138,42 @@
                         servicediv.find("input").val("");
                         return false;
                     });
+
+                    var category_html =   "<h4 class=\"widget-title\">Category</h4>" +
+                                        "<div id=\"searchDir\"></div>" +
+                                        "<span class=\"status f-online\"></span>" +
+                                        "<h6>" + data.category + "</h6>";
+
+                    var time_html =      "<h4 class=\"widget-title\">Start Time</h4>" +
+                                        "<div id=\"searchDir\"></div>" +
+                                        "<span>" + data.start_time + "</span>" +
+                                        "<h4 class=\"widget-title\">End Time</h4>" +
+                                        "<div id=\"searchDir\"></div>" +
+                                        "<span>" + data.end_time + "</span>";
+
+                    var people_html =   "<h4 class=\"widget-title\">Initiator</h4>" +
+                                        "<div id=\"searchDir\"></div>" +
+                                        "<span>" + data.initiator + "</span><br>" +
+                                        "<h4 class=\"widget-title\">Members</h4>";
+                                           // {#                                            {% for friend in friends %}#}
+                                           // {#                                                <li>#}
+                                           // {#                                                    <figure>#}
+                                           // {#                                                        <img src="images/resources/friend-avatar.jpg" alt="">#}
+                                           // {#                                                        <span class="status f-online"></span>#}
+                                           // {#                                                    </figure>#}
+                      //
+                        //                    {#                                            {% endfor %}#}
+                        //                "</ul>";
+
+                     for(val in data.members){
+                        people_html +="<span>" + data.members[val]+ "</span><br>";
+                     }
+                    // console.log(members);
                     $("#chats").append(servicediv);
                     $("#list").html("");
+                    $("#category").html(category_html);
+                    $("#time").html(time_html);
+                    $("#people").html(people_html);
                     // Handle leaving
                 } else if (data.leave) {
                     console.log("Leaving service " + data.leave);

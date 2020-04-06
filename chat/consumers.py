@@ -1,12 +1,15 @@
 from django.conf import settings
 
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
+from notifications.signals import notify
 
 from .exceptions import ClientError
 from .utils import get_service_or_error
-from pool.models import Service, Message
+from accounts.models import User
+from pool.models import Service, Message, ServiceMember
 from datetime import datetime
 from pytz import timezone
+from django.core import serializers
 
 
 class ChatConsumer(AsyncJsonWebsocketConsumer):
@@ -91,16 +94,40 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             service.group_name,
             self.channel_name,
         )
+        clicked_service = Service.objects.get(id=service_id)
+        initiator = clicked_service.initiator
+        start_time = clicked_service.start_time
+        end_time = clicked_service.end_time
+        service_members = ServiceMember.objects.filter(service=clicked_service)
+        members = dict()
+        ctr = 0
+        for member in service_members:
+            if member.user == initiator:
+                continue
+            members[ctr] = member.user.username
+            ctr += 1
+
+        print(members)
+
+        # s_json = serializers.serialize('json', members)
+        # print(s_json)
+
         # Instruct their client to finish opening the service
         await self.send_json({
             "join": str(service.id),
             "description": service.description,
+            "category": str(clicked_service.category),
+            "initiator": str(initiator.username),
+            "start_time": str(start_time),
+            "end_time": str(end_time),
+            "members": members,
         })
 
         # await self.send_service(service_id, 'default_message')
         messages = Message.objects.filter(service__id=service_id)
         for message in messages:
-            event = {"service_id": service_id, "username": message.user.username, "message": message.content, "timestamp": str(message.timestamp).split(' ')[1].split('.')[0][:-3]}
+            event = {"service_id": service_id, "username": message.user.username, "message": message.content,
+                     "timestamp": str(message.timestamp).split(' ')[1].split('.')[0][:-3]}
             await self.chat_message(event, init=True)
 
     async def leave_service(self, service_id):
@@ -136,7 +163,8 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         Called by receive_json when someone sends a message to a service.
         """
         cur_time = datetime.now(timezone('Asia/Kolkata'))
-        message_instance = Message(timestamp=cur_time, content=message, service=Service.objects.get(id=service_id), user=self.scope["user"])
+        message_instance = Message(timestamp=cur_time, content=message, service=Service.objects.get(id=service_id),
+                                   user=self.scope["user"])
         message_instance.save()
         # Check they are in this service
         if service_id not in self.services:
@@ -213,3 +241,10 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                     "login_user": self.scope['user'].username,
                 },
             )
+
+            print('From consumers.py->chat_message ---- Putting chat info in Notifs ----')
+            cur_service = Service.objects.get(id=event["service_id"])
+            members = ServiceMember.objects.filter(service=cur_service).values('user')
+            for member in members:
+                notify.send(User.objects.get(username=event['username']), recipient=User.objects.get(id=member['user']),
+                            verb=event['message'], description='Sent to service ' + cur_service.description)

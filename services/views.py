@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from notifications.signals import notify
 from django.views.generic import FormView, CreateView
 from pool.models import *
 from .forms import *
@@ -44,14 +45,26 @@ class FoodCreateView(LoginRequiredMixin, CreateView):
         data = form.save()
         f = FoodService(category=Category.objects.get(name='Food'), initiator=u, vendor=data['vendor'],
                         description=data['description'],
-                        start_time=data['start_time'], end_time=data['end_time'], slackness=data['slackness'],
+                        start_time=data['start_time'], end_time=data['end_time'],
                         )
         f.save()
         sm = ServiceMember(service=f, user=u)
         sm.save()
+
+        notified_members = set()
         for group in serializers.deserialize("json", groups):
             gs = ServiceGroup(group=group.object, service=f)
             gs.save()
+
+            members = GroupMember.objects.filter(group=group.object).values('user')
+            print(members)
+            for member in members:
+                print(member)
+                notified_members.add(User.objects.get(id=member['user']))
+
+        # for member in notified_members:
+        #     notify.send(self.request.user, recipient=member, verb=data['description'], description="Food " + str(f.id))
+
         # form.save(self.request.user)
         return render(self.request, "home.html", {'message': 2})
 
@@ -73,7 +86,7 @@ class ShoppingCreateView(LoginRequiredMixin, FormView):
         data = form.save()
         f = ShoppingService(category=Category.objects.get(name='Shopping'), initiator=u, vendor=data['vendor'],
                             description=data['description'],
-                            start_time=data['start_time'], end_time=data['end_time'], slackness=data['slackness'],
+                            start_time=data['start_time'], end_time=data['end_time'],
                             )
         f.save()
         sm = ServiceMember(service=f, user=u)
@@ -101,8 +114,8 @@ class TravelCreateView(LoginRequiredMixin, FormView):
         data = form.save()
         f = TravelService(category=Category.objects.get(name='Travel'), initiator=u, start_point=data["start_point"],
                           end_point=data["end_point"], description=data['description'],
-                          start_time=data['start_time'], end_time=data['end_time'],
-                          slackness=data['slackness'], transport=data['transport'],
+                          start_time=data['start_time'], end_time=data['end_time'], transport=data['transport'],
+
                           )
         f.save()
         sm = ServiceMember(service=f, user=u)
@@ -228,6 +241,7 @@ class ShoppingVendorAutocomplete(autocomplete.Select2QuerySetView):
         qs = Company.objects.filter(timestamp=current_time)
         # print(qs)
         return qs
+
 
 # @login_required
 # class ServiceCreateView(FormView):

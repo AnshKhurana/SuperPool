@@ -11,10 +11,17 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import sys
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REDIS_PORT = 6380
 
-redis_host = os.environ.get('REDIS_HOST', 'localhost')
+if len(sys.argv) < 3:
+    redis_host = os.environ.get('REDIS_HOST', 'localhost')
+else:
+    redis_host = os.environ.get('REDIS_HOST', sys.argv[2].split(':')[0])
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -23,7 +30,7 @@ CHANNEL_LAYERS = {
         # This example app uses the Redis channel layer implementation channels_redis
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [(redis_host, 6380)],
+            "hosts": [(redis_host, REDIS_PORT)],
         },
     },
 }
@@ -59,6 +66,7 @@ MESSAGE_TYPES_LIST = [
 ]
 
 COMPANY_API_URL = "https://autocomplete.clearbit.com/v1/companies/suggest"
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '3o^)rc46u87^o)kopo-b9vb+vh^75uot75wx(r6!3nd*aixjmf'
 
@@ -83,6 +91,8 @@ INSTALLED_APPS = [
     'groups',
     'channels',
     'chat',
+    'notifications',
+    'recommendations',
     'dal',
     'dal_select2',
     'rest_framework'
@@ -118,7 +128,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'superpool.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -147,7 +156,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -160,7 +168,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -177,9 +184,7 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-
 AUTH_USER_MODEL = "accounts.User"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-

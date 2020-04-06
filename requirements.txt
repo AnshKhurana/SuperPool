@@ -1,3 +1,4 @@
+django-notifications-hq
 pytz
 requests
 pathlib2

@@ -1,10 +1,10 @@
 from django.urls import path
 from .views import *
 from django.contrib.auth.decorators import login_required
+from pool.models import Group
 
-app_name = "chat"
+app_name = "recommendations"
 
 urlpatterns = [
-    path('', index, name='home'),
-    path('active/<int:service_id>', after_disable, name='active')
+    path('', RecommendationsHome.as_view(), name='home'),
 ]
