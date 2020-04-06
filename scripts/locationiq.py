@@ -15,9 +15,13 @@ while 1:
         'format': 'json'
     }
 
+    print(data)
+
     response_obj = requests.get(url, params=data)
 
     response_json = response_obj.json()
+
+    print(response_json)
 
     for i, loc_json in enumerate(response_json):
         print(i + 1, loc_json['display_name'], sep=' ')
