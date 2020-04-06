@@ -26,13 +26,13 @@ class FoodServiceSerializer(serializers.HyperlinkedModelSerializer):
         vendor = foodservice.vendor
         cur_user = self.context['request'].user
         filt = Q(initiator=cur_user) & Q(category__name='Food') \
-               & Q(start_time__range=(datetime(2000, 1, 1), datetime.now(timezone('Asia/Kolkata')))) & Q(vendor=vendor)
+               & Q(start_time__range=(datetime(2000, 1, 1), datetime.now())) & Q(vendor=vendor)
         fs = FoodService.objects.filter(filt)
         print(fs.count())
         return fs.count()
 
     def time_left(self, foodservice):
-        now = datetime.now(tz.utc)
+        now = datetime.now()
         diff = (foodservice.end_time - now) // 3600
         diff = str(diff).split(':')[2].split('.')[0]
         print(diff)
@@ -61,13 +61,13 @@ class ShoppingServiceSerializer(serializers.HyperlinkedModelSerializer):
         vendor = foodservice.vendor
         cur_user = self.context['request'].user
         filt = Q(initiator=cur_user) & Q(category__name='Food') \
-               & Q(start_time__range=(datetime(2000, 1, 1), datetime.now(timezone('Asia/Kolkata')))) & Q(vendor=vendor)
+               & Q(start_time__range=(datetime(2000, 1, 1), datetime.now())) & Q(vendor=vendor)
         fs = ShoppingService.objects.filter(filt)
         print(fs.count())
         return fs.count()
 
     def time_left(self, foodservice):
-        now = datetime.now(tz.utc)
+        now = datetime.now()
         diff = (foodservice.end_time - now) // 3600
         diff = str(diff).split(':')[2].split('.')[0]
         print(diff)
@@ -95,13 +95,13 @@ class TravelServiceSerializer(serializers.HyperlinkedModelSerializer):
         vendor = foodservice.vendor
         cur_user = self.context['request'].user
         filt = Q(initiator=cur_user) & Q(category__name='Food') \
-               & Q(start_time__range=(datetime(2000, 1, 1), datetime.now(timezone('Asia/Kolkata')))) & Q(vendor=vendor)
-        fs = FoodService.objects.filter(filt)
+               & Q(start_time__range=(datetime(2000, 1, 1), datetime.now())) & Q(vendor=vendor)
+        fs = TravelService.objects.filter(filt)
         print(fs.count())
         return fs.count()
 
     def time_left(self, foodservice):
-        now = datetime.now(tz.utc)
+        now = datetime.now()
         diff = (foodservice.end_time - now) // 3600
         diff = str(diff).split(':')[2].split('.')[0]
         print(diff)
