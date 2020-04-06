@@ -166,6 +166,14 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         message_instance = Message(timestamp=cur_time, content=message, service=Service.objects.get(id=service_id),
                                    user=self.scope["user"])
         message_instance.save()
+
+        print('From consumers.py->chat_message ---- Putting chat info in Notifs ----')
+        cur_service = Service.objects.get(id=service_id)
+        members = ServiceMember.objects.filter(service=cur_service).values('user')
+        for member in members:
+            notify.send(User.objects.get(username=self.scope["user"].username), recipient=User.objects.get(id=member['user']),
+                        verb=message, description='Sent to service ' + cur_service.description)
+
         # Check they are in this service
         if service_id not in self.services:
             raise ClientError("service_ACCESS_DENIED")
@@ -242,9 +250,9 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 },
             )
 
-            print('From consumers.py->chat_message ---- Putting chat info in Notifs ----')
-            cur_service = Service.objects.get(id=event["service_id"])
-            members = ServiceMember.objects.filter(service=cur_service).values('user')
-            for member in members:
-                notify.send(User.objects.get(username=event['username']), recipient=User.objects.get(id=member['user']),
-                            verb=event['message'], description='Sent to service ' + cur_service.description)
+            # print('From consumers.py->chat_message ---- Putting chat info in Notifs ----')
+            # cur_service = Service.objects.get(id=event["service_id"])
+            # members = ServiceMember.objects.filter(service=cur_service).values('user')
+            # for member in members:
+            #     notify.send(User.objects.get(username=event['username']), recipient=User.objects.get(id=member['user']),
+            #                 verb=event['message'], description='Sent to service ' + cur_service.description)
