@@ -129,7 +129,7 @@ class ServiceMember(models.Model):
 
 
 class Message(models.Model):
-    timestamp = models.DateTimeField(null=False, auto_now=True)
+    timestamp = models.DateTimeField(auto_now=True)
     content = models.CharField(default='', max_length=1000)
     service = models.ForeignKey(Service, on_delete=models.DO_NOTHING, related_name="messages")
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True, related_name="messages")

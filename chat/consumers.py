@@ -162,8 +162,8 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         """
         Called by receive_json when someone sends a message to a service.
         """
-        cur_time = datetime.now(timezone('Asia/Kolkata'))
-        message_instance = Message(timestamp=cur_time, content=message, service=Service.objects.get(id=service_id),
+
+        message_instance = Message(content=message, service=Service.objects.get(id=service_id),
                                    user=self.scope["user"])
         message_instance.save()
 
@@ -186,7 +186,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 "service_id": service_id,
                 "username": self.scope["user"].username,
                 "message": message,
-                "timestamp": str(cur_time).split(' ')[1].split('.')[0][:-3]
+                "timestamp": str(message_instance.timestamp).split(' ')[1].split('.')[0][:-3]
             }
         )
 
