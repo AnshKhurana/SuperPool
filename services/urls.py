@@ -13,4 +13,5 @@ urlpatterns = [
     path('groupselect', GroupSelectView.as_view(), name="groupselect"),
     path('food_autocomplete/', FoodVendorAutocomplete.as_view(), name='food-autocomplete'),
     path('shopping_autocomplete/', ShoppingVendorAutocomplete.as_view(), name='shopping-autocomplete'),
+    path('location_autocomplete/', LocationAutocomplete.as_view(), name='location-autocomplete'),
 ]

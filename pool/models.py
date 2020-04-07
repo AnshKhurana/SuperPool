@@ -64,6 +64,16 @@ class Company(models.Model):
         return self.name
 
 
+class Location(models.Model):
+    latitude = models.DecimalField(null=False, max_digits=10, decimal_places=7)
+    longitude = models.DecimalField(null=False, max_digits=10, decimal_places=7)
+    address = models.CharField(default='', max_length=1000)
+    timestamp = models.DateTimeField(null=False)
+
+    def __str__(self):
+        return self.address
+
+
 class Service(PolymorphicModel):
     # group_ids = models.CharField(validators=[validate_comma_separated_integer_list],
     #                              max_length=200, blank=True, null=True, default='')
@@ -105,14 +115,17 @@ class ServiceGroup(models.Model):
 
 
 class TravelService(Service):
-    start_point = models.CharField(null=False, max_length=1000)
-    end_point = models.CharField(null=False, max_length=1000)
-    TRAVEL_CHOICES= [
+    start_point = models.ForeignKey(Location, on_delete=models.DO_NOTHING, null=False, related_name='start_loc')
+    end_point = models.ForeignKey(Location, on_delete=models.DO_NOTHING, null=False, related_name='end_loc')
+    TRAVEL_CHOICES = [
         ('Taxi', 'Taxi'),
         ('Train', 'Train'),
         ('Flight', 'Flight'),
     ]
-    transport = models.CharField(max_length=10, choices=TRAVEL_CHOICES)
+    transport = models.CharField(max_length=10, choices=TRAVEL_CHOICES, null=True)
+
+    def __str__(self):
+        return '%s' % self.transport
 
 
 class FoodService(Service):
@@ -122,12 +135,12 @@ class FoodService(Service):
         return '%s' % self.vendor
 
 
-
 class ShoppingService(Service):
     vendor = models.ForeignKey(Company, on_delete=models.DO_NOTHING, null=False)
 
     def __str__(self):
         return '%s' % self.vendor
+
 
 class EventService(Service):
     EVENT_CHOICES = [
@@ -137,8 +150,10 @@ class EventService(Service):
     location = models.CharField(null=False, max_length=1000)
     event_type = models.CharField(max_length=10, choices=EVENT_CHOICES)
 
+
 class OtherService(Service):
     pass
+
 
 class ServiceMember(models.Model):
     service = models.ForeignKey(Service, on_delete=models.DO_NOTHING)

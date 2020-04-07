@@ -3,6 +3,18 @@
 
 {% block content %}
 
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css" rel="stylesheet" />
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<style>
+	body { margin: 0; padding: 0; }
+	#map { position: absolute; top: 60px; bottom: 0; left: 1350px; width: 25%; }
+</style>
+
+
+
+ <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
     {% csrf_token %}
     <section>
         <div class="gap gray-bg">
@@ -26,10 +38,19 @@
                                                 <h2>Enter details:</h2>
                                                 <form method="POST">
                                                     {% csrf_token %}
+
                                                     <table>
-                                                        {{ form }}
+
+                                                        {{ form.as_p }}
+                                                        {{ form.media }}
                                                     </table>
                                                     <br>
+<!--                                                    {{ form.initial.start_time }}-->
+<!--                                                    {{ form.instance.start_time }}-->
+<!--                                                    {{ form.data.start_time }}-->
+<!--                                                    {{ form.fields.start_time.initial }}-->
+<!--                                                    {{ form.start_time }}-->
+                                                    <button onclick="loadmap()">Display Locations</button> &nbsp
                                                     <button type="submit">Submit</button>
                                                 </form>
 
@@ -41,228 +62,388 @@
                                                 </div>
 
                                             </div>
-                                            <script>
-                                                function myFunction() {
-                                                    window.open("/groups/create", "popup", 'width=400,height=300, top=400, left=700');
-                                                }
-                                            </script>
 
                                         </div>
                                     </div>
                                 </div>
                             </div><!-- centerl meta -->
-                            <div class="col-lg-3">
-                                <aside class="sidebar static">
-                                    <div class="widget">
-                                        <h4 class="widget-title">Who's following</h4>
-                                        <ul class="followers">
-                                            <li>
-                                                <figure><img src="images/resources/friend-avatar2.jpg" alt=""></figure>
-                                                <div class="friend-meta">
-                                                    <h4><a href="time-line.html" title="">Kelly Bill</a></h4>
-                                                    <a href="#" title="" class="underline">Add Friend</a>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <figure><img src="images/resources/friend-avatar4.jpg" alt=""></figure>
-                                                <div class="friend-meta">
-                                                    <h4><a href="time-line.html" title="">Issabel</a></h4>
-                                                    <a href="#" title="" class="underline">Add Friend</a>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <figure><img src="images/resources/friend-avatar6.jpg" alt=""></figure>
-                                                <div class="friend-meta">
-                                                    <h4><a href="time-line.html" title="">Andrew</a></h4>
-                                                    <a href="#" title="" class="underline">Add Friend</a>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <figure><img src="images/resources/friend-avatar8.jpg" alt=""></figure>
-                                                <div class="friend-meta">
-                                                    <h4><a href="time-line.html" title="">Sophia</a></h4>
-                                                    <a href="#" title="" class="underline">Add Friend</a>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <figure><img src="images/resources/friend-avatar3.jpg" alt=""></figure>
-                                                <div class="friend-meta">
-                                                    <h4><a href="time-line.html" title="">Allen</a></h4>
-                                                    <a href="#" title="" class="underline">Add Friend</a>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div><!-- who's following -->
-                                    <div class="widget friend-list stick-widget">
-                                        <h4 class="widget-title">Friends</h4>
-                                        <div id="searchDir"></div>
-                                        <ul id="people-list" class="friendz-list">
-                                            <li>
-                                                <figure>
-                                                    <img src="images/resources/friend-avatar.jpg" alt="">
-                                                    <span class="status f-online"></span>
-                                                </figure>
-                                                <div class="friendz-meta">
-                                                    <a href="time-line.html">bucky barnes</a>
-                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="84f3edeaf0e1f6f7ebe8e0e1f6c4e3e9e5ede8aae7ebe9">[email&#160;protected]</a></i>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <figure>
-                                                    <img src="images/resources/friend-avatar2.jpg" alt="">
-                                                    <span class="status f-away"></span>
-                                                </figure>
-                                                <div class="friendz-meta">
-                                                    <a href="time-line.html">Sarah Loren</a>
-                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="96f4f7e4f8f3e5d6f1fbf7fffab8f5f9fb">[email&#160;protected]</a></i>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <figure>
-                                                    <img src="images/resources/friend-avatar3.jpg" alt="">
-                                                    <span class="status f-off"></span>
-                                                </figure>
-                                                <div class="friendz-meta">
-                                                    <a href="time-line.html">jason borne</a>
-                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1a707b697574785a7d777b737634797577">[email&#160;protected]</a></i>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <figure>
-                                                    <img src="images/resources/friend-avatar4.jpg" alt="">
-                                                    <span class="status f-off"></span>
-                                                </figure>
-                                                <div class="friendz-meta">
-                                                    <a href="time-line.html">Cameron diaz</a>
-                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="234942504c4d4163444e424a4f0d404c4e">[email&#160;protected]</a></i>
-                                                </div>
-                                            </li>
-                                            <li>
+<!--                            <div class="col-lg-3">-->
+<!--                                <aside class="sidebar static">-->
+<!--                                    <div class="widget">-->
+<!--                                        <h4 class="widget-title">Who's following</h4>-->
+<!--                                        <ul class="followers">-->
+<!--                                            <li>-->
+<!--                                                <figure><img src="images/resources/friend-avatar2.jpg" alt=""></figure>-->
+<!--                                                <div class="friend-meta">-->
+<!--                                                    <h4><a href="time-line.html" title="">Kelly Bill</a></h4>-->
+<!--                                                    <a href="#" title="" class="underline">Add Friend</a>-->
+<!--                                                </div>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
+<!--                                                <figure><img src="images/resources/friend-avatar4.jpg" alt=""></figure>-->
+<!--                                                <div class="friend-meta">-->
+<!--                                                    <h4><a href="time-line.html" title="">Issabel</a></h4>-->
+<!--                                                    <a href="#" title="" class="underline">Add Friend</a>-->
+<!--                                                </div>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
+<!--                                                <figure><img src="images/resources/friend-avatar6.jpg" alt=""></figure>-->
+<!--                                                <div class="friend-meta">-->
+<!--                                                    <h4><a href="time-line.html" title="">Andrew</a></h4>-->
+<!--                                                    <a href="#" title="" class="underline">Add Friend</a>-->
+<!--                                                </div>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
+<!--                                                <figure><img src="images/resources/friend-avatar8.jpg" alt=""></figure>-->
+<!--                                                <div class="friend-meta">-->
+<!--                                                    <h4><a href="time-line.html" title="">Sophia</a></h4>-->
+<!--                                                    <a href="#" title="" class="underline">Add Friend</a>-->
+<!--                                                </div>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
+<!--                                                <figure><img src="images/resources/friend-avatar3.jpg" alt=""></figure>-->
+<!--                                                <div class="friend-meta">-->
+<!--                                                    <h4><a href="time-line.html" title="">Allen</a></h4>-->
+<!--                                                    <a href="#" title="" class="underline">Add Friend</a>-->
+<!--                                                </div>-->
+<!--                                            </li>-->
+<!--                                        </ul>-->
+<!--                                    </div>&lt;!&ndash; who's following &ndash;&gt;-->
+<!--                                    <div class="widget friend-list stick-widget">-->
+<!--                                        <h4 class="widget-title">Friends</h4>-->
+<!--                                        <div id="searchDir"></div>-->
+<!--                                        <ul id="people-list" class="friendz-list">-->
+<!--                                            <li>-->
+<!--                                                <figure>-->
+<!--                                                    <img src="images/resources/friend-avatar.jpg" alt="">-->
+<!--                                                    <span class="status f-online"></span>-->
+<!--                                                </figure>-->
+<!--                                                <div class="friendz-meta">-->
+<!--                                                    <a href="time-line.html">bucky barnes</a>-->
+<!--                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="84f3edeaf0e1f6f7ebe8e0e1f6c4e3e9e5ede8aae7ebe9">[email&#160;protected]</a></i>-->
+<!--                                                </div>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
+<!--                                                <figure>-->
+<!--                                                    <img src="images/resources/friend-avatar2.jpg" alt="">-->
+<!--                                                    <span class="status f-away"></span>-->
+<!--                                                </figure>-->
+<!--                                                <div class="friendz-meta">-->
+<!--                                                    <a href="time-line.html">Sarah Loren</a>-->
+<!--                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="96f4f7e4f8f3e5d6f1fbf7fffab8f5f9fb">[email&#160;protected]</a></i>-->
+<!--                                                </div>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
+<!--                                                <figure>-->
+<!--                                                    <img src="images/resources/friend-avatar3.jpg" alt="">-->
+<!--                                                    <span class="status f-off"></span>-->
+<!--                                                </figure>-->
+<!--                                                <div class="friendz-meta">-->
+<!--                                                    <a href="time-line.html">jason borne</a>-->
+<!--                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1a707b697574785a7d777b737634797577">[email&#160;protected]</a></i>-->
+<!--                                                </div>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
+<!--                                                <figure>-->
+<!--                                                    <img src="images/resources/friend-avatar4.jpg" alt="">-->
+<!--                                                    <span class="status f-off"></span>-->
+<!--                                                </figure>-->
+<!--                                                <div class="friendz-meta">-->
+<!--                                                    <a href="time-line.html">Cameron diaz</a>-->
+<!--                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="234942504c4d4163444e424a4f0d404c4e">[email&#160;protected]</a></i>-->
+<!--                                                </div>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
 
-                                                <figure>
-                                                    <img src="images/resources/friend-avatar5.jpg" alt="">
-                                                    <span class="status f-online"></span>
-                                                </figure>
-                                                <div class="friendz-meta">
-                                                    <a href="time-line.html">daniel warber</a>
-                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0c666d7f63626e4c6b616d6560226f6361">[email&#160;protected]</a></i>
-                                                </div>
-                                            </li>
-                                            <li>
+<!--                                                <figure>-->
+<!--                                                    <img src="images/resources/friend-avatar5.jpg" alt="">-->
+<!--                                                    <span class="status f-online"></span>-->
+<!--                                                </figure>-->
+<!--                                                <div class="friendz-meta">-->
+<!--                                                    <a href="time-line.html">daniel warber</a>-->
+<!--                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0c666d7f63626e4c6b616d6560226f6361">[email&#160;protected]</a></i>-->
+<!--                                                </div>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
 
-                                                <figure>
-                                                    <img src="images/resources/friend-avatar6.jpg" alt="">
-                                                    <span class="status f-away"></span>
-                                                </figure>
-                                                <div class="friendz-meta">
-                                                    <a href="time-line.html">andrew</a>
-                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="89e3e8fae6e7ebc9eee4e8e0e5a7eae6e4">[email&#160;protected]</a></i>
-                                                </div>
-                                            </li>
-                                            <li>
+<!--                                                <figure>-->
+<!--                                                    <img src="images/resources/friend-avatar6.jpg" alt="">-->
+<!--                                                    <span class="status f-away"></span>-->
+<!--                                                </figure>-->
+<!--                                                <div class="friendz-meta">-->
+<!--                                                    <a href="time-line.html">andrew</a>-->
+<!--                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="89e3e8fae6e7ebc9eee4e8e0e5a7eae6e4">[email&#160;protected]</a></i>-->
+<!--                                                </div>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
 
-                                                <figure>
-                                                    <img src="images/resources/friend-avatar7.jpg" alt="">
-                                                    <span class="status f-off"></span>
-                                                </figure>
-                                                <div class="friendz-meta">
-                                                    <a href="time-line.html">amy watson</a>
-                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="670d061408090527000a060e0b4904080a">[email&#160;protected]</a></i>
-                                                </div>
-                                            </li>
-                                            <li>
+<!--                                                <figure>-->
+<!--                                                    <img src="images/resources/friend-avatar7.jpg" alt="">-->
+<!--                                                    <span class="status f-off"></span>-->
+<!--                                                </figure>-->
+<!--                                                <div class="friendz-meta">-->
+<!--                                                    <a href="time-line.html">amy watson</a>-->
+<!--                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="670d061408090527000a060e0b4904080a">[email&#160;protected]</a></i>-->
+<!--                                                </div>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
 
-                                                <figure>
-                                                    <img src="images/resources/friend-avatar5.jpg" alt="">
-                                                    <span class="status f-online"></span>
-                                                </figure>
-                                                <div class="friendz-meta">
-                                                    <a href="time-line.html">daniel warber</a>
-                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f49e95879b9a96b49399959d98da979b99">[email&#160;protected]</a></i>
-                                                </div>
-                                            </li>
-                                            <li>
+<!--                                                <figure>-->
+<!--                                                    <img src="images/resources/friend-avatar5.jpg" alt="">-->
+<!--                                                    <span class="status f-online"></span>-->
+<!--                                                </figure>-->
+<!--                                                <div class="friendz-meta">-->
+<!--                                                    <a href="time-line.html">daniel warber</a>-->
+<!--                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f49e95879b9a96b49399959d98da979b99">[email&#160;protected]</a></i>-->
+<!--                                                </div>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
 
-                                                <figure>
-                                                    <img src="images/resources/friend-avatar2.jpg" alt="">
-                                                    <span class="status f-away"></span>
-                                                </figure>
-                                                <div class="friendz-meta">
-                                                    <a href="time-line.html">Sarah Loren</a>
-                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="583a392a363d2b183f35393134763b3735">[email&#160;protected]</a></i>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <div class="chat-box">
-                                            <div class="chat-head">
-                                                <span class="status f-online"></span>
-                                                <h6>Bucky Barnes</h6>
-                                                <div class="more">
-                                                    <span><i class="ti-more-alt"></i></span>
-                                                    <span class="close-mesage"><i class="ti-close"></i></span>
-                                                </div>
-                                            </div>
-                                            <div class="chat-list">
-                                                <ul>
-                                                    <li class="me">
-                                                        <div class="chat-thumb"><img src="images/resources/chatlist1.jpg" alt=""></div>
-                                                        <div class="notification-event">
-															<span class="chat-message-item">
-																Hi James! Please remember to buy the food for tomorrow! I’m gonna be handling the gifts and Jake’s gonna get the drinks
-															</span>
-                                                            <span class="notification-date"><time datetime="2004-07-24T18:18" class="entry-date updated">Yesterday at 8:10pm</time></span>
-                                                        </div>
-                                                    </li>
-                                                    <li class="you">
-                                                        <div class="chat-thumb"><img src="images/resources/chatlist2.jpg" alt=""></div>
-                                                        <div class="notification-event">
-															<span class="chat-message-item">
-																Hi James! Please remember to buy the food for tomorrow! I’m gonna be handling the gifts and Jake’s gonna get the drinks
-															</span>
-                                                            <span class="notification-date"><time datetime="2004-07-24T18:18" class="entry-date updated">Yesterday at 8:10pm</time></span>
-                                                        </div>
-                                                    </li>
-                                                    <li class="me">
-                                                        <div class="chat-thumb"><img src="images/resources/chatlist1.jpg" alt=""></div>
-                                                        <div class="notification-event">
-															<span class="chat-message-item">
-																Hi James! Please remember to buy the food for tomorrow! I’m gonna be handling the gifts and Jake’s gonna get the drinks
-															</span>
-                                                            <span class="notification-date"><time datetime="2004-07-24T18:18" class="entry-date updated">Yesterday at 8:10pm</time></span>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <form class="text-box">
-                                                    <textarea placeholder="Post enter to post..."></textarea>
-                                                    <div class="add-smiles">
-                                                        <span title="add icon" class="em em-expressionless"></span>
-                                                    </div>
-                                                    <div class="smiles-bunch">
-                                                        <i class="em em---1"></i>
-                                                        <i class="em em-smiley"></i>
-                                                        <i class="em em-anguished"></i>
-                                                        <i class="em em-laughing"></i>
-                                                        <i class="em em-angry"></i>
-                                                        <i class="em em-astonished"></i>
-                                                        <i class="em em-blush"></i>
-                                                        <i class="em em-disappointed"></i>
-                                                        <i class="em em-worried"></i>
-                                                        <i class="em em-kissing_heart"></i>
-                                                        <i class="em em-rage"></i>
-                                                        <i class="em em-stuck_out_tongue"></i>
-                                                    </div>
-                                                    <button type="submit"></button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div><!-- friends list sidebar -->
-                                </aside>
-                            </div><!-- sidebar -->
+<!--                                                <figure>-->
+<!--                                                    <img src="images/resources/friend-avatar2.jpg" alt="">-->
+<!--                                                    <span class="status f-away"></span>-->
+<!--                                                </figure>-->
+<!--                                                <div class="friendz-meta">-->
+<!--                                                    <a href="time-line.html">Sarah Loren</a>-->
+<!--                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="583a392a363d2b183f35393134763b3735">[email&#160;protected]</a></i>-->
+<!--                                                </div>-->
+<!--                                            </li>-->
+<!--                                        </ul>-->
+<!--                                        <div class="chat-box">-->
+<!--                                            <div class="chat-head">-->
+<!--                                                <span class="status f-online"></span>-->
+<!--                                                <h6>Bucky Barnes</h6>-->
+<!--                                                <div class="more">-->
+<!--                                                    <span><i class="ti-more-alt"></i></span>-->
+<!--                                                    <span class="close-mesage"><i class="ti-close"></i></span>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            <div class="chat-list">-->
+<!--                                                <ul>-->
+<!--                                                    <li class="me">-->
+<!--                                                        <div class="chat-thumb"><img src="images/resources/chatlist1.jpg" alt=""></div>-->
+<!--                                                        <div class="notification-event">-->
+<!--															<span class="chat-message-item">-->
+<!--																Hi James! Please remember to buy the food for tomorrow! I’m gonna be handling the gifts and Jake’s gonna get the drinks-->
+<!--															</span>-->
+<!--                                                            <span class="notification-date"><time datetime="2004-07-24T18:18" class="entry-date updated">Yesterday at 8:10pm</time></span>-->
+<!--                                                        </div>-->
+<!--                                                    </li>-->
+<!--                                                    <li class="you">-->
+<!--                                                        <div class="chat-thumb"><img src="images/resources/chatlist2.jpg" alt=""></div>-->
+<!--                                                        <div class="notification-event">-->
+<!--															<span class="chat-message-item">-->
+<!--																Hi James! Please remember to buy the food for tomorrow! I’m gonna be handling the gifts and Jake’s gonna get the drinks-->
+<!--															</span>-->
+<!--                                                            <span class="notification-date"><time datetime="2004-07-24T18:18" class="entry-date updated">Yesterday at 8:10pm</time></span>-->
+<!--                                                        </div>-->
+<!--                                                    </li>-->
+<!--                                                    <li class="me">-->
+<!--                                                        <div class="chat-thumb"><img src="images/resources/chatlist1.jpg" alt=""></div>-->
+<!--                                                        <div class="notification-event">-->
+<!--															<span class="chat-message-item">-->
+<!--																Hi James! Please remember to buy the food for tomorrow! I’m gonna be handling the gifts and Jake’s gonna get the drinks-->
+<!--															</span>-->
+<!--                                                            <span class="notification-date"><time datetime="2004-07-24T18:18" class="entry-date updated">Yesterday at 8:10pm</time></span>-->
+<!--                                                        </div>-->
+<!--                                                    </li>-->
+<!--                                                </ul>-->
+<!--                                                <form class="text-box">-->
+<!--                                                    <textarea placeholder="Post enter to post..."></textarea>-->
+<!--                                                    <div class="add-smiles">-->
+<!--                                                        <span title="add icon" class="em em-expressionless"></span>-->
+<!--                                                    </div>-->
+<!--                                                    <div class="smiles-bunch">-->
+<!--                                                        <i class="em em-&#45;&#45;1"></i>-->
+<!--                                                        <i class="em em-smiley"></i>-->
+<!--                                                        <i class="em em-anguished"></i>-->
+<!--                                                        <i class="em em-laughing"></i>-->
+<!--                                                        <i class="em em-angry"></i>-->
+<!--                                                        <i class="em em-astonished"></i>-->
+<!--                                                        <i class="em em-blush"></i>-->
+<!--                                                        <i class="em em-disappointed"></i>-->
+<!--                                                        <i class="em em-worried"></i>-->
+<!--                                                        <i class="em em-kissing_heart"></i>-->
+<!--                                                        <i class="em em-rage"></i>-->
+<!--                                                        <i class="em em-stuck_out_tongue"></i>-->
+<!--                                                    </div>-->
+<!--                                                    <button type="submit"></button>-->
+<!--                                                </form>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>&lt;!&ndash; friends list sidebar &ndash;&gt;-->
+<!--                                </aside>-->
+<!--                            </div>&lt;!&ndash; sidebar &ndash;&gt;-->
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div id="map"></div>
     </section>
 
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1IjoiYXJuYWJqYW5hY3NlIiwiYSI6ImNrOHE0dm9sazAwN20zZW80ZXNqajI5N28ifQ._qdgPYptmnCwEtJeLVn6YQ';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/light-v10',
+        center: [87.3705, 23.8815],
+        zoom: 6
+    });
+
+    map.on('load', function() {
+        map.addSource('points', {
+            'type': 'geojson',
+            'data': {
+                'type': 'FeatureCollection',
+                'features': [
+                    {
+                        // feature for Mapbox DC
+                        'type': 'Feature',
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': [0.0, 0.0]
+                        },
+                        'properties': {
+                            'title': 'Starting point',
+                            'icon': 'monument'
+                        }
+                    },
+                    {
+                        // feature for Mapbox SF
+                        'type': 'Feature',
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': [0.0, 0.0]
+                        },
+                        'properties': {
+                            'title': 'Ending Point',
+                            'icon': 'harbor'
+                        }
+                    }
+                ]
+            }
+        });
+        map.addLayer({
+            'id': 'points',
+            'type': 'symbol',
+            'source': 'points',
+            'layout': {
+                // get the icon name from the source's "icon" property
+                // concatenate the name to get an icon from the style's sprite sheet
+                'icon-image': ['concat', ['get', 'icon'], '-15'],
+                // get the title name from the source's "title" property
+                'text-field': ['get', 'title'],
+                'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+                'text-offset': [0, 0.6],
+                'text-anchor': 'top'
+            }
+        });
+    });
+
+    function loadmap() {
+    const instance = axios.create({
+                baseURL: '{% url 'pool:home' %}',
+                timeout: 1000,
+            });
+        var sp = document.getElementById("id_start_point").value;
+        var ep = document.getElementById("id_end_point").value;
+        instance.get('/api/get_coordinates', {
+                    params: {
+                        pid: sp
+                    }
+                }).then(
+                    function (response) {
+                        start_reply = response.data;
+                        console.log(start_reply);
+                }).catch(function (error) {
+            // handle error
+            alert(error);
+            console.log(error);
+        })
+
+        instance.get('/api/get_coordinates', {
+                    params: {
+                        pid: ep
+                    }
+                }).then(
+                    function (response) {
+                        end_reply = response.data;
+                        console.log(end_reply);
+                }).catch(function (error) {
+            // handle error
+            alert(error);
+            console.log(error);
+        })
+        mapboxgl.accessToken = 'pk.eyJ1IjoiYXJuYWJqYW5hY3NlIiwiYSI6ImNrOHE0dm9sazAwN20zZW80ZXNqajI5N28ifQ._qdgPYptmnCwEtJeLVn6YQ';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/light-v10',
+            center: [start_reply['lon'], start_reply['lat']],
+            zoom: 6
+        });
+
+        map.on('load', function() {
+            map.addSource('points', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'FeatureCollection',
+                    'features': [
+                        {
+                            // feature for Mapbox DC
+                            'type': 'Feature',
+                            'geometry': {
+                                'type': 'Point',
+                                'coordinates': [start_reply['lon'], start_reply['lat']]
+                            },
+                            'properties': {
+                                'title': 'Starting Point',
+                                'icon': 'monument'
+                            }
+                        },
+                        {
+                            // feature for Mapbox SF
+                            'type': 'Feature',
+                            'geometry': {
+                                'type': 'Point',
+                                'coordinates': [end_reply['lon'], end_reply['lat']]
+                            },
+                            'properties': {
+                                'title': 'Ending Point',
+                                'icon': 'harbor'
+                            }
+                        }
+                    ]
+                }
+            });
+            map.addLayer({
+                'id': 'points',
+                'type': 'symbol',
+                'source': 'points',
+                'layout': {
+                    // get the icon name from the source's "icon" property
+                    // concatenate the name to get an icon from the style's sprite sheet
+                    'icon-image': ['concat', ['get', 'icon'], '-15'],
+                    // get the title name from the source's "title" property
+                    'text-field': ['get', 'title'],
+                    'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+                    'text-offset': [0, 0.6],
+                    'text-anchor': 'top'
+                }
+            });
+        });
+        }
+</script>
+
+{% endblock %}
+
+{% block footer %}
+    <link rel="stylesheet" type="text/css" href="{% static 'autocomplete_light/select2.css' %}" />
+    <script type="text/javascript" src="{% static 'autocomplete_light/jquery.init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'autocomplete_light/autocomplete.init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'autocomplete_light/select2.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'autocomplete_light/vendor/select2/dist/css/select2.css' %}" />
+    <script type="text/javascript" src="{% static 'autocomplete_light/vendor/select2/dist/js/select2.full.js' %}"></script>
+    <script type="text/javascript" src="{% static 'autocomplete_light/forward.js' %}"></script>
+    {{ form.media }}
 {% endblock %}

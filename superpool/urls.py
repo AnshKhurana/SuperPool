@@ -30,5 +30,6 @@ urlpatterns = [
     path('notifications/', include(notifications.urls, namespace='notifications')),
     path('api/', include('api.urls')),
     path('activities/', include('activities.urls')),
-    path('recommendations/', include('recommendations.urls'))
+    path('recommendations/', include('recommendations.urls')),
+    path('location/', include('location.urls'))
 ]

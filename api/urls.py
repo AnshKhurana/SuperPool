@@ -11,6 +11,7 @@ urlpatterns = [
     re_path(r'^shoppingservice$',ShoppingServiceList.as_view(), name = 'shoppingservice'),
     re_path(r'^eventservice$',EventServiceList.as_view(), name = 'eventservice'),
     re_path(r'^otherservice$',OtherServiceList.as_view(), name = 'otherservice'),
+    re_path(r'^get_coordinates$',get_coordinates, name = 'get_coordinates'),
 
 
     re_path(r'^foodservicereco$', FoodServiceReco.as_view(), name='foodservicereco'),
