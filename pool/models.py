@@ -112,7 +112,7 @@ class TravelService(Service):
         ('Train', 'Train'),
         ('Flight', 'Flight'),
     ]
-    transport = models.CharField(max_length=10, choices=TRAVEL_CHOICES)
+    transport = models.CharField(max_length=10, choices=TRAVEL_CHOICES, null=True)
 
 
 class FoodService(Service):
