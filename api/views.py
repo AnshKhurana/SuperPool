@@ -41,13 +41,17 @@ class TravelServiceList(generics.ListAPIView):
     serializer_class = TravelServiceSerializer
 
     def get_queryset(self):
+        print('Her')
         user = self.request.user
         gids = self.request.GET.get('gids').split(',')
         filt = Q(groups__id__in=gids) & Q(category__name='Travel') & Q(groups__members=user.id)
+        print('Here')
         if 'start' in self.request.GET and 'end' in self.request.GET:
             start = self.request.GET.get('start')
             end = self.request.GET.get('end')
             filt = filt & Q(start_time__range=(start, end))
+        print('!!!!!!!!!!')
+        print(Service.objects.filter(filt).distinct().all())
         return Service.objects.filter(filt).distinct().all()
 
 
