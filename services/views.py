@@ -270,13 +270,17 @@ class LocationAutocomplete(autocomplete.Select2QuerySetView):
             }
             responses = requests.get(url, params=data).json()
             for response in responses:
-                print(response.keys())
+                # print(response.keys())
                 if 'error' in response.keys():
                     break
                 location = Location(latitude=response['lat'],
                                     longitude=response['lon'],
-                                    address=response['display_address'],
+                                    address=response['display_place']+response['display_name']+response['display_address'],
                                     timestamp=current_time)
+                # location = Location(latitude=response['lat'],
+                #                     longitude=response['lon'],
+                #                     address=response['address']['name'] + response['address']['city'] + response['address']['state'] + response['address']['postcode'],
+                #                     timestamp=current_time)
                 location.save()
         qs = Location.objects.filter(timestamp=current_time)
         print(qs)

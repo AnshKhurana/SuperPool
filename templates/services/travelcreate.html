@@ -501,11 +501,7 @@
                     function (response) {
                         start_reply = response.data;
                         console.log(start_reply);
-                }).catch(function (error) {
-            // handle error
-            alert(error);
-            console.log(error);
-        })
+
 
         instance.get('/api/get_coordinates', {
                     params: {
@@ -515,18 +511,34 @@
                     function (response) {
                         end_reply = response.data;
                         console.log(end_reply);
-                }).catch(function (error) {
-            // handle error
-            alert(error);
-            console.log(error);
-        })
+
+        console.log(start_reply['lon']);
+        console.log(end_reply['lon']);
+        var centre_x = parseFloat(start_reply['lon']);
+        //console.log(centre_x);
+        //centre_x = parseFloat(centre_x / 2);
+        var centre_y = parseFloat(start_reply['lat']);
+        //centre_y = parseFloat(centre_y / 2);
+        var zoom_x = Math.abs(start_reply['lon'] - end_reply['lon']);
+        var zoom_y = Math.abs(start_reply['lat'] - end_reply['lat']);
+        var zoom = Math.max(zoom_x, zoom_y);
+        console.log(centre_x);
+        console.log(centre_y);
+        console.log(zoom_x);
+        console.log(zoom_y);
+        console.log(zoom);
         mapboxgl.accessToken = 'pk.eyJ1IjoiYXJuYWJqYW5hY3NlIiwiYSI6ImNrOHE0dm9sazAwN20zZW80ZXNqajI5N28ifQ._qdgPYptmnCwEtJeLVn6YQ';
         var map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/light-v10',
-            center: [start_reply['lon'], start_reply['lat']],
-            zoom: 6
+            center: [(start_reply['lon'] - (-1 * end_reply['lon']))/2 , (start_reply['lat'] - (-1 * end_reply['lat']))/2],
+            zoom: 10 * (1 / zoom)
         });
+
+        var a=1;
+        var b=2;
+        var c=3;
+        var d=4;
 
         map.on('load', function() {
             map.addSource('points', {
@@ -577,6 +589,16 @@
                 }
             });
         });
+        }).catch(function (error) {
+            // handle error
+            alert(error);
+            console.log(error);
+        })
+        }).catch(function (error) {
+            // handle error
+            alert(error);
+            console.log(error);
+        })
         }
 </script>
 

@@ -41,18 +41,38 @@ class TravelServiceList(generics.ListAPIView):
     serializer_class = TravelServiceSerializer
 
     def get_queryset(self):
-        print('Her')
+        NEARNESS_EPSILON = 5
         user = self.request.user
         gids = self.request.GET.get('gids').split(',')
-        filt = Q(groups__id__in=gids) & Q(category__name='Travel') & Q(groups__members=user.id)
-        print('Here')
+        filt = Q(groups__id__in=gids) & Q(groups__members=user.id)
+        print(self.request.GET.keys())
+
+        services = TravelService.objects.all()
         if 'start' in self.request.GET and 'end' in self.request.GET:
             start = self.request.GET.get('start')
             end = self.request.GET.get('end')
             filt = filt & Q(start_time__range=(start, end))
-        print('!!!!!!!!!!')
-        print(Service.objects.filter(filt).distinct().all())
-        return Service.objects.filter(filt).distinct().all()
+        if 'start_point' in self.request.GET and 'end_point' in self.request.GET:
+            start_point_id = self.request.GET.get('start_point')
+            end_point_id = self.request.GET.get('end_point')
+            start_point = Location.objects.get(id=start_point_id)
+            end_point = Location.objects.get(id=end_point_id)
+            near_start = Location.objects.annotate(radius_sqr=pow(models.F('latitude') - start_point.latitude, 2) + \
+                                                              pow(models.F('longitude') - start_point.longitude, 2)). \
+                filter(radius_sqr__lte=NEARNESS_EPSILON)
+            print('start_points')
+            print(near_start)
+            near_end = Location.objects.annotate(radius_sqr=pow(models.F('latitude') - end_point.latitude, 2) + \
+                                                            pow(models.F('longitude') - end_point.longitude, 2)). \
+                filter(radius_sqr__lte=NEARNESS_EPSILON)
+            print('end_points')
+            print(near_end)
+            services = services.filter(start_point__in=near_start, end_point__in=near_end)
+        if 'transport' in self.request.GET:
+            transport = self.request.GET.get('transport')
+            filt = filt & Q(transport=transport)
+
+        return services.filter(filt).distinct().all()
 
 
 class EventServiceList(generics.ListAPIView):
@@ -161,7 +181,7 @@ def get_coordinates(request):
     #     start = self.request.GET.get('start')
     #     end = self.request.GET.get('end')
     #     filt = filt & Q(start_time__range=(start, end))
-    print("pid is "+str(pid))
+    print("pid is " + str(pid))
     print("Location is ")
     z = Location.objects.get(id=pid)
     return JsonResponse({'lat': z.latitude, 'lon': z.longitude})

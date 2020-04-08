@@ -82,6 +82,8 @@ class ShoppingServiceSerializer(serializers.HyperlinkedModelSerializer):
 
 class TravelServiceSerializer(serializers.HyperlinkedModelSerializer):
     initiator = serializers.StringRelatedField(read_only=True)
+    start_point = serializers.StringRelatedField(read_only=True)
+    end_point = serializers.StringRelatedField(read_only=True)
     my_field = serializers.SerializerMethodField('am_i_there')
     use_count_field = serializers.SerializerMethodField('use_count')
     time_left_field = serializers.SerializerMethodField('time_left')
@@ -93,18 +95,18 @@ class TravelServiceSerializer(serializers.HyperlinkedModelSerializer):
         service_members = User.objects.filter(id__in=ServiceMember.objects.filter(service=travelservice).values('user'))
         return cur_user == service_initiator or cur_user in service_members
 
-    def use_count(self, foodservice):
-        vendor = foodservice.vendor
+    def use_count(self, travelservice):
+        # vendor = foodservice.vendor
         cur_user = self.context['request'].user
         filt = Q(initiator=cur_user) & Q(category__name='Travel') \
-               & Q(start_time__range=(datetime(2000, 1, 1), datetime.now())) & Q(vendor=vendor)
+               & Q(start_time__range=(datetime(2000, 1, 1), datetime.now()))
         fs = TravelService.objects.filter(filt)
         print(fs.count())
         return fs.count()
 
-    def time_left(self, foodservice):
+    def time_left(self, travelservice):
         now = datetime.now()
-        diff = (foodservice.end_time - now) // 3600
+        diff = (travelservice.end_time - now) // 3600
         diff = str(diff).split(':')[2].split('.')[0]
         print(diff)
         return diff
