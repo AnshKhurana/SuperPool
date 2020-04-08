@@ -112,17 +112,21 @@ class TravelCreateView(LoginRequiredMixin, FormView):
             del self.request.session['servicegroups']
         u = self.request.user
         data = form.save()
+        print('Form data obtained')
         f = TravelService(category=Category.objects.get(name='Travel'), initiator=u, start_point=data["start_point"],
                           end_point=data["end_point"], description=data['description'],
                           start_time=data['start_time'], end_time=data['end_time'], transport=data['transport'],
 
                           )
         f.save()
+        print('TravelService saved')
         sm = ServiceMember(service=f, user=u)
         sm.save()
+        print('ServiceMember saved')
         for group in serializers.deserialize("json", groups):
             gs = ServiceGroup(group=group.object, service=f)
             gs.save()
+        print('ServiceGroups registered')
         # form.save(self.request.user)
         return render(self.request, "home.html", {'message': 4})
 

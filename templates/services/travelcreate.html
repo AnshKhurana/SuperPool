@@ -282,7 +282,151 @@
         <div id="map"></div>
     </section>
 
-<script>
+ <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+
+        document.getElementById("id_start_time").addEventListener("change",fetchServices);
+        document.getElementById("id_end_time").addEventListener("change",fetchServices);
+        function fetchServices()
+
+        {
+            const instance = axios.create({
+                baseURL: '{% url 'pool:home' %}',
+                timeout: 1000,
+            });
+
+            var start= document.getElementById("id_start_time").value;
+            var end= document.getElementById("id_end_time").value;
+            if (start==undefined || end==undefined || start=="" || end=="")
+            {
+                start= undefined;
+                end= undefined;
+            }
+
+            var cat_selected = "shopping";
+            var gids_to_choose_from = "1,2";
+            var all_gids = gids_to_choose_from.split(",");
+            var selected_gids = all_gids;
+            var select = document.getElementById("service_list");
+            select.innerHTML = "";
+
+            {#for (gid in all_gids)#}
+            {#{#}
+            {#    var selected = document.getElementById('group_' + all_gids[gid]).checked;#}
+            {#    if (selected)#}
+            {#    {#}
+            {#        selected_gids.push(all_gids[gid]);#}
+            {#    }#}
+            {#}#}
+
+                var gid_string =selected_gids.join(",");
+
+                if (gid_string == "")
+                {
+                    return;
+                }
+                if (cat_selected == "food")
+                {
+                    instance.get('/api/foodservice', {
+                        params: {
+                            gids: gid_string,
+                            start: start,
+                            end: end
+                        }
+                    }).then(
+                        function (response) {
+                            reply = response.data;
+                            console.log(reply);
+
+                            for (item in reply)
+                            {
+                                {#here, reply[item] is our service object, can access fields directly,#}
+                                select.innerHTML += "<li> <div class=\'nearly-pepls\'> <div class=\"pepl-info\">" +
+                                    "<h4><a href=\"#\" title=\"\">Food Service</a></h4>" +
+                                    "<a href=\"#\" title=\"\"><h5>" + reply[item].vendor + "</h5></a>" +
+                                    "<p> by " + reply[item].initiator + "</p>" +
+                                    "<h4><p>Start Time: " + reply[item].start_time + "<br> End Time: " + reply[item].end_time + "</p> </h4>" +
+                                    "<span> " + reply[item].description + "</span>" +
+                                    "<a href=\"#\" title=\"\" data-url=\"{% url 'groups:create' %}\" class=\"add-butn add-friend\" data-ripple=\"\">Join Service</a>"
+                                    + "</div> </div> </li>";
+
+                            }
+
+                        }).catch(function (error) {
+                        // handle error
+                        alert(error);
+                        console.log(error);
+                    })
+                }
+                else if (cat_selected == "shopping")
+                {
+                    instance.get('/api/shoppingservice', {
+                        params: {
+                            gids: gid_string,
+                            start: start,
+                            end: end
+                        }
+                    }).then(
+                        function (response) {
+                            reply = response.data;
+                            console.log(reply);
+
+                            for (item in reply)
+                            {
+                                {#here, reply[item] is our service object, can access fields directly,#}
+                                select.innerHTML += "<li> <div class=\'nearly-pepls\'> <div class=\"pepl-info\">" +
+                                    "<h4><a href=\"#\" title=\"\">Shopping Service</a></h4>" +
+                                    "<a href=\"#\" title=\"\"><h5>" + reply[item].vendor + "</h5></a>" +
+                                    "<p> by " + reply[item].initiator + "</p>" +
+                                    "<h4><p>Start Time: " + reply[item].start_time + "<br> End Time: " + reply[item].end_time + "</p> </h4>" +
+                                    "<span> " + reply[item].description + "</span>" +
+                                    "<a href=\"#\" title=\"\" data-url=\"{% url 'groups:create' %}\" class=\"add-butn add-friend\" data-ripple=\"\">Join Service</a>"
+                                    + "</div> </div> </li>";
+                            }
+                        }).catch(function (error) {
+                        // handle error
+                        alert(error);
+                        console.log(error);
+                    })
+                }
+                else
+                {
+                    {#    travel#}
+                    instance.get('/api/travelservice', {
+                        params: {
+                            gids: gid_string,
+                            start: start,
+                            end: end
+                        }
+                    }).then(
+                        function (response) {
+                            reply = response.data;
+                            console.log(reply);
+
+                            for (item in reply)
+                            {
+                                {#here, reply[item] is our service object, can access fields directly,#}
+                                select.innerHTML += "<li> <div class=\'nearly-pepls\'> <div class=\"pepl-info\">" +
+                                    "<h4><a href=\"#\" title=\"\">Travel Service</a></h4>" +
+                                    "<a href=\"#\" title=\"\"><h5>" + "reply[item].vendor" + "</h5></a>" +
+                                    "<p> by " + reply[item].initiator + "</p>" +
+                                    "<h4><p>Source: " + reply[item].start_point + "<br> Destination: " + reply[item].end_point + "</p> </h4> <br>" +
+                                    "<h4><p>Start Time: " + reply[item].start_time + "<br> End Time: " + reply[item].end_time + "</p> </h4>" +
+                                    "<span> " + reply[item].description + "</span>" +
+                                    "<a href=\"#\" title=\"\" data-url=\"{% url 'groups:create' %}\" class=\"add-butn add-friend\" data-ripple=\"\">Join Service</a>"
+                                    + "</div> </div> </li>";
+                            }
+                        }).catch(function (error) {
+                        // handle error
+                        alert(error);
+                        console.log(error);
+                    })
+                }
+                console.log("new html");
+                console.log(new_html);
+                select.innerHTML = new_html;
+            }
+
 	mapboxgl.accessToken = 'pk.eyJ1IjoiYXJuYWJqYW5hY3NlIiwiYSI6ImNrOHE0dm9sazAwN20zZW80ZXNqajI5N28ifQ._qdgPYptmnCwEtJeLVn6YQ';
     var map = new mapboxgl.Map({
         container: 'map',
