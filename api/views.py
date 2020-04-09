@@ -25,7 +25,7 @@ class FoodServiceList(generics.ListAPIView):
 
         if 'text' in self.request.GET:
             text = self.request.GET.get('text')
-            filt = (Q(description__search=text) | Q(foodservice__vendor__name__search=text)) & filt
+            filt = (Q(description__trigram_similar=text) | Q(foodservice__vendor__name__trigram_similar=text)) & filt
 
         return Service.objects.filter(filt).distinct().all()
 
@@ -44,7 +44,7 @@ class ShoppingServiceList(generics.ListAPIView):
 
         if 'text' in self.request.GET:
             text = self.request.GET.get('text')
-            filt = (Q(description__search=text) | Q(shoppingservice__vendor__name__search=text)) & filt
+            filt = (Q(description__trigram_similar=text) | Q(shoppingservice__vendor__name__trigram_similar=text)) & filt
 
 
         return Service.objects.filter(filt).distinct().all()
@@ -87,9 +87,9 @@ class TravelServiceList(generics.ListAPIView):
 
         if 'text' in self.request.GET:
             text = self.request.GET.get('text')
-            filt = (Q(description__search=text) | Q(travelservice__transport=text) |
-                    Q(travelservice__start_point__address__search_=text) |
-                    Q(travelservice__end_point__address__search_=text)) & filt
+            filt = (Q(description__trigram_similar=text) | Q(transport__trigram_similar=text) |
+                    Q(start_point__address__trigram_similar=text) |
+                    Q(end_point__address__trigram_similar=text)) & filt
 
         return services.filter(filt).distinct().all()
 
@@ -108,8 +108,8 @@ class EventServiceList(generics.ListAPIView):
 
         if 'text' in self.request.GET:
             text = self.request.GET.get('text')
-            filt = (Q(description__search=text) |
-                    Q(eventservice__location__address__search_=text)) & filt
+            filt = (Q(description__trigram_similar=text) |
+                    Q(eventservice__location__address__trigram_similar=text)) & filt
 
         return Service.objects.filter(filt).distinct().all()
 
@@ -128,7 +128,7 @@ class OtherServiceList(generics.ListAPIView):
 
         if 'text' in self.request.GET:
             text = self.request.GET.get('text')
-            filt = Q(description__search=text) & filt
+            filt = Q(description__trigram_similar=text) & filt
 
         return Service.objects.filter(filt).distinct().all()
 
