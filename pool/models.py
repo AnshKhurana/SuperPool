@@ -147,7 +147,7 @@ class EventService(Service):
         ('Movie', 'Movie'),
         ('Concert', 'Concert'),
     ]
-    location = models.CharField(null=False, max_length=1000)
+    location = models.ForeignKey(Location, on_delete=models.DO_NOTHING, null=False, related_name='location')
     event_type = models.CharField(max_length=10, choices=EVENT_CHOICES)
 
 
