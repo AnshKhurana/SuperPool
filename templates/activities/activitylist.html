@@ -162,9 +162,10 @@
             fetchServices();
         }
 
-        function clrSearch() {
+        function clrAndFetch() {
             document.getElementById("searchtext").value = "";
-            getText();
+            searchtext = undefined;
+            fetchServices();
         }
 
         function getText()
@@ -214,6 +215,9 @@
         function fetchServices()
 
         {
+
+            console.log("in fetchServ");
+            console.log(searchtext);
             const instance = axios.create({
                 baseURL: '{% url 'pool:home' %}',
                 timeout: 1000,
@@ -553,29 +557,29 @@
                                         <ul class="followers">
                                             <li>
                                                 <div class="friend-meta">
-                                                    <h4><input type="radio" id=food_sel" name="category" value="food" checked onclick="clrSearch(); fetchServices();"> Food</h4>
+                                                    <h4><input type="radio" id=food_sel" name="category" value="food" checked onclick="clrAndFetch()"> Food</h4>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="friend-meta">
-                                                    <h4><input type="radio" id="travel_sel" name="category" value="travel"  onclick="clrSearch(); fetchServices();"> Travel</h4>
+                                                    <h4><input type="radio" id="travel_sel" name="category" value="travel"  onclick="clrAndFetch()"> Travel</h4>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="friend-meta">
-                                                    <h4><input type="radio" id="shopping_sel" name="category" value="shopping"  onclick="clrSearch(); fetchServices();" > Shopping</h4>
-                                                </div>
-                                            </li>
-
-                                            <li>
-                                                <div class="friend-meta">
-                                                    <h4><input type="radio" id="event_sel" name="category" value="event"  onclick="clrSearch(); fetchServices();" > Event</h4>
+                                                    <h4><input type="radio" id="shopping_sel" name="category" value="shopping"  onclick="clrAndFetch()" > Shopping</h4>
                                                 </div>
                                             </li>
 
                                             <li>
                                                 <div class="friend-meta">
-                                                    <h4><input type="radio" id="other_sel" name="category" value="other"  onclick="clrSearch(); fetchServices();" > Other</h4>
+                                                    <h4><input type="radio" id="event_sel" name="category" value="event"  onclick="clrAndFetch()" > Event</h4>
+                                                </div>
+                                            </li>
+
+                                            <li>
+                                                <div class="friend-meta">
+                                                    <h4><input type="radio" id="other_sel" name="category" value="other"  onclick="clrAndFetch()" > Other</h4>
                                                 </div>
                                             </li>
                                         </ul>
