@@ -36,6 +36,7 @@
 {#                                                insert stuff here#}
 
                                                 <h2>Enter details:</h2>
+                                                <button onclick="loadmap()">Display Locations</button> &nbsp
                                                 <form method="POST">
                                                     {% csrf_token %}
 
@@ -50,7 +51,6 @@
 <!--                                                    {{ form.data.start_time }}-->
 <!--                                                    {{ form.fields.start_time.initial }}-->
 <!--                                                    {{ form.start_time }}-->
-                                                    <button onclick="loadmap()">Display Locations</button> &nbsp
                                                     <button type="submit">Submit</button>
                                                 </form>
 
@@ -428,12 +428,16 @@
                 select.innerHTML = new_html;
             }
 
+    var india_centre_x = 79.0;
+    var india_centre_y = 22.0;
+    var india_zoom = 4;
+
 	mapboxgl.accessToken = 'pk.eyJ1IjoiYXJuYWJqYW5hY3NlIiwiYSI6ImNrOHE0dm9sazAwN20zZW80ZXNqajI5N28ifQ._qdgPYptmnCwEtJeLVn6YQ';
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/light-v10',
-        center: [87.3705, 23.8815],
-        zoom: 6
+        center: [india_centre_x, india_centre_y],
+        zoom: india_zoom
     });
 
     map.on('load', function() {
@@ -513,32 +517,40 @@
                         console.log(end_reply);
 
         console.log(start_reply['lon']);
+        console.log(start_reply['lat']);
         console.log(end_reply['lon']);
-        var centre_x = parseFloat(start_reply['lon']);
-        //console.log(centre_x);
-        //centre_x = parseFloat(centre_x / 2);
-        var centre_y = parseFloat(start_reply['lat']);
-        //centre_y = parseFloat(centre_y / 2);
+        console.log(end_reply['lat']);
+        var centre_x = (start_reply['lon'] - (-1 * end_reply['lon']))/2 ;
+        var centre_y = (start_reply['lat'] - (-1 * end_reply['lat']))/2;
         var zoom_x = Math.abs(start_reply['lon'] - end_reply['lon']);
         var zoom_y = Math.abs(start_reply['lat'] - end_reply['lat']);
         var zoom = Math.max(zoom_x, zoom_y);
+
         console.log(centre_x);
         console.log(centre_y);
         console.log(zoom_x);
         console.log(zoom_y);
         console.log(zoom);
+
+        if (zoom<5) {
+            zoom = 6
+        }
+        else if(zoom<10) {
+            zoom = 5
+        }
+        else {
+            zoom = 4
+        }
+
+        console.log(zoom);
+
         mapboxgl.accessToken = 'pk.eyJ1IjoiYXJuYWJqYW5hY3NlIiwiYSI6ImNrOHE0dm9sazAwN20zZW80ZXNqajI5N28ifQ._qdgPYptmnCwEtJeLVn6YQ';
         var map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/light-v10',
-            center: [(start_reply['lon'] - (-1 * end_reply['lon']))/2 , (start_reply['lat'] - (-1 * end_reply['lat']))/2],
-            zoom: 10 * (1 / zoom)
+            center: [centre_x, centre_y],
+            zoom: zoom
         });
-
-        var a=1;
-        var b=2;
-        var c=3;
-        var d=4;
 
         map.on('load', function() {
             map.addSource('points', {
