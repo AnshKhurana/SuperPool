@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from pool.models import Service, ServiceMember, FoodService
+from pool.models import Service, ServiceMember, FoodService, ShoppingService, TravelService, EventService, OtherService
 from django.db.models import Q
 
 
 @login_required
-def index(request):
+def food_index(request):
     """
     Root page view. This is essentially a single-page app, if you ignore the
     login and admin parts.
@@ -13,16 +13,112 @@ def index(request):
     # Get a list of rooms, ordered alphabetically
     # services = Service.objects.order_by("title")
     # services = Service.objects.filter(members__id=request.user.id)
-    services_sec = Service.objects.filter(
+    services_sec = FoodService.objects.filter(
         id__in=ServiceMember.objects.filter(user=request.user).values('service')).exclude(initiator=request.user)
     # print(services_sec)
-    service_prim = Service.objects.filter(initiator=request.user)
+    service_prim = FoodService.objects.filter(initiator=request.user)
     # print(service_prim)
     # services = service_prim.union(services_sec)
     # print(services)
 
     # Render that in the index template
     return render(request, "chat/index.html", {
+        "username": request.user,
+        "services": service_prim,
+        "other_serv": services_sec,
+    })
+
+@login_required
+def shopping_index(request):
+    """
+    Root page view. This is essentially a single-page app, if you ignore the
+    login and admin parts.
+    """
+    # Get a list of rooms, ordered alphabetically
+    # services = Service.objects.order_by("title")
+    # services = Service.objects.filter(members__id=request.user.id)
+    services_sec = ShoppingService.objects.filter(
+        id__in=ServiceMember.objects.filter(user=request.user).values('service')).exclude(initiator=request.user)
+    # print(services_sec)
+    service_prim = ShoppingService.objects.filter(initiator=request.user)
+    # print(service_prim)
+    # services = service_prim.union(services_sec)
+    # print(services)
+
+    # Render that in the index template
+    return render(request, "chat/shopping_index.html", {
+        "username": request.user,
+        "services": service_prim,
+        "other_serv": services_sec,
+    })
+
+@login_required
+def travel_index(request):
+    """
+    Root page view. This is essentially a single-page app, if you ignore the
+    login and admin parts.
+    """
+    # Get a list of rooms, ordered alphabetically
+    # services = Service.objects.order_by("title")
+    # services = Service.objects.filter(members__id=request.user.id)
+    services_sec = TravelService.objects.filter(
+        id__in=ServiceMember.objects.filter(user=request.user).values('service')).exclude(initiator=request.user)
+    # print(services_sec)
+    service_prim = TravelService.objects.filter(initiator=request.user)
+    # print(service_prim)
+    # services = service_prim.union(services_sec)
+    # print(services)
+
+    # Render that in the index template
+    return render(request, "chat/travel_index.html", {
+        "username": request.user,
+        "services": service_prim,
+        "other_serv": services_sec,
+    })
+
+@login_required
+def event_index(request):
+    """
+    Root page view. This is essentially a single-page app, if you ignore the
+    login and admin parts.
+    """
+    # Get a list of rooms, ordered alphabetically
+    # services = Service.objects.order_by("title")
+    # services = Service.objects.filter(members__id=request.user.id)
+    services_sec = EventService.objects.filter(
+        id__in=ServiceMember.objects.filter(user=request.user).values('service')).exclude(initiator=request.user)
+    # print(services_sec)
+    service_prim = EventService.objects.filter(initiator=request.user)
+    # print(service_prim)
+    # services = service_prim.union(services_sec)
+    # print(services)
+
+    # Render that in the index template
+    return render(request, "chat/event_index.html", {
+        "username": request.user,
+        "services": service_prim,
+        "other_serv": services_sec,
+    })
+
+@login_required
+def other_index(request):
+    """
+    Root page view. This is essentially a single-page app, if you ignore the
+    login and admin parts.
+    """
+    # Get a list of rooms, ordered alphabetically
+    # services = Service.objects.order_by("title")
+    # services = Service.objects.filter(members__id=request.user.id)
+    services_sec = OtherService.objects.filter(
+        id__in= OtherService.objects.filter(user=request.user).values('service')).exclude(initiator=request.user)
+    # print(services_sec)
+    service_prim = FoodService.objects.filter(initiator=request.user)
+    # print(service_prim)
+    # services = service_prim.union(services_sec)
+    # print(services)
+
+    # Render that in the index template
+    return render(request, "chat/other_index.html", {
         "username": request.user,
         "services": service_prim,
         "other_serv": services_sec,

@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.views.generic import FormView
 from notifications.signals import notify
 
+from activities.forms import TravelActivityForm
 from pool.models import *
 from django.views.generic.base import TemplateView
 
@@ -9,7 +11,8 @@ from django.views.generic.base import TemplateView
 # Create your views here.
 
 
-class ActivitiesHome(TemplateView):
+class ActivitiesHome(FormView):
+    form_class = TravelActivityForm
     template_name = "activities/activitylist.html"
 
     def get_context_data(self, *args, **kwargs):

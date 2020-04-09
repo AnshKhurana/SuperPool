@@ -68,6 +68,10 @@
     <script>
         var start= undefined;
         var end= undefined;
+        var start_point= undefined;
+        var end_point= undefined;
+        var transport= undefined;
+
         function dateTime()
         {
             start= document.getElementById("start").value;
@@ -76,6 +80,27 @@
             {
                 start= undefined;
                 end= undefined;
+            }
+            fetchServices();
+        }
+
+        function get_location()
+        {
+            start_point= document.getElementById("id_start_point").value;
+            end_point= document.getElementById("id_end_point").value;
+            transport= document.getElementById("id_transport").value;
+            console.log(transport);
+            if (start_point==undefined || start_point=="")
+            {
+                start_point= undefined;
+            }
+            if (end_point==undefined || end_point=="")
+            {
+                end_point= undefined;
+            }
+            if (transport==undefined || transport=="")
+            {
+                transport= undefined;
             }
             fetchServices();
         }
@@ -138,6 +163,7 @@
             }
             if (cat_selected == "food")
             {
+                document.getElementById("new_form").style.display = "none";
                 instance.get('/api/foodservice', {
                     params: {
                         gids: gid_string,
@@ -186,6 +212,7 @@
             }
             else if (cat_selected == "shopping")
             {
+                 document.getElementById("new_form").style.display = "none";
                 instance.get('/api/shoppingservice', {
                     params: {
                         gids: gid_string,
@@ -232,14 +259,20 @@
             }
             else if (cat_selected == "travel")
             {
+                 document.getElementById("new_form").style.display = "block";
+                 console.log(transport);
                 instance.get('/api/travelservice', {
                     params: {
                         gids: gid_string,
                         start: start,
-                        end: end
+                        end: end,
+                        start_point: start_point,
+                        end_point: end_point,
+                        transport: transport
                     }
                 }).then(
                     function (response) {
+                        console.log('Travel');
                         reply = response.data;
                         console.log(reply);
 
@@ -469,6 +502,12 @@
                                         </ul>
                                     </div><!-- who's following -->
 
+                                    <div id="new_form">
+                                        {{ form.as_p }}
+                                        {{ form.media }}
+                                         <button onclick="get_location()">Find Services</button>
+                                    </div>
+
 
                                     <div class="widget">
                                         <h4 class="widget-title">Groups</h4>
@@ -532,4 +571,15 @@
     </section>
 
 
+{% endblock %}
+
+{% block footer %}
+    <link rel="stylesheet" type="text/css" href="{% static 'autocomplete_light/select2.css' %}" />
+    <script type="text/javascript" src="{% static 'autocomplete_light/jquery.init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'autocomplete_light/autocomplete.init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'autocomplete_light/select2.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'autocomplete_light/vendor/select2/dist/css/select2.css' %}" />
+    <script type="text/javascript" src="{% static 'autocomplete_light/vendor/select2/dist/js/select2.full.js' %}"></script>
+    <script type="text/javascript" src="{% static 'autocomplete_light/forward.js' %}"></script>
+    {{ form.media }}
 {% endblock %}

@@ -95,7 +95,8 @@ INSTALLED_APPS = [
     'recommendations',
     'dal',
     'dal_select2',
-    'rest_framework'
+    'rest_framework',
+    'location'
 ]
 
 MIDDLEWARE = [

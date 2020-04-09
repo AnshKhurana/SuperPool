@@ -112,19 +112,24 @@ class TravelCreateView(LoginRequiredMixin, FormView):
             del self.request.session['servicegroups']
         u = self.request.user
         data = form.save()
+        print('Form data obtained')
         f = TravelService(category=Category.objects.get(name='Travel'), initiator=u, start_point=data["start_point"],
                           end_point=data["end_point"], description=data['description'],
                           start_time=data['start_time'], end_time=data['end_time'], transport=data['transport'],
 
                           )
         f.save()
+        print('TravelService saved')
         sm = ServiceMember(service=f, user=u)
         sm.save()
+        print('ServiceMember saved')
         for group in serializers.deserialize("json", groups):
             gs = ServiceGroup(group=group.object, service=f)
             gs.save()
+        print('ServiceGroups registered')
         # form.save(self.request.user)
         return render(self.request, "home.html", {'message': 4})
+
 
 class EventCreateView(LoginRequiredMixin, FormView):
     form_class = EventCreationForm
@@ -153,6 +158,7 @@ class EventCreateView(LoginRequiredMixin, FormView):
             gs.save()
         # form.save(self.request.user)
         return render(self.request, "home.html", {'message': 5})
+
 
 class OtherCreateView(LoginRequiredMixin, FormView):
     form_class = OtherCreationForm
@@ -242,6 +248,43 @@ class ShoppingVendorAutocomplete(autocomplete.Select2QuerySetView):
         # print(qs)
         return qs
 
+
+class LocationAutocomplete(autocomplete.Select2QuerySetView):
+    # model = FoodVendor
+    # context_object_name = 'Food Vendor'
+    # template_name = 'pool/foodvendor_form.html'
+
+    def get_queryset(self):
+        url = "https://us1.locationiq.com/v1/autocomplete.php"
+        KEY = 'c635736cc00334'
+        COUNTRY_CODE = 'in'
+        LIMIT = 15
+        current_time = datetime.now()
+        if self.q:
+            data = {
+                'key': KEY,
+                'q': self.q,
+                'countrycodes': COUNTRY_CODE,
+                'limit': LIMIT,
+                'format': 'json'
+            }
+            responses = requests.get(url, params=data).json()
+            for response in responses:
+                # print(response.keys())
+                if 'error' in response.keys():
+                    break
+                location = Location(latitude=response['lat'],
+                                    longitude=response['lon'],
+                                    address=response['display_place']+response['display_name']+response['display_address'],
+                                    timestamp=current_time)
+                # location = Location(latitude=response['lat'],
+                #                     longitude=response['lon'],
+                #                     address=response['address']['name'] + response['address']['city'] + response['address']['state'] + response['address']['postcode'],
+                #                     timestamp=current_time)
+                location.save()
+        qs = Location.objects.filter(timestamp=current_time)
+        print(qs)
+        return qs
 
 # @login_required
 # class ServiceCreateView(FormView):
