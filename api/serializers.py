@@ -27,14 +27,12 @@ class FoodServiceSerializer(serializers.HyperlinkedModelSerializer):
         filt = Q(initiator=cur_user) & Q(category__name='Food') \
                & Q(start_time__range=(datetime(2000, 1, 1), datetime.now())) & Q(vendor=vendor)
         fs = FoodService.objects.filter(filt)
-        print(fs.count())
         return fs.count()
 
     def time_left(self, foodservice):
         now = datetime.now()
         diff = (foodservice.end_time - now) // 3600
         diff = str(diff).split(':')[2].split('.')[0]
-        print(diff)
         return diff
 
     class Meta:
@@ -64,14 +62,12 @@ class ShoppingServiceSerializer(serializers.HyperlinkedModelSerializer):
         filt = Q(initiator=cur_user) & Q(category__name='Shopping') \
                & Q(start_time__range=(datetime(2000, 1, 1), datetime.now())) & Q(vendor=vendor)
         fs = ShoppingService.objects.filter(filt)
-        print(fs.count())
         return fs.count()
 
     def time_left(self, foodservice):
         now = datetime.now()
         diff = (foodservice.end_time - now) // 3600
         diff = str(diff).split(':')[2].split('.')[0]
-        print(diff)
         return diff
 
     class Meta:
@@ -101,14 +97,12 @@ class TravelServiceSerializer(serializers.HyperlinkedModelSerializer):
         filt = Q(initiator=cur_user) & Q(category__name='Travel') \
                & Q(start_time__range=(datetime(2000, 1, 1), datetime.now()))
         fs = TravelService.objects.filter(filt)
-        print(fs.count())
         return fs.count()
 
     def time_left(self, travelservice):
         now = datetime.now()
         diff = (travelservice.end_time - now) // 3600
         diff = str(diff).split(':')[2].split('.')[0]
-        print(diff)
         return diff
 
     class Meta:
