@@ -502,6 +502,12 @@
                                         </ul>
                                     </div><!-- who's following -->
 
+                                    <div id="new_form">
+                                        {{ form.as_p }}
+                                        {{ form.media }}
+                                         <button onclick="get_location()">Find Services</button>
+                                    </div>
+
 
                                     <div class="widget">
                                         <h4 class="widget-title">Groups</h4>
@@ -517,15 +523,6 @@
                                         </ul>
                                     </div><!-- friends list sidebar -->
 
-                                    <div id="new_form">
-                                        {{ form.as_p }}
-                                        {{ form.media }}
-                                    </div>
-                                    <li>
-                                                <div class="friend-meta">
-                                                    <button onclick="get_location()">Find Services</button>
-                                                </div>
-                                            </li>
                                 </aside>
                             </div><!-- sidebar -->
                         </div>

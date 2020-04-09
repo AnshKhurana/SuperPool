@@ -113,7 +113,7 @@ class TravelServiceSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = TravelService
-        fields = ['id', 'start_time', 'end_time', 'initiator', 'description', 'start_point', 'end_point', 'my_field',
+        fields = ['id', 'start_time', 'end_time', 'initiator', 'description', 'transport', 'start_point', 'end_point', 'my_field',
                   'is_active', 'use_count_field', 'time_left_field']
 
 
