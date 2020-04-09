@@ -532,6 +532,12 @@
         console.log(zoom_y);
         console.log(zoom);
 
+        if (zoom<1) {
+            zoom = 8
+        }
+        else if (zoom<3) {
+            zoom = 6
+        }
         if (zoom<5) {
             zoom = 6
         }
