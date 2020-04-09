@@ -71,6 +71,7 @@
         var start_point= undefined;
         var end_point= undefined;
         var transport= undefined;
+        var searchtext = undefined;
 
         function dateTime()
         {
@@ -82,6 +83,20 @@
                 end= undefined;
             }
             fetchServices();
+        }
+
+
+        function getText()
+        {
+            searchtext = document.getElementById("searchtext").value;
+
+            if (searchtext == "")
+            {
+                searchtext = undefined;
+            }
+
+            fetchServices();
+
         }
 
         function get_location()
@@ -168,7 +183,8 @@
                     params: {
                         gids: gid_string,
                         start: start,
-                        end: end
+                        end: end,
+                        text: searchtext
                     }
                 }).then(
                     function (response) {
@@ -217,7 +233,8 @@
                     params: {
                         gids: gid_string,
                         start: start,
-                        end: end
+                        end: end,
+                        text: searchtext
                     }
                 }).then(
                     function (response) {
@@ -268,7 +285,8 @@
                         end: end,
                         start_point: start_point,
                         end_point: end_point,
-                        transport: transport
+                        transport: transport,
+                        text: searchtext
                     }
                 }).then(
                     function (response) {
@@ -317,7 +335,8 @@
                     params: {
                         gids: gid_string,
                         start: start,
-                        end: end
+                        end: end,
+                        text: searchtext
                     }
                 }).then(
                     function (response) {
@@ -349,7 +368,8 @@
                     params: {
                         gids: gid_string,
                         start: start,
-                        end: end
+                        end: end,
+                        text: searchtext
                     }
                 }).then(
                     function (response) {
