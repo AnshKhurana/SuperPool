@@ -5,6 +5,7 @@ from pool.models import *
 from django.db.models import Q
 from datetime import datetime
 from pytz import timezone
+from django.contrib.postgres.search import SearchVector
 from django.http.response import JsonResponse
 
 
@@ -16,10 +17,16 @@ class FoodServiceList(generics.ListAPIView):
         user = self.request.user
         gids = self.request.GET.get('gids').split(',')
         filt = Q(groups__id__in=gids) & Q(category__name='Food') & Q(groups__members=user.id)
+
         if 'start' in self.request.GET and 'end' in self.request.GET:
             start = self.request.GET.get('start')
             end = self.request.GET.get('end')
             filt = filt & Q(start_time__range=(start, end))
+
+        if 'text' in self.request.GET:
+            text = self.request.GET.get('text')
+            filt = (Q(description__search=text) | Q(foodservice__vendor__name__search=text)) & filt
+
         return Service.objects.filter(filt).distinct().all()
 
 
@@ -34,6 +41,12 @@ class ShoppingServiceList(generics.ListAPIView):
             start = self.request.GET.get('start')
             end = self.request.GET.get('end')
             filt = filt & Q(start_time__range=(start, end))
+
+        if 'text' in self.request.GET:
+            text = self.request.GET.get('text')
+            filt = (Q(description__search=text) | Q(shoppingservice__vendor__name__search=text)) & filt
+
+
         return Service.objects.filter(filt).distinct().all()
 
 
@@ -72,6 +85,12 @@ class TravelServiceList(generics.ListAPIView):
             transport = self.request.GET.get('transport')
             filt = filt & Q(transport=transport)
 
+        if 'text' in self.request.GET:
+            text = self.request.GET.get('text')
+            filt = (Q(description__search=text) | Q(travelservice__transport=text) |
+                    Q(travelservice__start_point__address__search_=text) |
+                    Q(travelservice__end_point__address__search_=text)) & filt
+
         return services.filter(filt).distinct().all()
 
 
@@ -86,6 +105,12 @@ class EventServiceList(generics.ListAPIView):
             start = self.request.GET.get('start')
             end = self.request.GET.get('end')
             filt = filt & Q(start_time__range=(start, end))
+
+        if 'text' in self.request.GET:
+            text = self.request.GET.get('text')
+            filt = (Q(description__search=text) |
+                    Q(eventservice__location__address__search_=text)) & filt
+
         return Service.objects.filter(filt).distinct().all()
 
 
@@ -100,6 +125,11 @@ class OtherServiceList(generics.ListAPIView):
             start = self.request.GET.get('start')
             end = self.request.GET.get('end')
             filt = filt & Q(start_time__range=(start, end))
+
+        if 'text' in self.request.GET:
+            text = self.request.GET.get('text')
+            filt = Q(description__search=text) & filt
+
         return Service.objects.filter(filt).distinct().all()
 
 
