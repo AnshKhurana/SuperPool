@@ -1,4 +1,82 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <title>SuperPool</title>
+
+    {% include 'includes/stylesheets.html' %}
+    {% csrf_token %}
+
+</head>
+<body>
+<div class="theme-layout">
+
+    <div class="topbar stick">
+        <div class="logo">
+            <a title="" href="/"><img src="{% static 'images/logo.png' %}" alt="" style="height: 70px; width: 90px"></a>
+        </div>
+
+        <div class="top-area">
+            <div class="top-search">
+                <form method="get" class="">
+                    <input type="text" id="searchtext" placeholder="Search For a Service">
+                    <button type="button" onclick="getText()" data-ripple><i class="ti-search"></i></button>
+                </form>
+            </div>
+            <ul class="setting-area">
+<!--                <li><a href="'services:create'" title="New Post" data-ripple=""><i class="ti-plus"></i></a></li>-->
+                <li><a href="{% url 'pool:home' %}" title="Home" data-ripple=""><i class="ti-home"></i></a></li>
+
+<!--{#                <li><a href="{% url 'communications:all-messages' %}" class="link">Messenger</a></li>#}-->
+<!--                <li>-->
+<!--                    <a href="#" title="Notification" data-ripple="">-->
+<!--                        <i class="ti-user"></i><span id="total-friend-notifications"></span>-->
+<!--                    </a>-->
+<!--                    <div class="dropdowns">-->
+<!--                        <ul class="drops-menu" id="friend-menu">-->
+<!--                        </ul>-->
+<!--                        <a href="#" title="" class="more-mesg">view more</a>-->
+<!--                    </div>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <a href="#" title="Messages" data-ripple=""><i class="ti-comment"></i><span id="total-like-comment-notifications">0</span></a>-->
+<!--                    <div class="dropdowns">-->
+<!--                        <ul class="drops-menu" id="like-comment-menu">-->
+<!--                        </ul>-->
+<!--                        <a href="#" title="" class="more-mesg">view more</a>-->
+<!--{#                        <a href="#" title="" class="more-mesg" data-url="{% url 'notifications:mark-like-comment-notifications-as-read' %}" id="mark-like-comment-notifications-as-read">mark all as read</a>#}-->
+<!--                    </div>-->
+<!--                </li>-->
+            </ul>
+            <div class="user-img">
+{#                <img src="{{ request.user.profile.profile_image.url }}" alt="" style="height: 40px; width: 40px;">#}
+                <span class="status f-online"></span>
+                <div class="user-setting">
+                    <a href="#" title=""><span class="status f-online"></span>online</a>
+                    <a href="#" title=""><span class="status f-away"></span>away</a>
+                    <a href="#" title=""><span class="status f-off"></span>offline</a>
+                    <a href="#" title=""><i class="ti-user"></i> view profile</a>
+{#                    <a href="{% url 'profile:edit-profile' %}" title=""><i class="ti-pencil-alt"></i>edit profile</a>#}
+                    <a href="#" title=""><i class="ti-target"></i>activity log</a>
+                    <a href="#" title=""><i class="ti-settings"></i>account setting</a>
+                    <a href="{% url 'accounts:logout' %}" title=""><i class="ti-power-off"></i>log out</a>
+                </div>
+            </div>
+            <span class="ti-menu main-menu" data-ripple=""></span>
+        </div>
+    </div><!-- topbar -->
+
+    {% block content %}
+    {% endblock %}
+
+
+{% include 'includes/scripts.html' %}
+{% block scripts %}{% endblock %}
+
 <style>
     .switch {
         position: relative;
@@ -60,8 +138,7 @@
         border-radius: 50%;
     }
 </style>
-{% load static %}
-{% block content %}
+
     {% csrf_token %}
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -85,6 +162,10 @@
             fetchServices();
         }
 
+        function clrSearch() {
+            document.getElementById("searchtext").value = "";
+            getText();
+        }
 
         function getText()
         {
@@ -472,29 +553,29 @@
                                         <ul class="followers">
                                             <li>
                                                 <div class="friend-meta">
-                                                    <h4><input type="radio" id=food_sel" name="category" value="food" checked onclick="fetchServices()"> Food</h4>
+                                                    <h4><input type="radio" id=food_sel" name="category" value="food" checked onclick="clrSearch(); fetchServices();"> Food</h4>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="friend-meta">
-                                                    <h4><input type="radio" id="travel_sel" name="category" value="travel"  onclick="fetchServices()"> Travel</h4>
+                                                    <h4><input type="radio" id="travel_sel" name="category" value="travel"  onclick="clrSearch(); fetchServices();"> Travel</h4>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="friend-meta">
-                                                    <h4><input type="radio" id="shopping_sel" name="category" value="shopping"  onclick="fetchServices()" > Shopping</h4>
-                                                </div>
-                                            </li>
-
-                                            <li>
-                                                <div class="friend-meta">
-                                                    <h4><input type="radio" id="event_sel" name="category" value="event"  onclick="fetchServices()" > Event</h4>
+                                                    <h4><input type="radio" id="shopping_sel" name="category" value="shopping"  onclick="clrSearch(); fetchServices();" > Shopping</h4>
                                                 </div>
                                             </li>
 
                                             <li>
                                                 <div class="friend-meta">
-                                                    <h4><input type="radio" id="other_sel" name="category" value="other"  onclick="fetchServices()" > Other</h4>
+                                                    <h4><input type="radio" id="event_sel" name="category" value="event"  onclick="clrSearch(); fetchServices();" > Event</h4>
+                                                </div>
+                                            </li>
+
+                                            <li>
+                                                <div class="friend-meta">
+                                                    <h4><input type="radio" id="other_sel" name="category" value="other"  onclick="clrSearch(); fetchServices();" > Other</h4>
                                                 </div>
                                             </li>
                                         </ul>
@@ -552,11 +633,11 @@
         </div>
         <script type="text/javascript">
         window.onload = function(){
-    if({{ message }}==0) {
+    if({{ message }} == 0) {
         alert("Already in the service");
     }
 
-    if({{ message }}==1) {
+    if({{   message }} == 1) {
         alert("Added to service successfully");
     }
 
@@ -591,8 +672,6 @@
     </section>
 
 
-{% endblock %}
-
 {% block footer %}
     <link rel="stylesheet" type="text/css" href="{% static 'autocomplete_light/select2.css' %}" />
     <script type="text/javascript" src="{% static 'autocomplete_light/jquery.init.js' %}"></script>
@@ -603,3 +682,7 @@
     <script type="text/javascript" src="{% static 'autocomplete_light/forward.js' %}"></script>
     {{ form.media }}
 {% endblock %}
+</div>
+
+</body>
+</html>
