@@ -23,3 +23,4 @@ scripts/sec-edgar-companies-list.zip
 scripts/sec-edgar-companies-list/database.sqlite
 server/*
 server/**
+logfile
