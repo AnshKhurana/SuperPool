@@ -26,7 +26,7 @@ class FoodServiceList(generics.ListAPIView):
         if 'text' in self.request.GET:
             text = self.request.GET.get('text')
             filt = (Q(description__search=text) | Q(foodservice__vendor__name__search=text)) & filt
-
+        
         return Service.objects.filter(filt).distinct().all()
 
 
