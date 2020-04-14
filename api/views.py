@@ -151,8 +151,10 @@ class FoodServiceReco(generics.ListAPIView):
                        ~Q(id__in=ServiceMember.objects.filter(user=user).values('service')) & \
                        Q(end_time__range=(datetime.now(), datetime(3000, 1, 1)))
         print('final filt made')
+        reco_vendors = FoodService.objects.filter(current_filt).all()
+        # print(reco_vendors)
 
-        return FoodService.objects.filter(current_filt).all()
+        return reco_vendors
 
 
 class ShoppingServiceReco(generics.ListAPIView):

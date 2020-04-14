@@ -18,7 +18,7 @@ for file in csv_files:
         break
 restaurant_dataset.reset_index(drop=True, inplace=True)
 
-Restaurant.objects.all().delete()
+# Restaurant.objects.all().delete()
 for record in restaurant_dataset.iterrows():
     record = record[1]
     restaurant = Restaurant(name=record.NAME,
@@ -135,19 +135,22 @@ gs3_old1 = ServiceGroup(group=g2, service=sf1_old1)
 gs3_old1.save()
 
 ## McDonalds at recent time
-sf1 = FoodService(category=Category.objects.get(name='Food'), initiator=u2, vendor=foodv1,
+sf1 = FoodService(category=Category.objects.get(name='Food'), initiator=u1, vendor=foodv1,
                   description="French fries",
-                  start_time="2020-01-22 01:01", end_time="2020-01-23 01:01")
+                  start_time="2020-04-14 01:01", end_time="2020-05-14 01:01")
 
 sf1.save()
 
 # add initiator as member
-sm2 = ServiceMember(service=sf1, user=u2)
+sm2 = ServiceMember(service=sf1, user=u1)
 sm2.save()
 
 # add service to all groups of the user
-gs3 = ServiceGroup(group=g2, service=sf1)
-gs3.save()
+gs3_1 = ServiceGroup(group=g1, service=sf1)
+gs3_1.save()
+
+gs3_2 = ServiceGroup(group=g2, service=sf1)
+gs3_2.save()
 print('Food Services created')
 ##--------------Food-------------------------##
 
