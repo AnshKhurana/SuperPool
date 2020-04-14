@@ -23,17 +23,24 @@ class FoodServiceList(generics.ListAPIView):
             end = self.request.GET.get('end')
             filt = filt & Q(start_time__range=(start, end))
 
+        if 'vendor' in self.request.GET:
+            ## Gets Services with same Restaurant Name
+            vendor_id = self.request.GET.get('vendor')
+            vendor = Restaurant.objects.get(id=vendor_id).name
+            filt = filt & Q(vendor__name=vendor)
+
         if 'text' in self.request.GET:
             text = self.request.GET.get('text')
-            filt = (Q(description__search=text) | Q(foodservice__vendor__name__search=text)) & filt
+            filt = filt & (Q(description__search=text) | Q(foodservice__vendor__name__search=text))
 
-        return Service.objects.filter(filt).distinct().all()
+        return FoodService.objects.filter(filt).distinct().all()
 
 
 class ShoppingServiceList(generics.ListAPIView):
     serializer_class = ShoppingServiceSerializer
 
     def get_queryset(self):
+        print(self.request.GET.keys())
         user = self.request.user
         gids = self.request.GET.get('gids').split(',')
         filt = Q(groups__id__in=gids) & Q(category__name='Shopping') & Q(groups__members=user.id)
@@ -42,11 +49,17 @@ class ShoppingServiceList(generics.ListAPIView):
             end = self.request.GET.get('end')
             filt = filt & Q(start_time__range=(start, end))
 
+        if 'vendor' in self.request.GET:
+            ## Gets Services with same Company Name
+            vendor_id = self.request.GET.get('vendor')
+            vendor = Company.objects.get(id=vendor_id).name
+            filt = filt & Q(vendor__name=vendor)
+
         if 'text' in self.request.GET:
             text = self.request.GET.get('text')
             filt = (Q(description__search=text) | Q(shoppingservice__vendor__name__search=text)) & filt
 
-        return Service.objects.filter(filt).distinct().all()
+        return ShoppingService.objects.filter(filt).distinct().all()
 
 
 class TravelServiceList(generics.ListAPIView):

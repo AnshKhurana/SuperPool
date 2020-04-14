@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import FormView
 from notifications.signals import notify
 
-from activities.forms import TravelActivityForm
+from activities.forms import TravelActivityForm, FoodActivityForm, ShoppingActivityForm
 from pool.models import *
 from django.views.generic.base import TemplateView
 
@@ -11,16 +11,21 @@ from django.views.generic.base import TemplateView
 # Create your views here.
 
 
-class ActivitiesHome(FormView):
-    form_class = TravelActivityForm
+class ActivitiesHome(TemplateView):
+    food_form_class = FoodActivityForm
+    shopping_form_class = ShoppingActivityForm
+    travel_form_class = TravelActivityForm
+
     template_name = "activities/activitylist.html"
 
     def get_context_data(self, *args, **kwargs):
         context = super(ActivitiesHome, self).get_context_data(*args, **kwargs)
+        # print(context)
         context["groups"] = Group.objects.filter(members=self.request.user.id).all()
         context["gid_string"] = ",".join([str(group.id) for group in context["groups"]])
         context["message"] = -1
-
+        # print('context data created')
+        # print(dir(context['view'].food_form_class))
         return context
 
 

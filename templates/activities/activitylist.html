@@ -149,6 +149,8 @@
         var end_point= undefined;
         var transport= undefined;
         var searchtext = undefined;
+        var foodvendor= undefined;
+        var shoppingvendor= undefined;
 
         function dateTime()
         {
@@ -179,6 +181,30 @@
 
             fetchServices();
 
+        }
+
+        function get_foodvendor()
+        {
+            foodvendor= document.getElementById("id_food_vendor").value;
+
+            if (foodvendor==undefined || foodvendor=="")
+            {
+                foodvendor= undefined;
+            }
+            fetchServices();
+        }
+
+        function get_shoppingvendor()
+        {
+            console.log('Arnab');
+            shoppingvendor= document.getElementById("id_shopping_vendor").value;
+            console.log(shoppingvendor);
+
+            if (shoppingvendor==undefined || shoppingvendor=="")
+            {
+                shoppingvendor= undefined;
+            }
+            fetchServices();
         }
 
         function get_location()
@@ -264,12 +290,16 @@
             }
             if (cat_selected == "food")
             {
-                document.getElementById("new_form").style.display = "none";
+                document.getElementById("new_food_form").style.display = "block";
+                document.getElementById("new_shopping_form").style.display = "none";
+                document.getElementById("new_travel_form").style.display = "none";
+
                 instance.get('/api/foodservice', {
                     params: {
                         gids: gid_string,
                         start: start,
                         end: end,
+                        vendor: foodvendor,
                         text: searchtext
                     }
                 }).then(
@@ -314,12 +344,16 @@
             }
             else if (cat_selected == "shopping")
             {
-                 document.getElementById("new_form").style.display = "none";
+                document.getElementById("new_food_form").style.display = "none";
+                document.getElementById("new_shopping_form").style.display = "block";
+                document.getElementById("new_travel_form").style.display = "none";
+
                 instance.get('/api/shoppingservice', {
                     params: {
                         gids: gid_string,
                         start: start,
                         end: end,
+                        vendor: shoppingvendor,
                         text: searchtext
                     }
                 }).then(
@@ -362,8 +396,11 @@
             }
             else if (cat_selected == "travel")
             {
-                 document.getElementById("new_form").style.display = "block";
-                 console.log(transport);
+                document.getElementById("new_food_form").style.display = "none";
+                document.getElementById("new_shopping_form").style.display = "none";
+                document.getElementById("new_travel_form").style.display = "block";
+
+                console.log(transport);
                 instance.get('/api/travelservice', {
                     params: {
                         gids: gid_string,
@@ -417,6 +454,10 @@
             }
             else if (cat_selected == "event")
             {
+                document.getElementById("new_food_form").style.display = "none";
+                document.getElementById("new_shopping_form").style.display = "none";
+                document.getElementById("new_travel_form").style.display = "none";
+
                 instance.get('/api/eventservice', {
                     params: {
                         gids: gid_string,
@@ -450,6 +491,10 @@
             }
             else
             {
+                document.getElementById("new_food_form").style.display = "none";
+                document.getElementById("new_shopping_form").style.display = "none";
+                document.getElementById("new_travel_form").style.display = "none";
+
                 instance.get('/api/otherservice', {
                     params: {
                         gids: gid_string,
@@ -608,9 +653,21 @@
                                         </ul>
                                     </div><!-- who's following -->
 
-                                    <div id="new_form">
-                                        {{ form.as_p }}
-                                        {{ form.media }}
+                                    <div id="new_food_form">
+                                        {{ view.food_form_class.as_p }}
+                                        {{ view.food_form_class.media }}
+                                         <button onclick="get_foodvendor()">Find Services</button>
+                                    </div>
+
+                                    <div id="new_shopping_form">
+                                        {{ view.shopping_form_class.as_p }}
+                                        {{ view.shopping_form_class.media }}
+                                         <button onclick="get_shoppingvendor()">Find Services</button>
+                                    </div>
+
+                                    <div id="new_travel_form">
+                                        {{ view.travel_form_class.as_p }}
+                                        {{ view.travel_form_class.media }}
                                          <button onclick="get_location()">Find Services</button>
                                     </div>
 
