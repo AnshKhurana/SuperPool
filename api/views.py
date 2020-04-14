@@ -21,7 +21,7 @@ class FoodServiceList(generics.ListAPIView):
         if 'start' in self.request.GET and 'end' in self.request.GET:
             start = self.request.GET.get('start')
             end = self.request.GET.get('end')
-            filt = filt & Q(start_time__range=(start, end))
+            filt = filt & ~Q(start_time__gt=end) & ~Q(end_time__lt=start)  ## Ensures intersection between the intervals
 
         if 'vendor' in self.request.GET:
             ## Gets Services with same Restaurant Name
@@ -47,7 +47,8 @@ class ShoppingServiceList(generics.ListAPIView):
         if 'start' in self.request.GET and 'end' in self.request.GET:
             start = self.request.GET.get('start')
             end = self.request.GET.get('end')
-            filt = filt & Q(start_time__range=(start, end))
+            # filt = filt & Q(start_time__range=(start, end))
+            filt = filt & ~Q(start_time__gt=end) & ~Q(end_time__lt=start)
 
         if 'vendor' in self.request.GET:
             ## Gets Services with same Company Name
@@ -76,7 +77,9 @@ class TravelServiceList(generics.ListAPIView):
         if 'start' in self.request.GET and 'end' in self.request.GET:
             start = self.request.GET.get('start')
             end = self.request.GET.get('end')
-            filt = filt & Q(start_time__range=(start, end))
+            # filt = filt & Q(start_time__range=(start, end))
+            filt = filt & ~Q(start_time__gt=end) & ~Q(end_time__lt=start)
+
         if 'start_point' in self.request.GET and 'end_point' in self.request.GET:
             start_point_id = self.request.GET.get('start_point')
             end_point_id = self.request.GET.get('end_point')
@@ -93,6 +96,7 @@ class TravelServiceList(generics.ListAPIView):
             print('end_points')
             print(near_end)
             services = services.filter(start_point__in=near_start, end_point__in=near_end)
+
         if 'transport' in self.request.GET:
             transport = self.request.GET.get('transport')
             filt = filt & Q(transport=transport)
@@ -116,7 +120,8 @@ class EventServiceList(generics.ListAPIView):
         if 'start' in self.request.GET and 'end' in self.request.GET:
             start = self.request.GET.get('start')
             end = self.request.GET.get('end')
-            filt = filt & Q(start_time__range=(start, end))
+            # filt = filt & Q(start_time__range=(start, end))
+            filt = filt & ~Q(start_time__gt=end) & ~Q(end_time__lt=start)
 
         if 'text' in self.request.GET:
             text = self.request.GET.get('text')
@@ -136,7 +141,8 @@ class OtherServiceList(generics.ListAPIView):
         if 'start' in self.request.GET and 'end' in self.request.GET:
             start = self.request.GET.get('start')
             end = self.request.GET.get('end')
-            filt = filt & Q(start_time__range=(start, end))
+            # filt = filt & Q(start_time__range=(start, end))
+            filt = filt & ~Q(start_time__gt=end) & ~Q(end_time__lt=start)
 
         if 'text' in self.request.GET:
             text = self.request.GET.get('text')

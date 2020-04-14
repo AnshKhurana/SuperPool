@@ -714,13 +714,13 @@
     var second = now.getSeconds();
     var start_time = year + "-" +
                       (month < 10 ? "0" + month.toString() : month) + "-" +
-                      (start_day < 10 ? "0" + start_day.toString() : day) + "T" +
+                      (start_day < 10 ? "0" + start_day.toString() : start_day) + "T" +
                       (hour < 10 ? "0" + hour.toString() : hour) + ":" +
                       (minute < 10 ? "0" + minute.toString() : minute);
 
      var end_time = year + "-" +
                       (month < 10 ? "0" + month.toString() : month) + "-" +
-                      (end_day < 10 ? "0" + end_day.toString() : day) + "T" +
+                      (end_day < 10 ? "0" + end_day.toString() : end_day) + "T" +
                       (hour < 10 ? "0" + hour.toString() : hour) + ":" +
                       (minute < 10 ? "0" + minute.toString() : minute);
     var datetimeField = document.getElementById("start");
