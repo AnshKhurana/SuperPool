@@ -1,9 +1,9 @@
 import os
 import django
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'superpool.settings')
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'superpool.settings')
 # os.chdir('..')
-django.setup()
+# django.setup()
 # import sys
 # sys.path.append('.')
 
