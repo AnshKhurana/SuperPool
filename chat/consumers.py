@@ -124,7 +124,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         })
 
         # await self.send_service(service_id, 'default_message')
-        messages = Message.objects.filter(service__id=service_id)
+        messages = Message.objects.filter(service__id=service_id).order_by('timestamp')
         for message in messages:
             event = {"service_id": service_id, "username": message.user.username, "message": message.content,
                      "timestamp": str(message.timestamp).split(' ')[1].split('.')[0][:-3]}
