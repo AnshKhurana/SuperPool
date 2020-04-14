@@ -89,7 +89,7 @@ class LogoutView(RedirectView):
     """
     Provides users the ability to logout
     """
-    url = reverse_lazy('core:home')
+    url = reverse_lazy('pool:home')
 
     def get(self, request, *args, **kwargs):
         auth.logout(request)
