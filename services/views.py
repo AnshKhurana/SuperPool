@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from notifications.signals import notify
 from django.views.generic import FormView, CreateView
+
+from chat.views import food_index_internal
 from pool.models import *
 from .forms import *
 from accounts.models import User
@@ -66,7 +68,10 @@ class FoodCreateView(LoginRequiredMixin, CreateView):
         #     notify.send(self.request.user, recipient=member, verb=data['description'], description="Food " + str(f.id))
 
         # form.save(self.request.user)
-        return render(self.request, "home.html", {'message': 2})
+        data_kwargs = food_index_internal(self.request)
+        data_kwargs["message"] = "Food"
+        return render(self.request, "chat/index.html", data_kwargs)
+        # return render(self.request, "chat/index.html", {'message': 2})
 
 
 class ShoppingCreateView(LoginRequiredMixin, FormView):
@@ -95,7 +100,10 @@ class ShoppingCreateView(LoginRequiredMixin, FormView):
             gs = ServiceGroup(group=group.object, service=f)
             gs.save()
         # form.save(self.request.user)
-        return render(self.request, "home.html", {'message': 3})
+        data_kwargs = food_index_internal(self.request)
+        data_kwargs["message"] = "Shopping"
+        return render(self.request, "chat/index.html", data_kwargs)
+        # return render(self.request, "home.html", {'message': 3})
 
 
 class TravelCreateView(LoginRequiredMixin, FormView):
@@ -128,7 +136,10 @@ class TravelCreateView(LoginRequiredMixin, FormView):
             gs.save()
         print('ServiceGroups registered')
         # form.save(self.request.user)
-        return render(self.request, "home.html", {'message': 4})
+        data_kwargs = food_index_internal(self.request)
+        data_kwargs["message"] = "Travel"
+        return render(self.request, "chat/index.html", data_kwargs)
+        # return render(self.request, "home.html", {'message': 4})
 
 
 class EventCreateView(LoginRequiredMixin, FormView):
@@ -157,7 +168,10 @@ class EventCreateView(LoginRequiredMixin, FormView):
             gs = ServiceGroup(group=group.object, service=f)
             gs.save()
         # form.save(self.request.user)
-        return render(self.request, "home.html", {'message': 5})
+        data_kwargs = food_index_internal(self.request)
+        data_kwargs["message"] = "Event"
+        return render(self.request, "chat/index.html", data_kwargs)
+        # return render(self.request, "home.html", {'message': 5})
 
 
 class OtherCreateView(LoginRequiredMixin, FormView):
@@ -185,7 +199,10 @@ class OtherCreateView(LoginRequiredMixin, FormView):
             gs = ServiceGroup(group=group.object, service=f)
             gs.save()
         # form.save(self.request.user)
-        return render(self.request, "home.html", {'message': 6})
+        data_kwargs = food_index_internal(self.request)
+        data_kwargs["message"] = "Other"
+        return render(self.request, "chat/index.html", data_kwargs)
+        # return render(self.request, "home.html", {'message': 6})
 
 
 class GroupSelectView(LoginRequiredMixin, FormView):

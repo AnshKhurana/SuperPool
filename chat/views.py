@@ -3,6 +3,29 @@ from django.contrib.auth.decorators import login_required
 from pool.models import Service, ServiceMember, FoodService, ShoppingService, TravelService, EventService, OtherService
 from django.db.models import Q
 
+@login_required
+def food_index_internal(request):
+    """
+    This is an internal function and should not be called via url
+    """
+    # Get a list of rooms, ordered alphabetically
+    # services = Service.objects.order_by("title")
+    # services = Service.objects.filter(members__id=request.user.id)
+    services_sec = FoodService.objects.filter(
+        id__in=ServiceMember.objects.filter(user=request.user).values('service')).exclude(initiator=request.user)
+    # print(services_sec)
+    service_prim = FoodService.objects.filter(initiator=request.user)
+    # print(service_prim)
+    # services = service_prim.union(services_sec)
+    # print(services)
+
+    # Render that in the index template
+    return {
+        "username": request.user,
+        "services": service_prim,
+        "other_serv": services_sec,
+        "message": 2,
+    }
 
 @login_required
 def food_index(request):
@@ -26,6 +49,7 @@ def food_index(request):
         "username": request.user,
         "services": service_prim,
         "other_serv": services_sec,
+        "message": -1,
     })
 
 @login_required
@@ -50,6 +74,7 @@ def shopping_index(request):
         "username": request.user,
         "services": service_prim,
         "other_serv": services_sec,
+        "message": -1,
     })
 
 @login_required
@@ -74,6 +99,7 @@ def travel_index(request):
         "username": request.user,
         "services": service_prim,
         "other_serv": services_sec,
+        "message": -1,
     })
 
 @login_required
@@ -98,6 +124,7 @@ def event_index(request):
         "username": request.user,
         "services": service_prim,
         "other_serv": services_sec,
+        "message": -1,
     })
 
 @login_required
@@ -122,6 +149,7 @@ def other_index(request):
         "username": request.user,
         "services": service_prim,
         "other_serv": services_sec,
+        "message": -1,
     })
 
 

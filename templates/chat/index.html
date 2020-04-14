@@ -66,6 +66,33 @@
 <!--{% block header_text %}&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp My Services{% endblock %}-->
 
 {% block content %}
+<script type="text/javascript">
+window.onload = function(){
+    if("{{ message }}"==1) {
+        alert("Added to group successfully");
+    }
+
+    if("{{ message }}"=="Food") {
+        alert("Food Service registered successfully");
+    }
+
+    if("{{ message }}"=="Shopping") {
+        alert("Shopping Service registered successfully");
+    }
+
+    if("{{ message }}"=="Travel") {
+        alert("Travel Service registered successfully");
+    }
+
+    if("{{ message }}"=="Event") {
+        alert("Event Service registered successfully");
+    }
+
+    if("{{ message }}"=="Other") {
+        alert("Other Service registered successfully");
+    }
+}
+</script>
 <!--<link rel="stylesheet" href="{% static 'css/chat_style.css' %}" type="text/css" media="screen" />-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
