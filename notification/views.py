@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from accounts.models import User
+from chat.views import food_index_internal
 from pool.models import Service, ServiceMember
 # Create your views here.
 from django.views.generic import ListView
@@ -36,7 +37,10 @@ def mark_all_as_read(request):
     print("In mark_all_as_read")
     currentuser = User.objects.get(id=request.user.id)
     currentuser.notifications.mark_all_as_read()
-    return render(request, 'home.html')
+    data_kwargs = food_index_internal(request)
+    data_kwargs["message"] = -1
+    return render(request, "chat/index.html", data_kwargs)
+    # return render(request, 'chat/index.html')
 
 
 def join_service(request, service_id):
