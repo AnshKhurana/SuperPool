@@ -7,5 +7,5 @@ app_name = "pool"
 urlpatterns = [
     # path('create', ServiceCreateView.as_view(),name='create')
     # path('', home, name='home')
-    path('', food_index, name='home')    # Making My Services the home page
+    path('', home, name='home')    # Making My Services the home page
 ]
