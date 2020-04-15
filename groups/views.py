@@ -6,6 +6,8 @@ import random
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
 from django.views.generic.detail import DetailView
+
+from chat.views import food_index_internal
 from pool.models import *
 from .forms import *
 from accounts.models import User
@@ -53,6 +55,9 @@ class GroupListView(DetailView):
             self.template_name = 'groups/group_info_admin.html'
         else:
             self.template_name = 'groups/group_info_non_admin.html'
+        context["g_id"] = context['group'].id
+        client_ip = self.request.META['REMOTE_ADDR']
+        context["join_url"] = "http://" + client_ip + ":{}/groups/join/".format(self.request.META['SERVER_PORT']) + str(context['group'].hash)
         return context
 
     # def get_context_data(self, **kwargs):
@@ -95,7 +100,9 @@ class GroupCreateView(CreateView):
             group.save()
             client_ip = request.META['REMOTE_ADDR']
             join_url = "http://" + client_ip + ":{}/groups/join/".format(request.META['SERVER_PORT']) + str(group.hash)
-            return HttpResponse("<h>%s</h>" % join_url)
+            data_kwargs = food_index_internal(self.request)
+            data_kwargs["message"] = "Group Create" + join_url
+            return render(self.request, "chat/index.html", data_kwargs)
         else:
             print(user_form.errors)
             return render(request, 'accounts/register.html', {'form': user_form})
@@ -108,7 +115,7 @@ def group_join(request, hash):
     group = Group.objects.filter(hash=hash)[0]
     member = GroupMember(group=group, user=cur_user)
     member.save()
-    return render(request, 'home.html', {'message': 1})
+    return render(request, 'home.html', {'message': "Group Join"})
 
 
 def remove_member(request, g_id, user_id):
@@ -116,4 +123,6 @@ def remove_member(request, g_id, user_id):
     user = User.objects.get(id=user_id)
     group_member = GroupMember.objects.get(group=group, user=user)
     group_member.delete()
-    return HttpResponse("<h>%s</h>" % "Removed from group successfully")
+    data_kwargs = food_index_internal(request)
+    data_kwargs["message"] = "Group Remove"
+    return render(request, "chat/index.html", data_kwargs)

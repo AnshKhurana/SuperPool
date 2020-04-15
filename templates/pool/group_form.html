@@ -1,27 +1,125 @@
+{% extends 'base.html' %}
+
+{% load static %}
 
 {% block content %}
-
 <head>
-    <h1 style="font-family: 'Lobster', serif; color:purple; margin-left:30px; font-size:40px;">Create New Group</h1>
-</head>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
-<body style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSMrGih1xF1tk2-8M9jgf5QyWzP3llg7tf85mtKoKJUgYVgOioQ')">
-<form style="margin-left:20px; " action="" method="post">
-    {% csrf_token %}
-    <table style="font-size:25px;" border="5">
-    {{ form }}
-  </table>
-  <button style="position: relative; left:120px; top:10px;" type="submit" class="btn btn-primary btn-lg">Submit</button>
-</form>
-</body>
+</head>
+<body id="body-class">
+<script>
+function alertFunc() {
+  alert("Page is loaded");
+}
+</script>
+        <div class="gap gray-bg">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row" id="page-contents">
+                            {% include 'includes/sidebar.html' %}
+                            <div class="col-lg-6">
+                                <div class="central-meta">
+
+
+                                    <div class="frnds">
+                                        <ul class="nav nav-tabs">
+                                            {#                                            <h5 class="f-title"><i class="ti-user"></i>Group Info </h5>#}
+                                            <li class="nav-item"><a class="active" href="#frends" data-toggle="tab">Group Info</a></li>
+                                        </ul>
+
+<!--                                         <div id="chats"></div>-->
+
+<!--                                        <div id="list" class="tab-content">-->
+<!--                                            <div class="tab-pane active fade show ">-->
+<!--                                                <ul class="nearby-contct"  id="service_list">-->
+
+
+
+<!--                                                    {#                                                        INSERT HERE#}-->
+                                                    <br><br>
+                                                    <form style="margin-left:20px; " action="" method="post">
+                                                        {% csrf_token %}
+                                                        <table style="font-size:25px;" border="5">
+                                                        {{ form }}
+                                                      </table>
+                                                      <button style="position: relative; left:120px; top:10px;" type="submit" class="btn btn-primary btn-lg">Submit</button>
+                                                    </form>
+
+
+<!--                                                </ul>-->
+
+<!--                                                <div class="lodmore">-->
+<!--                                                    {#                                                    set action of this button to refresh page or select fetchAll#}-->
+<!--                                                    <button onclick="#" class="btn-view btn-load-more"></button>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+
+
+
+                                </div>
+<!--                                    </div>-->
+<!--                                    </div>-->
+                            </div><!-- centerl meta -->
+<!--                             <div class="col-lg-3">-->
+<!--&lt;!&ndash;                                 <div class="col-lg-3">&ndash;&gt;-->
+<!--                                <aside class="sidebar static">-->
+
+<!--                                    {#                                    checkboxes for categories#}-->
+<!--                                    <div class="widget">-->
+<!--                                        <h4 class="widget-title">Categories</h4>-->
+<!--                                        <ul class="followers">-->
+<!--                                            <li>-->
+<!--                                                <div class="friend-meta">-->
+<!--                                                    <h4><input type="radio" id=food_sel" name="category" value="food" checked onclick="window.location.href='/'"> Food</h4>-->
+<!--                                                </div>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
+<!--                                                <div class="friend-meta">-->
+<!--                                                    <h4><input type="radio" id="travel_sel" name="category" value="travel"  onclick="window.location.href='travel'"> Travel</h4>-->
+<!--                                                </div>-->
+<!--                                            </li>-->
+<!--                                            <li>-->
+<!--                                                <div class="friend-meta">-->
+<!--                                                    <h4><input type="radio" id="shopping_sel" name="category" value="shopping"  onclick="window.location.href='shopping'" > Shopping</h4>-->
+<!--                                                </div>-->
+<!--                                            </li>-->
+
+<!--                                            <li>-->
+<!--                                                <div class="friend-meta">-->
+<!--                                                    <h4><input type="radio" id="event_sel" name="category" value="event"  onclick="window.location.href='event'" > Event</h4>-->
+<!--                                                </div>-->
+<!--                                            </li>-->
+
+<!--                                            <li>-->
+<!--                                                <div class="friend-meta">-->
+<!--                                                    <h4><input type="radio" id="other_sel" name="category" value="other"  onclick="window.location.href='other'" > Other</h4>-->
+<!--                                                </div>-->
+<!--                                            </li>-->
+<!--                                        </ul>-->
+
+<!--                                <br><br>-->
+
+<!--                                    <div class="widget friend-list stick-widget">-->
+<!--                                        <div id="category"></div>-->
+<!--                                    </div>-->
+<!--                                    <div class="widget friend-list stick-widget">-->
+<!--                                        <div id="time"></div>-->
+<!--                                    </div>-->
+<!--                                    <div class="widget friend-list stick-widget">-->
+<!--                                        <div id="people"></div>-->
+<!--                                    </div>-->
+<!--                                    </div>-->
+<!--                                    </aside>-->
+<!--                            </div>&lt;!&ndash; sidebar &ndash;&gt;-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </body>
 
 {% endblock %}

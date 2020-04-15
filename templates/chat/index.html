@@ -68,8 +68,16 @@
 {% block content %}
 <script type="text/javascript">
 window.onload = function(){
-    if("{{ message }}"==1) {
+    if("{{ message }}".substring(0,12)=="Group Create") {
+        alert("New Group url: "+"{{ message }}".substring(12));
+    }
+
+    if("{{ message }}"=="Group Join") {
         alert("Added to group successfully");
+    }
+
+    if("{{ message }}"=="Group Remove") {
+        alert("Removed member(s) from group successfully");
     }
 
     if("{{ message }}"=="Food") {
