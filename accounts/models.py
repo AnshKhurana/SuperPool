@@ -2,8 +2,6 @@ from django.db import models
 
 # Create your models here.
 
-gcp_api_key = "AIzaSyAEdRHs5qFXBpXu3HkQXcRXnwBzSbiYZv4"
-
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
